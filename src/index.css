@@ -1,0 +1,101 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    border-color: rgba(247, 243, 234, 0.08);
+  }
+  
+  html {
+    color-scheme: dark;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  body {
+    background-color: #101820;
+    color: #F7F3EA;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+}
+
+/* Custom Glassmorphism - Midnight Navy */
+.glass-nav {
+  background: rgba(16, 24, 32, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-nav-transparent {
+  background: linear-gradient(180deg, rgba(16, 24, 32, 0.75) 0%, rgba(16, 24, 32, 0.2) 60%, transparent 100%);
+}
+
+.glass-card {
+  background: rgba(27, 38, 48, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(247, 243, 234, 0.08);
+}
+
+.glass-card:hover {
+  background: rgba(27, 38, 48, 0.9);
+  border-color: rgba(201, 164, 92, 0.4);
+}
+
+/* Cinematic Video Overlay Gradients — Midnight Navy tones, keeping film visible */
+.cinematic-overlay {
+  background: linear-gradient(
+    180deg,
+    rgba(16, 24, 32, 0.45) 0%,
+    rgba(16, 24, 32, 0.12) 32%,
+    rgba(16, 24, 32, 0.06) 52%,
+    rgba(16, 24, 32, 0.28) 78%,
+    rgba(16, 24, 32, 0.52) 100%
+  );
+}
+
+/* Luxury Button Shine Effect */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(
+    60deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 80%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.6s ease;
+}
+
+.btn-shine:hover::after {
+  transform: translateX(100%);
+}
+
+/* Subtle Scrollbar — Midnight Navy Track, Champagne Gold Accent */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #101820;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1B2630;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C9A45C;
+}
+
