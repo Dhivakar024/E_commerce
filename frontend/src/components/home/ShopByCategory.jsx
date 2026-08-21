@@ -1,0 +1,71 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { ArrowUpRight } from 'lucide-react';
+import { CATEGORIES } from '../../data/products';
+
+export const ShopByCategory = () => {
+  return (
+    <section id="shop-by-category" className="py-20 sm:py-28 bg-luxury-black relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+        {/* Section Header */}
+        <div className="text-center max-w-2xl mx-auto mb-14 sm:mb-16">
+          <span className="text-xs uppercase tracking-ultra text-luxury-gold block mb-3 font-medium">
+            SELECTIONS
+          </span>
+          <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white mb-3">
+            Shop by Category
+          </h2>
+          <p className="text-xs sm:text-sm text-luxury-muted font-light leading-relaxed">
+            Explore collections curated for every style.
+          </p>
+        </div>
+
+        {/* 4 Category Cards Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-6 lg:gap-8">
+          {CATEGORIES.map((cat, index) => (
+            <Link
+              key={cat.id}
+              to={cat.link}
+              className="group relative flex flex-col overflow-hidden bg-luxury-charcoal/60 border border-white/10 hover:border-luxury-gold/40 transition-all duration-500 rounded-none shadow-lg"
+            >
+              {/* Image Container with hover zoom */}
+              <div className="relative aspect-[3/4] overflow-hidden bg-neutral-900">
+                <img
+                  src={cat.image}
+                  alt={cat.name}
+                  loading="lazy"
+                  className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108 filter brightness-95 group-hover:brightness-100"
+                />
+                
+                {/* Gradient Overlays */}
+                <div className="absolute inset-0 bg-gradient-to-t from-luxury-black via-luxury-black/30 to-transparent opacity-85 group-hover:opacity-65 transition-opacity duration-500" />
+
+                {/* Index tag */}
+                <div className="absolute top-4 left-4 px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/10 text-[10px] uppercase tracking-widest text-luxury-champagne">
+                  0{index + 1}
+                </div>
+              </div>
+
+              {/* Card Meta Content */}
+              <div className="p-5 sm:p-6 flex flex-col justify-between flex-grow bg-luxury-charcoal/40 border-t border-white/5">
+                <div>
+                  <h3 className="font-serif text-xl sm:text-2xl text-white font-medium mb-1.5 group-hover:text-luxury-champagne transition-colors">
+                    {cat.name}
+                  </h3>
+                  <p className="text-xs text-luxury-muted leading-relaxed line-clamp-2">
+                    {cat.description}
+                  </p>
+                </div>
+
+                <div className="mt-5 pt-3.5 border-t border-white/5 flex items-center justify-between text-xs tracking-widest uppercase text-luxury-champagne font-medium">
+                  <span>Explore</span>
+                  <ArrowUpRight className="w-3.5 h-3.5 text-luxury-gold transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
