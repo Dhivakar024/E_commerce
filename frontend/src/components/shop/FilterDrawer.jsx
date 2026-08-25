@@ -1,18 +1,13 @@
 import React, { useEffect } from 'react';
 import { X, RotateCcw, Check } from 'lucide-react';
+import { CATEGORIES } from '../../data/categories';
 
-const CATEGORY_OPTIONS = ['Women', 'Men', 'New Arrivals', 'Accessories'];
-const SIZE_OPTIONS = ['XS', 'S', 'M', 'L', 'XL'];
-const COLOR_OPTIONS = ['Black', 'White', 'Beige', 'Brown', 'Blue'];
 const PRICE_OPTIONS = [
-  { id: 'under-1000', label: 'Under ₹1,000' },
-  { id: '1000-2500', label: '₹1,000 – ₹2,500' },
-  { id: '2500-5000', label: '₹2,500 – ₹5,000' },
-  { id: 'above-5000', label: 'Above ₹5,000' },
-];
-const AVAILABILITY_OPTIONS = [
-  { id: 'in-stock', label: 'In Stock' },
-  { id: 'out-of-stock', label: 'Out of Stock' },
+  { id: 'all', label: 'All Prices' },
+  { id: 'under-2000', label: 'Under ₹2,000' },
+  { id: '2000-5000', label: '₹2,000 – ₹5,000' },
+  { id: '5000-20000', label: '₹5,000 – ₹20,000' },
+  { id: 'above-20000', label: 'Above ₹20,000' },
 ];
 
 export const FilterDrawer = ({
@@ -35,18 +30,14 @@ export const FilterDrawer = ({
     };
   }, [isOpen]);
 
-  const toggleSize = (size) => {
-    const next = filters.sizes?.includes(size)
-      ? filters.sizes.filter((s) => s !== size)
-      : [...(filters.sizes || []), size];
-    onFilterChange({ sizes: next });
-  };
+  const currentCategory = (filters.category || 'all').toLowerCase();
 
-  const toggleColor = (color) => {
-    const next = filters.colors?.includes(color)
-      ? filters.colors.filter((c) => c !== color)
-      : [...(filters.colors || []), color];
-    onFilterChange({ colors: next });
+  const toggleArrayItem = (key, value) => {
+    const currentList = filters[key] || [];
+    const next = currentList.includes(value)
+      ? currentList.filter((v) => v !== value)
+      : [...currentList, value];
+    onFilterChange({ [key]: next });
   };
 
   return (
@@ -88,7 +79,7 @@ export const FilterDrawer = ({
         </div>
 
         {/* Scrollable Filters Body */}
-        <div className="p-6 overflow-y-auto space-y-8 flex-grow">
+        <div className="p-6 overflow-y-auto space-y-7 flex-grow text-[#F7F3EA]">
           {/* 1. Category */}
           <div>
             <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
@@ -97,101 +88,223 @@ export const FilterDrawer = ({
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
-                onClick={() => onFilterChange({ category: 'All' })}
-                className={`py-2 px-3 text-xs uppercase tracking-wider text-left border ${
-                  filters.category === 'All' || !filters.category
+                onClick={() => onFilterChange({ category: 'all' })}
+                className={`py-2 px-3 text-xs uppercase tracking-wider text-left border cursor-pointer ${
+                  currentCategory === 'all'
                     ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
-                    : 'bg-white/5 text-[#F7F3EA]/80 border-white/10 hover:border-white/20'
+                    : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
                 }`}
               >
-                All
+                All Categories
               </button>
-              {CATEGORY_OPTIONS.map((cat) => (
+              {CATEGORIES.map((cat) => (
                 <button
-                  key={cat}
+                  key={cat.id}
                   type="button"
-                  onClick={() => onFilterChange({ category: cat })}
-                  className={`py-2 px-3 text-xs uppercase tracking-wider text-left border ${
-                    filters.category?.toLowerCase() === cat.toLowerCase()
+                  onClick={() => onFilterChange({ category: cat.slug })}
+                  className={`py-2 px-3 text-xs uppercase tracking-wider text-left border cursor-pointer ${
+                    currentCategory === cat.slug
                       ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
-                      : 'bg-white/5 text-[#F7F3EA]/80 border-white/10 hover:border-white/20'
+                      : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
                   }`}
                 >
-                  {cat}
+                  {cat.name}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* 2. Size */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
-              Size
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {SIZE_OPTIONS.map((size) => {
-                const isSelected = filters.sizes?.includes(size);
-                return (
-                  <button
-                    key={size}
-                    type="button"
-                    onClick={() => toggleSize(size)}
-                    className={`min-w-[44px] h-10 px-3 text-xs font-medium uppercase tracking-wider transition-colors border ${
-                      isSelected
-                        ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
-                        : 'bg-white/5 text-[#F7F3EA]/80 border-white/10 hover:border-white/20'
-                    }`}
-                  >
-                    {size}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          {/* DYNAMIC FILTERS */}
+          {(currentCategory === 'fashion' || currentCategory === 'all') && (
+            <>
+              {/* Sizes */}
+              <div>
+                <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
+                  Size
+                </h4>
+                <div className="flex flex-wrap gap-2">
+                  {['XS', 'S', 'M', 'L', 'XL'].map((size) => {
+                    const isSelected = filters.sizes?.includes(size);
+                    return (
+                      <button
+                        key={size}
+                        type="button"
+                        onClick={() => toggleArrayItem('sizes', size)}
+                        className={`min-w-[44px] h-10 px-3 text-xs font-medium uppercase tracking-wider transition-colors border cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                            : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                        }`}
+                      >
+                        {size}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
-          {/* 3. Color */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
-              Color
-            </h4>
-            <div className="grid grid-cols-2 gap-2">
-              {COLOR_OPTIONS.map((color) => {
-                const isSelected = filters.colors?.includes(color);
-                return (
-                  <button
-                    key={color}
-                    type="button"
-                    onClick={() => toggleColor(color)}
-                    className={`py-2.5 px-3 text-xs uppercase tracking-wider flex items-center justify-between border ${
-                      isSelected
-                        ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
-                        : 'bg-white/5 text-[#F7F3EA]/80 border-white/10 hover:border-white/20'
-                    }`}
-                  >
-                    <span>{color}</span>
-                    {isSelected && <Check className="w-3.5 h-3.5" />}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+              {/* Colors */}
+              <div>
+                <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
+                  Color
+                </h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {['White', 'Beige', 'Midnight Black', 'Navy Blue', 'Champagne Gold'].map((color) => {
+                    const isSelected = filters.colors?.includes(color);
+                    return (
+                      <button
+                        key={color}
+                        type="button"
+                        onClick={() => toggleArrayItem('colors', color)}
+                        className={`py-2 px-3 text-xs uppercase tracking-wider flex items-center justify-between border cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                            : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                        }`}
+                      >
+                        <span>{color}</span>
+                        {isSelected && <Check className="w-3.5 h-3.5" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          )}
 
-          {/* 4. Price */}
+          {currentCategory === 'furniture' && (
+            <div>
+              <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
+                Room Type
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                {['Living Room', 'Bedroom', 'Dining', 'Office', 'Outdoor'].map((room) => {
+                  const isSelected = filters.roomTypes?.includes(room);
+                  return (
+                    <button
+                      key={room}
+                      type="button"
+                      onClick={() => toggleArrayItem('roomTypes', room)}
+                      className={`py-2 px-3 text-xs uppercase tracking-wider flex items-center justify-between border cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                          : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                      }`}
+                    >
+                      <span>{room}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {currentCategory === 'electronics' && (
+            <div>
+              <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
+                Brand
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                {['AetherTech', 'Zenith Systems', 'Quantum Audio', 'Visionary Display'].map((brand) => {
+                  const isSelected = filters.brands?.includes(brand);
+                  return (
+                    <button
+                      key={brand}
+                      type="button"
+                      onClick={() => toggleArrayItem('brands', brand)}
+                      className={`py-2 px-3 text-xs uppercase tracking-wider flex items-center justify-between border cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                          : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                      }`}
+                    >
+                      <span>{brand}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {currentCategory === 'medicines' && (
+            <div>
+              <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
+                Prescription Requirement
+              </h4>
+              <div className="space-y-2">
+                <button
+                  type="button"
+                  onClick={() => onFilterChange({ prescriptionRequired: 'all' })}
+                  className={`w-full py-2 px-3 text-xs uppercase tracking-wider text-left border cursor-pointer ${
+                    filters.prescriptionRequired === undefined || filters.prescriptionRequired === 'all'
+                      ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                      : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                  }`}
+                >
+                  All Medicines
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onFilterChange({ prescriptionRequired: false })}
+                  className={`w-full py-2 px-3 text-xs uppercase tracking-wider text-left border cursor-pointer ${
+                    filters.prescriptionRequired === false
+                      ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                      : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                  }`}
+                >
+                  Over-the-Counter (No Rx)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onFilterChange({ prescriptionRequired: true })}
+                  className={`w-full py-2 px-3 text-xs uppercase tracking-wider text-left border cursor-pointer ${
+                    filters.prescriptionRequired === true
+                      ? 'bg-amber-400 text-[#101820] border-amber-400 font-semibold'
+                      : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                  }`}
+                >
+                  Prescription Required
+                </button>
+              </div>
+            </div>
+          )}
+
+          {currentCategory === 'cosmetics' && (
+            <div>
+              <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
+                Skin Type
+              </h4>
+              <div className="grid grid-cols-2 gap-2">
+                {['All Skin Types', 'Mature / Normal', 'Sensitive', 'Dry / Damaged'].map((st) => {
+                  const isSelected = filters.skinTypes?.includes(st);
+                  return (
+                    <button
+                      key={st}
+                      type="button"
+                      onClick={() => toggleArrayItem('skinTypes', st)}
+                      className={`py-2 px-3 text-xs uppercase tracking-wider flex items-center justify-between border cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                          : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                      }`}
+                    >
+                      <span>{st}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5" />}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Price Range */}
           <div>
             <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
               Price Range
             </h4>
             <div className="space-y-2">
-              <label className="flex items-center gap-2.5 text-xs text-[#F7F3EA]/80 hover:text-white cursor-pointer py-1">
-                <input
-                  type="radio"
-                  name="drawer_price"
-                  checked={filters.priceRange === 'all' || !filters.priceRange}
-                  onChange={() => onFilterChange({ priceRange: 'all' })}
-                  className="accent-[#C9A45C] cursor-pointer"
-                />
-                <span>All Prices</span>
-              </label>
               {PRICE_OPTIONS.map((price) => (
                 <label
                   key={price.id}
@@ -200,45 +313,11 @@ export const FilterDrawer = ({
                   <input
                     type="radio"
                     name="drawer_price"
-                    checked={filters.priceRange === price.id}
+                    checked={(filters.priceRange || 'all') === price.id}
                     onChange={() => onFilterChange({ priceRange: price.id })}
                     className="accent-[#C9A45C] cursor-pointer"
                   />
                   <span>{price.label}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {/* 5. Availability */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
-              Availability
-            </h4>
-            <div className="space-y-2">
-              <label className="flex items-center gap-2.5 text-xs text-[#F7F3EA]/80 hover:text-white cursor-pointer py-1">
-                <input
-                  type="radio"
-                  name="drawer_availability"
-                  checked={filters.availability === 'all' || !filters.availability}
-                  onChange={() => onFilterChange({ availability: 'all' })}
-                  className="accent-[#C9A45C] cursor-pointer"
-                />
-                <span>All Items</span>
-              </label>
-              {AVAILABILITY_OPTIONS.map((avail) => (
-                <label
-                  key={avail.id}
-                  className="flex items-center gap-2.5 text-xs text-[#F7F3EA]/80 hover:text-white cursor-pointer py-1"
-                >
-                  <input
-                    type="radio"
-                    name="drawer_availability"
-                    checked={filters.availability === avail.id}
-                    onChange={() => onFilterChange({ availability: avail.id })}
-                    className="accent-[#C9A45C] cursor-pointer"
-                  />
-                  <span>{avail.label}</span>
                 </label>
               ))}
             </div>
@@ -250,7 +329,7 @@ export const FilterDrawer = ({
           <button
             type="button"
             onClick={onClearFilters}
-            className="flex-1 py-3.5 px-4 bg-transparent border border-white/20 text-[#F7F3EA] text-xs uppercase tracking-widest font-medium hover:bg-white/10 flex items-center justify-center gap-1.5 transition-colors"
+            className="flex-1 py-3.5 px-4 bg-transparent border border-white/20 text-[#F7F3EA] text-xs uppercase tracking-widest font-medium hover:bg-white/10 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             <span>Clear All</span>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
-import { ShoppingBag, Heart, Eye, Check, Star } from 'lucide-react';
+import { ShoppingBag, Heart, Eye, Check, Star, FileText } from 'lucide-react';
 
 export const ProductCard = ({ product, className = '' }) => {
   const { addToCart, isWishlisted, toggleWishlist, openQuickView } = useShop();
@@ -76,19 +76,20 @@ export const ProductCard = ({ product, className = '' }) => {
 
         {/* Badges Container */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
+          {product.prescriptionRequired && (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-950/90 backdrop-blur-md border border-amber-500/50 text-[9px] uppercase tracking-wider text-amber-200 font-semibold shadow-md">
+              <FileText className="w-2.5 h-2.5" />
+              <span>Rx Required</span>
+            </span>
+          )}
           {product.isNew && (
-            <span className="px-2 py-0.5 bg-[#101820]/90 backdrop-blur-md border border-[#C9A45C]/40 text-[9px] uppercase tracking-widest text-[#C9A45C] font-medium">
+            <span className="px-2 py-0.5 bg-[#101820]/90 backdrop-blur-md border border-[#C9A45C]/40 text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold">
               NEW
             </span>
           )}
           {hasDiscount && (
             <span className="px-2 py-0.5 bg-rose-950/90 backdrop-blur-md border border-rose-500/40 text-[9px] uppercase tracking-widest text-rose-200 font-medium">
               -{discountPercent}%
-            </span>
-          )}
-          {product.tag && !product.isNew && (
-            <span className="px-2 py-0.5 bg-[#101820]/80 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-[#A9B0B5] font-medium">
-              {product.tag}
             </span>
           )}
         </div>
@@ -119,7 +120,7 @@ export const ProductCard = ({ product, className = '' }) => {
           {/* Quick View Button */}
           <button
             onClick={handleQuickViewClick}
-            className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-md border bg-white/90 text-[#101820] border-black/10 hover:text-[#C9A45C] hover:bg-white sm:opacity-0 sm:group-hover:opacity-100 opacity-100 shadow-sm"
+            className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-md border bg-white/90 text-[#101820] border-black/10 hover:text-[#C9A45C] hover:bg-white sm:opacity-0 sm:group-hover:opacity-100 opacity-100 shadow-sm cursor-pointer"
             aria-label={`Quick view ${product.name}`}
           >
             <Eye className="w-3.5 h-3.5" />
@@ -131,7 +132,7 @@ export const ProductCard = ({ product, className = '' }) => {
           <button
             onClick={handleAddToCart}
             disabled={isAdded}
-            className={`btn-shine w-full py-2.5 px-3 text-[11px] tracking-widest uppercase font-medium flex items-center justify-center gap-2 transition-all duration-300 shadow-lg cursor-pointer ${
+            className={`btn-shine w-full py-2.5 px-3 text-[11px] tracking-widest uppercase font-semibold flex items-center justify-center gap-2 transition-all duration-300 shadow-lg cursor-pointer ${
               isAdded
                 ? 'bg-emerald-700 text-white'
                 : 'bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820]'
@@ -157,21 +158,31 @@ export const ProductCard = ({ product, className = '' }) => {
       <div className="p-4 sm:p-5 flex flex-col justify-between flex-grow bg-white">
         <div>
           <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-[#A9B0B5] mb-1">
-            <span>{product.category}</span>
+            <span className="font-semibold text-[#C9A45C]">{product.brand || product.category}</span>
             {product.rating && (
               <div className="flex items-center gap-1 text-[#C9A45C]">
                 <Star className="w-3 h-3 fill-[#C9A45C] text-[#C9A45C]" />
-                <span className="text-[#101820] font-medium">{product.rating}</span>
+                <span className="text-[#101820] font-semibold">{product.rating}</span>
               </div>
             )}
           </div>
 
           <Link
             to={productUrl}
-            className="font-serif text-sm sm:text-base text-[#101820] font-medium hover:text-[#C9A45C] transition-colors line-clamp-1 block mb-2"
+            className="font-serif text-sm sm:text-base text-[#101820] font-semibold hover:text-[#C9A45C] transition-colors line-clamp-1 block mb-1"
           >
             {product.name}
           </Link>
+
+          {/* Subcategory & Key spec pill */}
+          <div className="text-[11px] text-[#A9B0B5] flex items-center gap-2 mb-2">
+            <span>{product.subcategory || product.category}</span>
+            {product.ram && <span>• {product.ram}</span>}
+            {product.dimensions && <span>• {product.dimensions}</span>}
+            {product.form && <span>• {product.form}</span>}
+            {product.volume && <span>• {product.volume}</span>}
+            {product.material && !product.dimensions && <span>• {product.material}</span>}
+          </div>
         </div>
 
         <div className="mt-2 pt-3 border-t border-black/5 flex items-center justify-between">
@@ -186,7 +197,7 @@ export const ProductCard = ({ product, className = '' }) => {
             )}
           </div>
 
-          {/* Color Swatches */}
+          {/* Color Swatches or Stock indicator */}
           {product.colorHexes && product.colorHexes.length > 0 ? (
             <div className="flex items-center gap-1">
               {product.colorHexes.slice(0, 3).map((col, idx) => (
@@ -202,17 +213,9 @@ export const ProductCard = ({ product, className = '' }) => {
               )}
             </div>
           ) : (
-            product.colors && product.colors.length > 0 && (
-              <div className="flex items-center gap-1">
-                {product.colors.slice(0, 3).map((color, idx) => (
-                  <span
-                    key={idx}
-                    className="w-2 h-2 rounded-full bg-neutral-300 border border-black/10"
-                    title={color}
-                  />
-                ))}
-              </div>
-            )
+            <span className="text-[10px] text-emerald-800 bg-emerald-50 px-1.5 py-0.5 border border-emerald-200 rounded-xs font-medium">
+              In Stock
+            </span>
           )}
         </div>
 
@@ -221,7 +224,7 @@ export const ProductCard = ({ product, className = '' }) => {
           <button
             onClick={handleAddToCart}
             disabled={isAdded}
-            className={`w-full py-2 text-[10px] tracking-widest uppercase font-medium flex items-center justify-center gap-1.5 transition-colors ${
+            className={`w-full py-2 text-[10px] tracking-widest uppercase font-semibold flex items-center justify-center gap-1.5 transition-colors ${
               isAdded
                 ? 'bg-emerald-700 text-white'
                 : 'bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820]'

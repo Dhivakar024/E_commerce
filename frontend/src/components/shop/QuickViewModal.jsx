@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
-import { X, Star, ShoppingBag, Heart, ArrowRight, Check } from 'lucide-react';
+import { X, Star, ShoppingBag, Heart, ArrowRight, Check, FileText } from 'lucide-react';
 
 export const QuickViewModal = () => {
   const { quickViewProduct, closeQuickView, addToCart, isWishlisted, toggleWishlist } = useShop();
@@ -67,7 +67,7 @@ export const QuickViewModal = () => {
       {/* Modal Container */}
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-none">
         <div
-          className="relative w-full max-w-4xl max-h-[90vh] bg-luxury-black border border-white/15 overflow-y-auto shadow-2xl pointer-events-auto flex flex-col md:flex-row animate-fade-in"
+          className="relative w-full max-w-4xl max-h-[90vh] bg-[#101820] text-[#F7F3EA] border border-white/15 overflow-y-auto shadow-2xl pointer-events-auto flex flex-col md:flex-row animate-fade-in"
           role="dialog"
           aria-modal="true"
           aria-label={`Quick view: ${quickViewProduct.name}`}
@@ -75,22 +75,28 @@ export const QuickViewModal = () => {
           {/* Close Button */}
           <button
             onClick={closeQuickView}
-            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/60 hover:bg-black text-luxury-cream/80 hover:text-white border border-white/10 transition-colors"
+            className="absolute top-4 right-4 z-20 p-2 rounded-full bg-black/60 hover:bg-black text-[#F7F3EA]/80 hover:text-white border border-white/10 transition-colors cursor-pointer"
             aria-label="Close modal"
           >
             <X className="w-5 h-5" />
           </button>
 
           {/* Left: Gallery (50% on Desktop) */}
-          <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between bg-luxury-charcoal/40 border-b md:border-b-0 md:border-r border-white/10">
+          <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between bg-[#1B2630]/60 border-b md:border-b-0 md:border-r border-white/10">
             <div className="relative aspect-[3/4] overflow-hidden bg-neutral-900 mb-4">
               <img
                 src={images[selectedImageIndex] || quickViewProduct.image}
                 alt={quickViewProduct.name}
                 className="w-full h-full object-cover object-center transition-all duration-500"
               />
-              {quickViewProduct.isNew && (
-                <span className="absolute top-3 left-3 px-2 py-0.5 bg-black/80 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-luxury-champagne font-medium">
+              {quickViewProduct.prescriptionRequired && (
+                <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 bg-amber-950/90 backdrop-blur-md border border-amber-500/40 text-[9px] uppercase tracking-wider text-amber-200 font-semibold">
+                  <FileText className="w-2.5 h-2.5" />
+                  <span>Rx Required</span>
+                </span>
+              )}
+              {quickViewProduct.isNew && !quickViewProduct.prescriptionRequired && (
+                <span className="absolute top-3 left-3 px-2 py-0.5 bg-black/80 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold">
                   NEW
                 </span>
               )}
@@ -98,159 +104,129 @@ export const QuickViewModal = () => {
 
             {/* Thumbnail Selectors */}
             {images.length > 1 && (
-              <div className="flex items-center gap-2.5 overflow-x-auto">
+              <div className="flex items-center gap-2 overflow-x-auto pb-1">
                 {images.map((img, idx) => (
                   <button
                     key={idx}
                     type="button"
                     onClick={() => setSelectedImageIndex(idx)}
-                    className={`w-14 h-16 overflow-hidden border transition-all flex-shrink-0 ${
+                    className={`w-14 h-16 flex-shrink-0 overflow-hidden border transition-all cursor-pointer ${
                       selectedImageIndex === idx
-                        ? 'border-luxury-gold ring-1 ring-luxury-gold'
-                        : 'border-white/10 opacity-70 hover:opacity-100'
+                        ? 'border-[#C9A45C] ring-1 ring-[#C9A45C]'
+                        : 'border-white/15 opacity-60 hover:opacity-100'
                     }`}
                   >
-                    <img src={img} alt={`Thumb ${idx + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={img}
+                      alt={`Thumb ${idx + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Right: Product Details (50% on Desktop) */}
-          <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between">
+          {/* Right: Details & Purchase (50% on Desktop) */}
+          <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between space-y-6">
             <div>
-              {/* Category & Rating */}
-              <div className="flex items-center justify-between text-xs text-luxury-muted mb-2">
-                <span className="uppercase tracking-widest text-luxury-gold font-medium">
-                  {quickViewProduct.category}
+              {/* Category, Brand & Rating */}
+              <div className="flex items-center justify-between text-xs text-[#A9B0B5] mb-2">
+                <span className="uppercase tracking-widest text-[#C9A45C] font-semibold">
+                  {quickViewProduct.brand || quickProductCategory(quickViewProduct)}
                 </span>
-                <div className="flex items-center gap-1 text-luxury-champagne">
-                  <Star className="w-3.5 h-3.5 fill-luxury-gold text-luxury-gold" />
-                  <span className="font-medium text-white">{quickViewProduct.rating}</span>
-                  <span className="text-luxury-muted text-[11px]">({quickViewProduct.reviewCount})</span>
-                </div>
+                {quickViewProduct.rating && (
+                  <div className="flex items-center gap-1 text-[#C9A45C]">
+                    <Star className="w-3.5 h-3.5 fill-[#C9A45C]" />
+                    <span className="text-white font-medium">{quickViewProduct.rating}</span>
+                  </div>
+                )}
               </div>
 
-              {/* Product Title */}
-              <h3 className="font-serif text-2xl sm:text-3xl text-white font-normal mb-3">
+              {/* Title */}
+              <h2 className="font-serif text-2xl sm:text-3xl text-white font-normal mb-2 leading-tight">
                 {quickViewProduct.name}
-              </h3>
+              </h2>
 
               {/* Price */}
-              <div className="flex items-center gap-3 mb-6">
-                <span className="font-serif text-xl sm:text-2xl text-luxury-champagne font-medium">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="font-serif text-xl sm:text-2xl text-[#C9A45C] font-semibold">
                   ₹{quickViewProduct.price.toLocaleString('en-IN')}
                 </span>
                 {quickViewProduct.compareAtPrice && (
-                  <span className="text-sm text-luxury-muted line-through">
+                  <span className="text-xs text-[#A9B0B5] line-through">
                     ₹{quickViewProduct.compareAtPrice.toLocaleString('en-IN')}
-                  </span>
-                )}
-                {quickViewProduct.compareAtPrice && (
-                  <span className="text-[10px] px-2 py-0.5 bg-rose-950/60 border border-rose-500/30 text-rose-300 uppercase tracking-widest">
-                    Save ₹{(quickViewProduct.compareAtPrice - quickViewProduct.price).toLocaleString('en-IN')}
                   </span>
                 )}
               </div>
 
-              {/* Short Description */}
-              <p className="text-xs sm:text-sm text-luxury-muted font-light leading-relaxed mb-6">
+              {/* Description */}
+              <p className="text-xs text-[#F7F3EA]/80 font-light leading-relaxed mb-6 line-clamp-3">
                 {quickViewProduct.description}
               </p>
 
-              {/* Size Selector */}
-              {quickViewProduct.sizes && quickViewProduct.sizes.length > 0 && (
-                <div className="mb-5">
-                  <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="uppercase tracking-widest text-luxury-cream">Select Size:</span>
-                    <span className="text-luxury-champagne font-medium">{selectedSize}</span>
-                  </div>
+              {/* Color Swatches if applicable */}
+              {quickViewProduct.colors && quickViewProduct.colors.length > 0 && (
+                <div className="mb-4">
+                  <span className="text-xs uppercase tracking-widest text-[#A9B0B5] block mb-2 font-medium">
+                    Color / Finish: <strong className="text-white font-normal">{selectedColor}</strong>
+                  </span>
                   <div className="flex flex-wrap gap-2">
-                    {quickViewProduct.sizes.map((size) => (
+                    {quickViewProduct.colors.map((c) => (
                       <button
-                        key={size}
+                        key={c}
                         type="button"
-                        onClick={() => setSelectedSize(size)}
-                        className={`min-w-[42px] h-10 px-3 text-xs font-medium uppercase tracking-wider border transition-all ${
-                          selectedSize === size
-                            ? 'bg-white text-luxury-black border-white'
-                            : 'bg-white/5 text-luxury-cream/80 border-white/10 hover:border-white/30'
+                        onClick={() => setSelectedColor(c)}
+                        className={`px-3 py-1.5 text-xs uppercase tracking-wider border transition-all cursor-pointer ${
+                          selectedColor === c
+                            ? 'bg-white text-[#101820] border-white font-semibold'
+                            : 'bg-white/5 text-white/80 border-white/15 hover:border-white/40'
                         }`}
                       >
-                        {size}
+                        {c}
                       </button>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Color Selector */}
-              {quickViewProduct.colors && quickViewProduct.colors.length > 0 && (
+              {/* Sizes / Variants */}
+              {quickViewProduct.sizes && quickViewProduct.sizes.length > 0 && (
                 <div className="mb-6">
-                  <div className="flex items-center justify-between text-xs mb-2">
-                    <span className="uppercase tracking-widest text-luxury-cream">Select Color:</span>
-                    <span className="text-luxury-champagne font-medium">{selectedColor}</span>
-                  </div>
+                  <span className="text-xs uppercase tracking-widest text-[#A9B0B5] block mb-2 font-medium">
+                    Options / Size: <strong className="text-white font-normal">{selectedSize}</strong>
+                  </span>
                   <div className="flex flex-wrap gap-2">
-                    {quickViewProduct.colors.map((color) => {
-                      const hexObj = quickViewProduct.colorHexes?.find((c) => c.name === color);
-                      return (
-                        <button
-                          key={color}
-                          type="button"
-                          onClick={() => setSelectedColor(color)}
-                          className={`px-3 py-1.5 text-xs uppercase tracking-wider flex items-center gap-2 border transition-all ${
-                            selectedColor === color
-                              ? 'bg-white/10 border-luxury-gold text-white font-medium'
-                              : 'bg-white/5 border-white/10 text-luxury-muted hover:text-white'
-                          }`}
-                        >
-                          {hexObj && (
-                            <span
-                              className="w-2.5 h-2.5 rounded-full border border-white/20"
-                              style={{ backgroundColor: hexObj.hex }}
-                            />
-                          )}
-                          <span>{color}</span>
-                        </button>
-                      );
-                    })}
+                    {quickViewProduct.sizes.map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() => setSelectedSize(s)}
+                        className={`min-w-[42px] h-9 px-3 text-xs uppercase tracking-wider font-semibold border transition-all cursor-pointer ${
+                          selectedSize === s
+                            ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C]'
+                            : 'bg-white/5 text-white/80 border-white/15 hover:border-white/40'
+                        }`}
+                      >
+                        {s}
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
+            </div>
 
-              {/* Quantity Stepper & Actions */}
-              <div className="flex items-center gap-3 mb-6">
-                <div className="flex items-center border border-white/15 bg-white/5">
-                  <button
-                    type="button"
-                    onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                    className="w-9 h-11 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
-                    aria-label="Decrease quantity"
-                  >
-                    -
-                  </button>
-                  <span className="w-10 text-center text-xs font-medium text-white">{quantity}</span>
-                  <button
-                    type="button"
-                    onClick={() => setQuantity((q) => q + 1)}
-                    className="w-9 h-11 flex items-center justify-center text-white hover:bg-white/10 transition-colors"
-                    aria-label="Increase quantity"
-                  >
-                    +
-                  </button>
-                </div>
-
-                {/* Add to Cart Button */}
+            {/* Actions */}
+            <div className="space-y-3 pt-4 border-t border-white/10">
+              <div className="flex items-center gap-3">
                 <button
                   type="button"
                   onClick={handleAddToCart}
                   disabled={isAdded}
-                  className={`flex-grow h-11 px-6 text-xs uppercase tracking-widest font-medium flex items-center justify-center gap-2 transition-all shadow-xl ${
+                  className={`btn-shine flex-grow py-3.5 px-4 text-xs uppercase tracking-widest font-semibold flex items-center justify-center gap-2 transition-all shadow-lg cursor-pointer ${
                     isAdded
-                      ? 'bg-emerald-700 text-white'
-                      : 'bg-white hover:bg-luxury-champagne text-luxury-black'
+                      ? 'bg-emerald-600 text-white'
+                      : 'bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820]'
                   }`}
                 >
                   {isAdded ? (
@@ -261,37 +237,32 @@ export const QuickViewModal = () => {
                   ) : (
                     <>
                       <ShoppingBag className="w-4 h-4" />
-                      <span>Add to Bag • ₹{(quickViewProduct.price * quantity).toLocaleString('en-IN')}</span>
+                      <span>Add to Bag</span>
                     </>
                   )}
                 </button>
 
-                {/* Wishlist Button */}
                 <button
                   type="button"
                   onClick={() => toggleWishlist(quickViewProduct.id)}
-                  className={`w-11 h-11 flex items-center justify-center border transition-colors ${
+                  className={`p-3.5 border transition-colors cursor-pointer ${
                     wishlisted
-                      ? 'bg-white text-rose-500 border-white'
-                      : 'bg-white/5 border-white/15 text-white/80 hover:text-white hover:bg-white/10'
+                      ? 'border-[#C9A45C] bg-[#C9A45C] text-[#101820]'
+                      : 'border-white/20 text-[#A9B0B5] hover:text-white hover:border-white'
                   }`}
-                  aria-label="Toggle Wishlist"
+                  aria-label="Wishlist"
                 >
-                  <Heart className={`w-4 h-4 ${wishlisted ? 'fill-rose-500' : ''}`} />
+                  <Heart className={`w-4 h-4 ${wishlisted ? 'fill-[#101820]' : ''}`} />
                 </button>
               </div>
-            </div>
 
-            {/* View Full Details Link */}
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs">
-              <span className="text-luxury-muted font-light">Stock: {quickViewProduct.stock} units available</span>
               <Link
-                to={`/product/${quickViewProduct.slug}`}
+                to={`/product/${quickViewProduct.slug || quickViewProduct.id}`}
                 onClick={closeQuickView}
-                className="group inline-flex items-center gap-1.5 text-luxury-champagne hover:text-white uppercase tracking-widest font-medium transition-colors"
+                className="w-full py-2.5 text-center text-xs uppercase tracking-widest text-[#A9B0B5] hover:text-white flex items-center justify-center gap-1.5 transition-colors"
               >
-                <span>View Full Details</span>
-                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                <span>View Full Product Details</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           </div>
@@ -300,3 +271,7 @@ export const QuickViewModal = () => {
     </>
   );
 };
+
+function quickProductCategory(p) {
+  return p.category || 'LAX360 Selection';
+}

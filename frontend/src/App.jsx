@@ -10,6 +10,7 @@ import { ToastNotification } from './components/shop/ToastNotification';
 // Customer Storefront Pages
 import { Home } from './pages/Home';
 import { Shop } from './pages/Shop';
+import { CategoryPage } from './pages/CategoryPage';
 import { ProductDetails } from './pages/ProductDetails';
 import { Wishlist } from './pages/Wishlist';
 import { Cart } from './pages/Cart';
@@ -60,13 +61,13 @@ const AppContent = () => {
   const isAdminRoute = pathname.startsWith('/admin');
 
   return (
-    <div className="flex flex-col min-h-screen bg-luxury-black text-luxury-cream selection:bg-luxury-gold/30 selection:text-white">
+    <div className="flex flex-col min-h-screen bg-[#101820] text-[#F7F3EA] selection:bg-[#C9A45C]/30 selection:text-white">
       <ScrollToTop />
 
       {/* Global Floating Toast Notifications */}
       <ToastNotification />
 
-      {/* Sticky Glassmorphic Navbar (Hidden on distraction-free Checkout and Admin Portal) */}
+      {/* Sticky Glassmorphic Navbar */}
       {!isCheckoutPage && !isAdminRoute && <Navbar />}
 
       {/* Main Content Viewport */}
@@ -75,10 +76,9 @@ const AppContent = () => {
           {/* Customer Storefront Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/shop" element={<Shop />} />
-          <Route path="/shop/women" element={<Shop categoryName="Women" />} />
-          <Route path="/shop/men" element={<Shop categoryName="Men" />} />
-          <Route path="/shop/new-arrivals" element={<Shop categoryName="New Arrivals" />} />
-          <Route path="/shop/accessories" element={<Shop categoryName="Accessories" />} />
+          <Route path="/categories" element={<Shop />} />
+          <Route path="/category" element={<Shop />} />
+          <Route path="/category/:categorySlug" element={<CategoryPage />} />
           <Route path="/shop/:category" element={<Shop />} />
           <Route path="/product/:slug" element={<ProductDetails />} />
           <Route path="/search" element={<SearchPage />} />
@@ -132,7 +132,7 @@ const AppContent = () => {
         </Routes>
       </div>
 
-      {/* Luxury 5-Column Footer (Hidden on distraction-free Checkout and Admin Portal) */}
+      {/* 4-Column Footer */}
       {!isCheckoutPage && !isAdminRoute && <Footer />}
     </div>
   );

@@ -14,21 +14,33 @@ import { QuickViewModal } from '../components/shop/QuickViewModal';
 import { NewsletterSection } from '../components/home/NewsletterSection';
 import { ChevronDown } from 'lucide-react';
 
-const INITIAL_PAGE_SIZE = 8;
-const PAGE_INCREMENT = 4;
+const INITIAL_PAGE_SIZE = 9;
+const PAGE_INCREMENT = 6;
 
 export const Shop = ({ categoryName }) => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // Normalize category from prop or url
-  const routeCategory = categoryName || params.category || 'All';
-  const urlSearch = searchParams.get('search') || '';
+  // Normalize category from query param, path param, or prop
+  const urlCategory = searchParams.get('category');
+  const urlSubcategory = searchParams.get('subcategory');
+  const urlSearch = searchParams.get('search') || searchParams.get('q') || '';
+  const routeCategory = categoryName || params.category || urlCategory || 'all';
 
   const [filters, setFilters] = useState({
     category: routeCategory,
+    subcategory: urlSubcategory || '',
     sizes: [],
     colors: [],
+    materials: [],
+    roomTypes: [],
+    brands: [],
+    rams: [],
+    storages: [],
+    forms: [],
+    skinTypes: [],
+    finishes: [],
+    prescriptionRequired: 'all',
     priceRange: 'all',
     availability: 'all',
     searchQuery: urlSearch,
@@ -39,29 +51,44 @@ export const Shop = ({ categoryName }) => {
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  // Sync category state when route changes
+  // Sync category & search params when URL changes
   useEffect(() => {
+    const activeCat = categoryName || params.category || searchParams.get('category') || 'all';
+    const activeSub = searchParams.get('subcategory') || '';
+    const activeSearch = searchParams.get('search') || searchParams.get('q') || '';
+
     setFilters((prev) => ({
       ...prev,
-      category: routeCategory,
-      searchQuery: urlSearch,
+      category: activeCat,
+      subcategory: activeSub,
+      searchQuery: activeSearch,
     }));
     setVisibleCount(INITIAL_PAGE_SIZE);
-  }, [routeCategory, urlSearch]);
+  }, [categoryName, params.category, searchParams]);
 
   const handleFilterChange = (newFilters) => {
     setIsLoading(true);
     setFilters((prev) => ({ ...prev, ...newFilters }));
     setVisibleCount(INITIAL_PAGE_SIZE);
-    setTimeout(() => setIsLoading(false), 200);
+    setTimeout(() => setIsLoading(false), 150);
   };
 
   const handleClearFilters = () => {
     setIsLoading(true);
     setFilters({
-      category: 'All',
+      category: 'all',
+      subcategory: '',
       sizes: [],
       colors: [],
+      materials: [],
+      roomTypes: [],
+      brands: [],
+      rams: [],
+      storages: [],
+      forms: [],
+      skinTypes: [],
+      finishes: [],
+      prescriptionRequired: 'all',
       priceRange: 'all',
       availability: 'all',
       searchQuery: '',
@@ -69,15 +96,25 @@ export const Shop = ({ categoryName }) => {
     });
     setSearchParams({});
     setVisibleCount(INITIAL_PAGE_SIZE);
-    setTimeout(() => setIsLoading(false), 200);
+    setTimeout(() => setIsLoading(false), 150);
   };
 
   // Calculate active filter count
   const activeFilterCount = useMemo(() => {
     let count = 0;
-    if (filters.category && filters.category !== 'All') count++;
+    if (filters.category && filters.category !== 'all') count++;
+    if (filters.subcategory) count++;
     if (filters.sizes?.length > 0) count += filters.sizes.length;
     if (filters.colors?.length > 0) count += filters.colors.length;
+    if (filters.materials?.length > 0) count += filters.materials.length;
+    if (filters.roomTypes?.length > 0) count += filters.roomTypes.length;
+    if (filters.brands?.length > 0) count += filters.brands.length;
+    if (filters.rams?.length > 0) count += filters.rams.length;
+    if (filters.storages?.length > 0) count += filters.storages.length;
+    if (filters.forms?.length > 0) count += filters.forms.length;
+    if (filters.skinTypes?.length > 0) count += filters.skinTypes.length;
+    if (filters.finishes?.length > 0) count += filters.finishes.length;
+    if (filters.prescriptionRequired !== undefined && filters.prescriptionRequired !== 'all') count++;
     if (filters.priceRange && filters.priceRange !== 'all') count++;
     if (filters.availability && filters.availability !== 'all') count++;
     if (filters.searchQuery) count++;
@@ -88,55 +125,136 @@ export const Shop = ({ categoryName }) => {
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter((product) => {
       // 1. Category Filter
-      if (filters.category && filters.category !== 'All') {
-        const cat = filters.category.toLowerCase().replace('-', ' ');
-        const prodCat = product.category.toLowerCase();
-        const isNewArrivalCategory = cat.includes('new') || cat.includes('arrival');
-
-        if (isNewArrivalCategory) {
-          if (!product.isNew && prodCat !== 'new arrivals') return false;
-        } else if (!prodCat.includes(cat) && cat !== prodCat) {
+      if (filters.category && filters.category.toLowerCase() !== 'all') {
+        const selectedCat = filters.category.toLowerCase();
+        const prodCatSlug = (product.categorySlug || product.category || '').toLowerCase();
+        if (prodCatSlug !== selectedCat && !prodCatSlug.includes(selectedCat)) {
           return false;
         }
       }
 
-      // 2. Search Query Filter
+      // 2. Subcategory Filter
+      if (filters.subcategory && filters.subcategory.trim()) {
+        const sub = filters.subcategory.toLowerCase();
+        const prodSub = (product.subcategory || '').toLowerCase();
+        if (prodSub !== sub && !prodSub.includes(sub)) {
+          return false;
+        }
+      }
+
+      // 3. Search Query Filter
       if (filters.searchQuery && filters.searchQuery.trim()) {
         const q = filters.searchQuery.toLowerCase().trim();
         const inName = product.name.toLowerCase().includes(q);
+        const inBrand = product.brand?.toLowerCase().includes(q) || false;
         const inCat = product.category.toLowerCase().includes(q);
         const inSubcat = product.subcategory?.toLowerCase().includes(q) || false;
-        const inDesc = product.description.toLowerCase().includes(q);
+        const inDesc = product.description?.toLowerCase().includes(q) || false;
         const inTags = product.tags?.some((t) => t.toLowerCase().includes(q)) || false;
 
-        if (!inName && !inCat && !inSubcat && !inDesc && !inTags) {
+        if (!inName && !inBrand && !inCat && !inSubcat && !inDesc && !inTags) {
           return false;
         }
       }
 
-      // 3. Size Filter
+      // 4. Size Filter (Fashion / Furniture)
       if (filters.sizes?.length > 0) {
-        const hasSize = product.sizes?.some((s) => filters.sizes.includes(s));
+        const hasSize = product.sizes?.some((s) =>
+          filters.sizes.some((fs) => s.toLowerCase().includes(fs.toLowerCase()))
+        );
         if (!hasSize) return false;
       }
 
-      // 4. Color Filter
+      // 5. Color Filter
       if (filters.colors?.length > 0) {
         const hasColor = product.colors?.some((c) =>
-          filters.colors.some((fc) => fc.toLowerCase() === c.toLowerCase())
+          filters.colors.some((fc) => c.toLowerCase().includes(fc.toLowerCase()))
         );
         if (!hasColor) return false;
       }
 
-      // 5. Price Range Filter
-      if (filters.priceRange && filters.priceRange !== 'all') {
-        if (filters.priceRange === 'under-1000' && product.price >= 1000) return false;
-        if (filters.priceRange === '1000-2500' && (product.price < 1000 || product.price > 2500)) return false;
-        if (filters.priceRange === '2500-5000' && (product.price < 2500 || product.price > 5000)) return false;
-        if (filters.priceRange === 'above-5000' && product.price <= 5000) return false;
+      // 6. Material Filter (Fashion / Furniture)
+      if (filters.materials?.length > 0) {
+        const hasMat = filters.materials.some((m) =>
+          (product.material || '').toLowerCase().includes(m.toLowerCase())
+        );
+        if (!hasMat) return false;
       }
 
-      // 6. Availability Filter
+      // 7. Room Type (Furniture)
+      if (filters.roomTypes?.length > 0) {
+        const hasRoom = filters.roomTypes.some((r) =>
+          (product.roomType || product.subcategory || '').toLowerCase().includes(r.toLowerCase())
+        );
+        if (!hasRoom) return false;
+      }
+
+      // 8. Brand Filter (Electronics / Cosmetics / Medicines)
+      if (filters.brands?.length > 0) {
+        const hasBrand = filters.brands.some((b) =>
+          (product.brand || '').toLowerCase().includes(b.toLowerCase())
+        );
+        if (!hasBrand) return false;
+      }
+
+      // 9. RAM (Electronics)
+      if (filters.rams?.length > 0) {
+        const hasRam = filters.rams.some((ram) =>
+          (product.ram || '').toLowerCase().includes(ram.toLowerCase())
+        );
+        if (!hasRam) return false;
+      }
+
+      // 10. Storage (Electronics)
+      if (filters.storages?.length > 0) {
+        const hasStorage = filters.storages.some((st) =>
+          (product.storage || '').toLowerCase().includes(st.toLowerCase()) ||
+          product.sizes?.some((s) => s.toLowerCase().includes(st.toLowerCase()))
+        );
+        if (!hasStorage) return false;
+      }
+
+      // 11. Form (Medicines)
+      if (filters.forms?.length > 0) {
+        const hasForm = filters.forms.some((f) =>
+          (product.form || '').toLowerCase().includes(f.toLowerCase())
+        );
+        if (!hasForm) return false;
+      }
+
+      // 12. Prescription Status (Medicines)
+      if (filters.prescriptionRequired !== undefined && filters.prescriptionRequired !== 'all') {
+        if (Boolean(product.prescriptionRequired) !== Boolean(filters.prescriptionRequired)) {
+          return false;
+        }
+      }
+
+      // 13. Skin Type (Cosmetics)
+      if (filters.skinTypes?.length > 0) {
+        const hasSkin = filters.skinTypes.some((st) =>
+          (product.skinType || '').toLowerCase().includes(st.toLowerCase()) ||
+          (product.skinType || '').toLowerCase().includes('all skin')
+        );
+        if (!hasSkin) return false;
+      }
+
+      // 14. Finish (Cosmetics)
+      if (filters.finishes?.length > 0) {
+        const hasFin = filters.finishes.some((fin) =>
+          (product.finish || '').toLowerCase().includes(fin.toLowerCase())
+        );
+        if (!hasFin) return false;
+      }
+
+      // 15. Price Range Filter
+      if (filters.priceRange && filters.priceRange !== 'all') {
+        if (filters.priceRange === 'under-2000' && product.price >= 2000) return false;
+        if (filters.priceRange === '2000-5000' && (product.price < 2000 || product.price > 5000)) return false;
+        if (filters.priceRange === '5000-20000' && (product.price < 5000 || product.price > 20000)) return false;
+        if (filters.priceRange === 'above-20000' && product.price <= 20000) return false;
+      }
+
+      // 16. Availability Filter
       if (filters.availability && filters.availability !== 'all') {
         if (filters.availability === 'in-stock' && product.stock <= 0) return false;
         if (filters.availability === 'out-of-stock' && product.stock > 0) return false;
@@ -155,6 +273,8 @@ export const Shop = ({ categoryName }) => {
           return a.name.localeCompare(b.name);
         case 'name-desc':
           return b.name.localeCompare(a.name);
+        case 'rating':
+          return (b.rating || 0) - (a.rating || 0);
         case 'featured':
         default:
           return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0);
@@ -172,23 +292,41 @@ export const Shop = ({ categoryName }) => {
   return (
     <main className="w-full bg-[#F7F3EA] text-[#101820] min-h-screen">
       {/* 1. SHOP HERO & BREADCRUMB */}
-      <ShopHero categoryTitle={filters.category} />
+      <ShopHero categoryTitle={filters.category === 'all' ? 'All Products' : filters.category} />
 
       {/* 2. CATEGORY NAVIGATION TABS */}
       <CategoryNavTabs
         activeCategory={filters.category}
-        onSelectCategory={(cat) => handleFilterChange({ category: cat })}
+        onSelectCategory={(cat) => handleFilterChange({ category: cat, subcategory: '' })}
       />
 
       {/* 3. MAIN PRODUCT DISCOVERY VIEW */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-10 sm:py-14">
-        {/* Search Bar */}
-        <div className="mb-8 max-w-xl">
-          <SearchBar
-            value={filters.searchQuery || ''}
-            onChange={(val) => handleFilterChange({ searchQuery: val })}
-            onClear={() => handleFilterChange({ searchQuery: '' })}
-          />
+        {/* Search Bar & Subcategory pill if active */}
+        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="max-w-md w-full">
+            <SearchBar
+              value={filters.searchQuery || ''}
+              onChange={(val) => handleFilterChange({ searchQuery: val })}
+              onClear={() => handleFilterChange({ searchQuery: '' })}
+            />
+          </div>
+
+          {filters.subcategory && (
+            <div className="flex items-center gap-2 text-xs">
+              <span className="text-[#A9B0B5]">Subcategory:</span>
+              <span className="bg-[#101820] text-[#F7F3EA] px-3 py-1 font-medium rounded-none flex items-center gap-1.5">
+                {filters.subcategory}
+                <button
+                  type="button"
+                  onClick={() => handleFilterChange({ subcategory: '' })}
+                  className="hover:text-[#C9A45C] ml-1"
+                >
+                  ✕
+                </button>
+              </span>
+            </div>
+          )}
         </div>
 
         {/* Filter + Sort Toolbar */}
@@ -214,7 +352,7 @@ export const Shop = ({ categoryName }) => {
           {/* Product Grid Viewport */}
           <div className="flex-grow">
             {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                 {Array.from({ length: 6 }).map((_, idx) => (
                   <ProductSkeleton key={idx} />
                 ))}
@@ -234,8 +372,8 @@ export const Shop = ({ categoryName }) => {
                 <div className="mt-14 pt-8 border-t border-black/10 flex flex-col items-center justify-center gap-4">
                   {/* Progress Indicator */}
                   <div className="text-xs text-[#A9B0B5] font-light">
-                    Showing <span className="text-[#101820] font-medium">{visibleProducts.length}</span> of{' '}
-                    <span className="text-[#101820] font-medium">{filteredProducts.length}</span> items
+                    Showing <span className="text-[#101820] font-semibold">{visibleProducts.length}</span> of{' '}
+                    <span className="text-[#101820] font-semibold">{filteredProducts.length}</span> items
                   </div>
 
                   {/* Progress Bar */}
@@ -252,7 +390,7 @@ export const Shop = ({ categoryName }) => {
                   {hasMore && (
                     <button
                       onClick={handleLoadMore}
-                      className="btn-shine inline-flex items-center gap-2 px-8 py-3.5 bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820] text-xs uppercase tracking-widest font-medium transition-all duration-300 mt-2 shadow-sm cursor-pointer"
+                      className="btn-shine inline-flex items-center gap-2 px-8 py-3.5 bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820] text-xs uppercase tracking-widest font-semibold transition-all duration-300 mt-2 shadow-sm cursor-pointer"
                     >
                       <span>Load More Products</span>
                       <ChevronDown className="w-3.5 h-3.5" />
@@ -278,7 +416,7 @@ export const Shop = ({ categoryName }) => {
       {/* Quick View Modal */}
       <QuickViewModal />
 
-      {/* Reusable Newsletter Section */}
+      {/* Reusable VIP Newsletter */}
       <NewsletterSection />
     </main>
   );
