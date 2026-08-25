@@ -45,7 +45,7 @@ export const AdminInventory = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
           <span className="text-[10px] uppercase tracking-ultra text-luxury-gold block font-medium">
-            ATELIER SUPPLY & STOCK
+            MARKETPLACE SUPPLY & STOCK
           </span>
           <h1 className="font-serif text-2xl sm:text-3xl text-white font-normal">
             Inventory Management
@@ -64,7 +64,7 @@ export const AdminInventory = () => {
       {/* Stock Overview Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="p-4 bg-luxury-black border border-white/10 space-y-1">
-          <span className="text-luxury-muted block uppercase tracking-wider text-[10px]">Total Units in Atelier</span>
+          <span className="text-luxury-muted block uppercase tracking-wider text-[10px]">Total Units in Stock</span>
           <span className="font-serif text-2xl text-white font-medium">
             {inventory.reduce((a, b) => a + b.stock, 0)} units
           </span>
@@ -73,7 +73,7 @@ export const AdminInventory = () => {
         <div className="p-4 bg-luxury-black border border-white/10 space-y-1">
           <span className="text-luxury-muted block uppercase tracking-wider text-[10px]">Low Stock Watch (&le; 8 units)</span>
           <span className="font-serif text-2xl text-rose-400 font-medium">
-            {inventory.filter((i) => i.stock <= lowStockThreshold).length} silhouettes
+            {inventory.filter((i) => i.stock <= lowStockThreshold).length} products
           </span>
         </div>
 

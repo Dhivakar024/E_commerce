@@ -16,7 +16,7 @@ export const NewsletterSection = () => {
 
     if (!email.trim()) {
       setStatus('error');
-      setErrorMessage('Please enter your email address.');
+      setErrorMessage('Please enter your email.');
       return;
     }
 
@@ -32,28 +32,28 @@ export const NewsletterSection = () => {
   };
 
   return (
-    <section className="py-24 sm:py-32 bg-luxury-black relative z-10">
+    <section className="py-24 sm:py-32 bg-[#101820] relative z-10">
       <div className="max-w-3xl mx-auto px-6 sm:px-8 text-center">
-        <span className="text-xs uppercase tracking-ultra text-luxury-gold block mb-3 font-medium">
-          THE INNER CIRCLE
+        <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-3 font-semibold">
+          MARKETPLACE DISPATCH
         </span>
         <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white mb-4">
-          Stay in the Know
+          Stay in the Loop
         </h2>
-        <p className="text-xs sm:text-sm text-luxury-muted font-light max-w-md mx-auto mb-10 leading-relaxed">
-          Be the first to discover new collections, exclusive releases and special offers.
+        <p className="text-xs sm:text-sm text-[#A9B0B5] font-light max-w-md mx-auto mb-10 leading-relaxed">
+          Get updates on new products, exclusive offers and marketplace deals.
         </p>
 
         {status === 'success' ? (
-          <div className="inline-flex items-center gap-3 px-6 py-4 bg-white/5 border border-luxury-gold/40 text-luxury-champagne text-xs sm:text-sm tracking-wide animate-fade-in">
-            <CheckCircle2 className="w-5 h-5 text-luxury-gold flex-shrink-0" />
-            <span>Thank you for subscribing. You are now on the private guest list.</span>
+          <div className="inline-flex items-center gap-3 px-6 py-4 bg-white/5 border border-[#C9A45C]/40 text-[#F7F3EA] text-xs sm:text-sm tracking-wide animate-fade-in">
+            <CheckCircle2 className="w-5 h-5 text-[#C9A45C] flex-shrink-0" />
+            <span>Thank you for subscribing! You will receive our latest marketplace deals.</span>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="max-w-md mx-auto" noValidate>
             <div className="flex flex-col sm:flex-row items-stretch gap-3">
               <div className="relative flex-grow">
-                <Mail className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-luxury-muted" />
+                <Mail className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[#A9B0B5]" />
                 <input
                   type="email"
                   value={email}
@@ -61,20 +61,20 @@ export const NewsletterSection = () => {
                     setEmail(e.target.value);
                     if (status === 'error') setStatus('idle');
                   }}
-                  placeholder="Enter your email address"
-                  className={`w-full bg-luxury-charcoal/80 border text-xs sm:text-sm text-white placeholder:text-luxury-muted/60 pl-11 pr-4 py-3.5 focus:outline-none transition-colors ${
+                  placeholder="Enter your email"
+                  className={`w-full bg-[#1B2630] border text-xs sm:text-sm text-white placeholder:text-[#A9B0B5]/60 pl-11 pr-4 py-3.5 focus:outline-none transition-colors ${
                     status === 'error'
-                      ? 'border-rose-500/80 focus:border-rose-400'
-                      : 'border-white/15 focus:border-luxury-gold'
+                      ? 'border-rose-500 focus:border-rose-400'
+                      : 'border-white/15 focus:border-[#C9A45C]'
                   }`}
                   aria-label="Email address for newsletter"
                 />
               </div>
               <button
                 type="submit"
-                className="btn-shine px-8 py-3.5 bg-white hover:bg-luxury-champagne text-luxury-black font-medium text-xs uppercase tracking-widest transition-colors flex items-center justify-center cursor-pointer flex-shrink-0"
+                className="btn-shine px-8 py-3.5 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] font-semibold text-xs uppercase tracking-widest transition-colors flex items-center justify-center cursor-pointer flex-shrink-0"
               >
-                Subscribe
+                SUBSCRIBE
               </button>
             </div>
 
@@ -87,8 +87,8 @@ export const NewsletterSection = () => {
           </form>
         )}
 
-        <p className="text-[10px] text-luxury-subtle mt-4 tracking-wider">
-          Complimentary subscription. Unsubscribe at any time with complete ease.
+        <p className="text-[10px] text-[#A9B0B5] mt-4 tracking-wider">
+          We respect your inbox. Unsubscribe anytime with one click.
         </p>
       </div>
     </section>

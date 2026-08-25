@@ -10,7 +10,7 @@ import {
 
 const STATUS_OPTIONS = [
   'Order Confirmed',
-  'Preparing in Atelier',
+  'Processing & Packaging',
   'Dispatched',
   'Out for Delivery',
   'Delivered',
@@ -62,7 +62,7 @@ export const AdminOrders = () => {
                 pinCode: '400020',
                 country: 'India',
               },
-              deliveryMethod: { id: 'express', name: 'Priority Atelier Express', estimate: '1–2 Days', price: 199 },
+              deliveryMethod: { id: 'express', name: 'Priority Air Express', estimate: '1–2 Days', price: 199 },
               paymentMethod: 'card',
               items: [
                 {
@@ -77,7 +77,7 @@ export const AdminOrders = () => {
               shipping: 199,
               tax: 2106,
               total: 14004,
-              status: 'Preparing in Atelier',
+              status: 'Processing & Packaging',
             },
             {
               id: 'ord-demo-2',

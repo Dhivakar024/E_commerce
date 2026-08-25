@@ -146,13 +146,13 @@ export const Account = () => {
         localStorage.setItem('elan_saved_address', JSON.stringify(addressForm));
       }
       setIsAddingAddress(false);
-      showToast('Address added to your atelier book.', 'success');
+      showToast('Address added to your address book.', 'success');
     } catch {
       const newAddr = { ...addressForm, _id: `addr-${Date.now()}` };
       setAddresses((prev) => [newAddr, ...prev]);
-      localStorage.setItem('elan_saved_address', JSON.stringify(addressForm));
+      localStorage.setItem('lax360_saved_address', JSON.stringify(addressForm));
       setIsAddingAddress(false);
-      showToast('Address added to your atelier book.', 'success');
+      showToast('Address added to your address book.', 'success');
     }
   };
 
@@ -329,8 +329,8 @@ export const Account = () => {
                       <span className="text-white font-medium text-sm">{user.phone ? `+91 ${user.phone}` : 'Not provided'}</span>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-luxury-muted block uppercase tracking-wider text-[10px]">Atelier Membership</span>
-                      <span className="text-luxury-gold font-medium text-sm uppercase tracking-wider">Élite Private Client</span>
+                      <span className="text-luxury-muted block uppercase tracking-wider text-[10px]">Account Tier</span>
+                      <span className="text-luxury-gold font-medium text-sm uppercase tracking-wider">LAX360 Verified Member</span>
                     </div>
                   </div>
                 )}

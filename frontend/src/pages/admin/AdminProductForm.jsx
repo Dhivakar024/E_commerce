@@ -89,7 +89,7 @@ export const AdminProductForm = () => {
               CATALOG EDITOR
             </span>
             <h1 className="font-serif text-2xl sm:text-3xl text-white font-normal">
-              {isEdit ? `Edit "${formData.name || 'Silhouette'}"` : 'New Atelier Creation'}
+              {isEdit ? `Edit "${formData.name || 'Product'}"` : 'Add New Marketplace Product'}
             </h1>
           </div>
         </div>

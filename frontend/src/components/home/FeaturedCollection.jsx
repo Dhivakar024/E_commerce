@@ -1,90 +1,136 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Shirt, Armchair, Smartphone, Pill, Sparkles } from 'lucide-react';
+
+const STORE_BLOCKS = [
+  {
+    category: 'Fashion',
+    title: 'Modern Apparel & Footwear',
+    description: 'Timeless styles, refined workwear, and comfortable casuals for men, women, and kids.',
+    cta: 'Shop Fashion',
+    link: '/category/fashion',
+    icon: Shirt,
+    image: 'https://images.unsplash.com/photo-1445205170230-053b83016050?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    category: 'Furniture',
+    title: 'Home & Living Essentials',
+    description: 'Architectural living room sofas, solid teak dining tables, and ergonomic office comfort.',
+    cta: 'Explore Furniture',
+    link: '/category/furniture',
+    icon: Armchair,
+    image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    category: 'Electronics',
+    title: 'Smart Tech & Gadgets',
+    description: 'OLED 4K displays, high-speed laptops, flagship smartphones, and pro audio gear.',
+    cta: 'Discover Electronics',
+    link: '/category/electronics',
+    icon: Smartphone,
+    image: 'https://images.unsplash.com/photo-1550009158-9ebf69173e03?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    category: 'Medicines',
+    title: 'Health & Personal Wellness',
+    description: 'Certified multivitamins, first-aid safety kits, herbal care, and diagnostic monitors.',
+    cta: 'Shop Wellness',
+    link: '/category/medicines',
+    icon: Pill,
+    image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=800&auto=format&fit=crop',
+  },
+  {
+    category: 'Cosmetics',
+    title: 'Beauty & Skincare Formulations',
+    description: 'Hydrating serums, velvet matte lip shades, luminous highlighters, and clean beauty.',
+    cta: 'Explore Beauty',
+    link: '/category/cosmetics',
+    icon: Sparkles,
+    image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=800&auto=format&fit=crop',
+  },
+];
 
 export const FeaturedCollection = () => {
   return (
-    <section className="py-20 sm:py-28 bg-luxury-charcoal/30 border-y border-white/5 relative z-10 overflow-hidden">
+    <section className="py-20 sm:py-28 bg-[#1B2630]/40 border-y border-white/5 relative z-10 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
-          {/* LEFT: Large Fashion Editorial Image (50% on Desktop) */}
-          <div className="lg:col-span-6 order-1">
-            <div className="relative aspect-[4/5] sm:aspect-[1/1] lg:aspect-[4/5] overflow-hidden border border-white/10 shadow-2xl bg-neutral-900 group">
-              <img
-                src="https://images.unsplash.com/photo-1539109136881-3be0616acf4b?q=80&w=1200&auto=format&fit=crop"
-                alt="Featured Editorial Collection"
-                loading="lazy"
-                className="w-full h-full object-cover object-center transition-transform duration-1000 ease-out group-hover:scale-105 filter brightness-95"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-luxury-black/70 via-transparent to-transparent" />
-              
-              {/* Editorial Stamp */}
-              <div className="absolute bottom-6 left-6 right-6 p-4 bg-luxury-black/80 backdrop-blur-md border border-white/10 flex items-center justify-between">
-                <div>
-                  <span className="text-[10px] uppercase tracking-ultra text-luxury-gold block">
-                    EDITORIAL ARCHIVE
-                  </span>
-                  <span className="font-serif text-sm text-white font-medium">
-                    Autumn / Winter Haute Capsule
-                  </span>
-                </div>
-                <span className="text-xs text-luxury-muted">Limited Series</span>
-              </div>
-            </div>
-          </div>
-
-          {/* RIGHT: Text Content (50% on Desktop) */}
-          <div className="lg:col-span-6 order-2 flex flex-col justify-center">
-            {/* Small Label */}
-            <div className="inline-flex items-center gap-2 mb-4">
-              <Sparkles className="w-3.5 h-3.5 text-luxury-gold" />
-              <span className="text-xs uppercase tracking-ultra font-medium text-luxury-gold">
-                CURATED FOR YOU
-              </span>
-            </div>
-
-            {/* Heading */}
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white leading-[1.15] tracking-tight mb-6">
-              Timeless Pieces. <br />
-              <span className="italic font-light text-luxury-champagne">Modern Expression.</span>
+        {/* Section Header */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 border-b border-white/10 pb-6">
+          <div>
+            <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
+              EXPLORE OUR STORE
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white mb-2">
+              Curated Category Hubs
             </h2>
-
-            {/* Description */}
-            <p className="text-sm sm:text-base text-luxury-cream/80 font-light leading-relaxed mb-6 max-w-lg">
-              Discover carefully selected pieces designed to elevate your everyday wardrobe. Created with unmatched attention to detail, noble textiles, and effortless versatility.
+            <p className="text-xs sm:text-sm text-[#A9B0B5] font-light">
+              Shop across 5 dedicated marketplace departments with guaranteed authenticity and fast delivery.
             </p>
-
-            <p className="text-xs sm:text-sm text-luxury-muted font-light leading-relaxed mb-10 max-w-lg">
-              Each garment in our featured capsule is hand-draped and structured to bring composure, grace, and an understated presence to every moment.
-            </p>
-
-            {/* Features list */}
-            <div className="grid grid-cols-2 gap-4 pt-6 border-t border-white/10 mb-10">
-              <div>
-                <span className="text-xs uppercase tracking-widest text-luxury-champagne font-medium block mb-1">
-                  Pure Origins
-                </span>
-                <span className="text-xs text-luxury-muted">100% Grade-A Italian & French Mills</span>
-              </div>
-              <div>
-                <span className="text-xs uppercase tracking-widest text-luxury-champagne font-medium block mb-1">
-                  Bespoke Craft
-                </span>
-                <span className="text-xs text-luxury-muted">Limited runs with numbered certificates</span>
-              </div>
-            </div>
-
-            {/* Button */}
-            <div>
-              <Link
-                to="/collections"
-                className="btn-shine group inline-flex items-center justify-center gap-3 px-8 py-4 bg-white text-luxury-black hover:bg-luxury-champagne font-medium text-xs uppercase tracking-widest transition-all duration-300 transform hover:-translate-y-0.5 shadow-xl"
-              >
-                <span>Explore Collection</span>
-                <ArrowRight className="w-4 h-4 text-luxury-black transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-            </div>
           </div>
+
+          <Link
+            to="/shop"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#C9A45C] hover:text-white mt-4 md:mt-0 font-semibold transition-colors"
+          >
+            <span>View Complete Marketplace</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* 5 Category Shopping Blocks */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {STORE_BLOCKS.map((block, idx) => {
+            const Icon = block.icon;
+            const isLarge = idx === 0 || idx === 1;
+
+            return (
+              <div
+                key={block.category}
+                className={`group relative flex flex-col justify-between overflow-hidden bg-[#101820] border border-white/10 hover:border-[#C9A45C] transition-all duration-500 shadow-xl ${
+                  isLarge ? 'md:col-span-1 lg:col-span-1' : ''
+                }`}
+              >
+                {/* Background Image Container */}
+                <div className="relative aspect-[16/10] overflow-hidden bg-neutral-900">
+                  <img
+                    src={block.image}
+                    alt={block.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108 filter brightness-85 group-hover:brightness-95"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-[#101820]/30 to-transparent" />
+
+                  {/* Category Pill Tag */}
+                  <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 bg-[#101820]/90 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold">
+                    <Icon className="w-3 h-3" />
+                    <span>{block.category}</span>
+                  </div>
+                </div>
+
+                {/* Content */}
+                <div className="p-6 flex flex-col justify-between flex-grow space-y-4">
+                  <div>
+                    <h3 className="font-serif text-xl text-white font-medium mb-2 group-hover:text-[#C9A45C] transition-colors">
+                      {block.title}
+                    </h3>
+                    <p className="text-xs text-[#A9B0B5] font-light leading-relaxed">
+                      {block.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-4 border-t border-white/10">
+                    <Link
+                      to={block.link}
+                      className="btn-shine inline-flex items-center justify-center gap-2 w-full py-3 bg-white/5 hover:bg-[#C9A45C] hover:text-[#101820] text-[#F7F3EA] text-xs uppercase tracking-widest font-semibold border border-white/10 hover:border-[#C9A45C] transition-all"
+                    >
+                      <span>{block.cta}</span>
+                      <ArrowRight className="w-3.5 h-3.5" />
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

@@ -1,47 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const MULTI_FOOTER_SECTIONS = [
+const FOOTER_COLUMNS = [
   {
-    title: 'Marketplace',
+    title: 'SHOP',
     links: [
-      { label: 'Fashion & Apparel', path: '/category/fashion' },
-      { label: 'Furniture & Living', path: '/category/furniture' },
-      { label: 'Electronics & Tech', path: '/category/electronics' },
-      { label: 'Medicines & Health', path: '/category/medicines' },
-      { label: 'Cosmetics & Beauty', path: '/category/cosmetics' },
-      { label: 'All Products', path: '/shop' },
+      { label: 'Fashion', path: '/category/fashion' },
+      { label: 'Furniture', path: '/category/furniture' },
+      { label: 'Electronics', path: '/category/electronics' },
+      { label: 'Medicines', path: '/category/medicines' },
+      { label: 'Cosmetics', path: '/category/cosmetics' },
     ],
   },
   {
-    title: 'Customer Care',
+    title: 'HELP',
     links: [
-      { label: 'Track Order', path: '/account/orders' },
-      { label: 'Shipping & Delivery', path: '/shipping' },
-      { label: 'Returns & Exchanges', path: '/returns' },
-      { label: 'Prescription Policy', path: '/category/medicines' },
-      { label: 'FAQ & Support', path: '/faq' },
       { label: 'Contact Us', path: '/contact' },
+      { label: 'FAQs', path: '/faq' },
+      { label: 'Shipping', path: '/shipping' },
+      { label: 'Returns', path: '/returns' },
+      { label: 'Track Order', path: '/account/orders' },
     ],
   },
   {
-    title: 'Company',
+    title: 'COMPANY',
     links: [
-      { label: 'About LAX360', path: '/about' },
-      { label: 'Our Standards', path: '/about' },
+      { label: 'About Us', path: '/about' },
       { label: 'Collections', path: '/collections' },
-      { label: 'Terms & Conditions', path: '/terms' },
-      { label: 'Privacy Policy', path: '/privacy' },
+      { label: 'Careers', path: '/about' },
+      { label: 'Contact', path: '/contact' },
     ],
   },
   {
-    title: 'Account',
+    title: 'LEGAL',
     links: [
-      { label: 'My Profile', path: '/account' },
-      { label: 'Order History', path: '/account/orders' },
-      { label: 'Saved Wishlist', path: '/wishlist' },
-      { label: 'Shopping Bag', path: '/cart' },
-      { label: 'Customer Login', path: '/login' },
+      { label: 'Privacy Policy', path: '/privacy' },
+      { label: 'Terms & Conditions', path: '/terms' },
+      { label: 'Cookie Policy', path: '/privacy' },
     ],
   },
 ];
@@ -62,16 +57,16 @@ export const Footer = () => {
               </span>
             </div>
           </Link>
-          <p className="text-xs text-[#A9B0B5] max-w-md font-light leading-relaxed">
-            Everything You Need. All in One Place. Premium multi-category e-commerce platform delivering fashion, furniture, electronics, certified healthcare, and luxury cosmetics.
+          <p className="text-xs sm:text-sm text-[#A9B0B5] max-w-md font-light leading-relaxed">
+            Your modern destination for fashion, furniture, electronics, medicines, cosmetics and everyday essentials.
           </p>
         </div>
 
         {/* 4 Footer Columns */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 mb-16">
-          {MULTI_FOOTER_SECTIONS.map((section) => (
+          {FOOTER_COLUMNS.map((section) => (
             <div key={section.title}>
-              <h4 className="font-serif text-xs uppercase tracking-ultra text-white font-medium mb-4">
+              <h4 className="font-serif text-xs uppercase tracking-ultra text-white font-semibold mb-4">
                 {section.title}
               </h4>
               <ul className="space-y-2.5 text-xs text-[#A9B0B5]">
@@ -103,8 +98,8 @@ export const Footer = () => {
             <Link to="/terms" className="hover:text-white transition-colors">
               Terms & Conditions
             </Link>
-            <Link to="/about" className="hover:text-white transition-colors">
-              Accessibility
+            <Link to="/privacy" className="hover:text-white transition-colors">
+              Cookie Policy
             </Link>
           </div>
         </div>

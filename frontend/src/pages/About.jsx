@@ -1,95 +1,282 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles, ShieldCheck, Leaf } from 'lucide-react';
-import { BrandPhilosophy } from '../components/home/BrandPhilosophy';
+import {
+  ArrowRight,
+  Sparkles,
+  Layers,
+  CheckCircle2,
+  ShieldCheck,
+  HeartHandshake,
+  Shirt,
+  Armchair,
+  Smartphone,
+  Pill,
+} from 'lucide-react';
+import { CATEGORIES } from '../data/categories';
+import { NewsletterSection } from '../components/home/NewsletterSection';
+
+const CATEGORY_ICONS = {
+  fashion: Shirt,
+  furniture: Armchair,
+  electronics: Smartphone,
+  medicines: Pill,
+  cosmetics: Sparkles,
+};
+
+const WHAT_WE_OFFER = [
+  {
+    category: 'Fashion',
+    slug: 'fashion',
+    icon: Shirt,
+    description: 'Everyday styles and essentials for men, women and kids.',
+  },
+  {
+    category: 'Furniture',
+    slug: 'furniture',
+    icon: Armchair,
+    description: 'Furniture and home pieces designed for modern living.',
+  },
+  {
+    category: 'Electronics',
+    slug: 'electronics',
+    icon: Smartphone,
+    description: 'Technology and smart devices for everyday life.',
+  },
+  {
+    category: 'Medicines',
+    slug: 'medicines',
+    icon: Pill,
+    description: 'Everyday healthcare, wellness and personal care essentials.',
+  },
+  {
+    category: 'Cosmetics',
+    slug: 'cosmetics',
+    icon: Sparkles,
+    description: 'Beauty, skincare, haircare and personal care products.',
+  },
+];
+
+const WHY_LAX360 = [
+  {
+    icon: Layers,
+    title: 'One Marketplace',
+    description: 'Shop across multiple categories from one platform.',
+  },
+  {
+    icon: CheckCircle2,
+    title: 'Wide Selection',
+    description: 'Discover products for different parts of everyday life.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Simple Experience',
+    description: 'Search, compare and shop with a clean experience.',
+  },
+  {
+    icon: HeartHandshake,
+    title: 'Customer Focused',
+    description: 'Designed around convenience and customer needs.',
+  },
+];
 
 export const About = () => {
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pt-28 sm:pt-32 pb-24">
+    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 space-y-20">
-        {/* Story Hero */}
+        {/* 1. Hero Section */}
         <div className="text-center max-w-3xl mx-auto space-y-4">
-          <span className="text-xs uppercase tracking-ultra text-luxury-gold block font-medium">
-            OUR HERITAGE & VISION
+          <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
+            ABOUT LAX360 PVT LTD
           </span>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-normal leading-tight">
-            The Pursuit of Pure Architectural Elegance
+            One Marketplace. Everything You Need.
           </h1>
-          <p className="text-xs sm:text-sm text-luxury-muted font-light leading-relaxed max-w-xl mx-auto">
-            Founded with an uncompromising devotion to noble fibers, tailored proportion, and European artisan heritage.
+          <p className="text-sm sm:text-base text-[#A9B0B5] font-light leading-relaxed max-w-2xl mx-auto">
+            LAX360 PVT LTD is a modern multi-category e-commerce platform bringing everyday products together in one convenient shopping destination.
           </p>
         </div>
 
-        {/* Cinematic Imagery Banner */}
-        <div className="relative h-[380px] sm:h-[480px] overflow-hidden border border-white/10 shadow-2xl">
+        {/* 2. Panoramic Marketplace Banner */}
+        <div className="relative h-[340px] sm:h-[440px] overflow-hidden border border-white/10 shadow-2xl">
           <img
-            src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1600&q=80"
-            alt="Atelier Craftsmanship"
-            className="w-full h-full object-cover"
+            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80"
+            alt="LAX360 Multi-Category Marketplace"
+            className="w-full h-full object-cover filter brightness-60"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-transparent to-[#101820]/40" />
           <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 max-w-lg space-y-2">
-            <span className="text-[10px] uppercase tracking-ultra text-luxury-champagne block font-medium">
-              ESTABLISHED MMXXVI
+            <span className="text-[10px] uppercase tracking-ultra text-[#C9A45C] block font-semibold">
+              EVERYDAY SHOPPING SIMPLIFIED
             </span>
             <h2 className="font-serif text-2xl sm:text-3xl text-white font-normal">
-              Every Stitch Tells a Tale of Mastery
+              Empowering Modern Lifestyles Across India
             </h2>
           </div>
         </div>
 
-        {/* Pillars Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-4">
-          <div className="p-8 bg-luxury-charcoal/30 border border-white/10 space-y-4 shadow-xl">
-            <div className="w-10 h-10 rounded-full bg-luxury-gold/10 border border-luxury-gold/30 flex items-center justify-center text-luxury-gold">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <h3 className="font-serif text-xl text-white font-normal">Master Craftsmanship</h3>
-            <p className="text-xs text-luxury-cream/80 font-light leading-relaxed">
-              Every silhouette is cut and draped by generational artisans in historic tailoring workshops in Florence and Biella, honoring centuries of sartorial tradition.
-            </p>
+        {/* 3. OUR MISSION */}
+        <div className="p-8 sm:p-12 bg-[#1B2630] border border-white/10 shadow-xl text-center max-w-4xl mx-auto space-y-4">
+          <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
+            OUR MISSION
+          </span>
+          <h2 className="font-serif text-2xl sm:text-3xl text-white font-normal">
+            "To make everyday shopping simpler by bringing multiple product categories together on one convenient digital marketplace."
+          </h2>
+          <p className="text-xs sm:text-sm text-[#A9B0B5] font-light leading-relaxed max-w-2xl mx-auto">
+            We eliminate the need to switch between fragmented specialty stores. By consolidating certified electronics, architectural furniture, daily wellness essentials, clean cosmetics, and versatile fashion, LAX360 provides a frictionless unified shopping journey.
+          </p>
+        </div>
+
+        {/* 4. WHAT WE OFFER (5 Category Blocks) */}
+        <div className="space-y-8">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
+              CORE CATEGORIES
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+              What We Offer
+            </h2>
           </div>
 
-          <div className="p-8 bg-luxury-charcoal/30 border border-white/10 space-y-4 shadow-xl">
-            <div className="w-10 h-10 rounded-full bg-luxury-gold/10 border border-luxury-gold/30 flex items-center justify-center text-luxury-gold">
-              <Leaf className="w-5 h-5" />
-            </div>
-            <h3 className="font-serif text-xl text-white font-normal">Noble & Traceable Fibers</h3>
-            <p className="text-xs text-luxury-cream/80 font-light leading-relaxed">
-              We exclusively harvest organic European flax, cruelty-free mulberry silk, and Grade-A Mongolian cashmere with full ecological provenance and zero synthetic fillers.
-            </p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {WHAT_WE_OFFER.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link
+                  key={item.category}
+                  to={`/category/${item.slug}`}
+                  className="p-6 bg-[#1B2630] border border-white/10 hover:border-[#C9A45C] transition-all duration-300 flex flex-col justify-between space-y-4 group shadow-xl hover:-translate-y-1"
+                >
+                  <div className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C] group-hover:bg-[#C9A45C] group-hover:text-[#101820] transition-colors">
+                    <Icon className="w-6 h-6" />
+                  </div>
+
+                  <div>
+                    <h3 className="font-serif text-lg text-white font-medium mb-1.5 group-hover:text-[#C9A45C] transition-colors">
+                      {item.category}
+                    </h3>
+                    <p className="text-xs text-[#A9B0B5] font-light leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs uppercase tracking-widest text-[#C9A45C] font-semibold">
+                    <span>Explore</span>
+                    <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 5. WHY LAX360? */}
+        <div className="space-y-8 pt-6 border-t border-white/10">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
+              ADVANTAGES
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+              Why LAX360?
+            </h2>
           </div>
 
-          <div className="p-8 bg-luxury-charcoal/30 border border-white/10 space-y-4 shadow-xl">
-            <div className="w-10 h-10 rounded-full bg-luxury-gold/10 border border-luxury-gold/30 flex items-center justify-center text-luxury-gold">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <h3 className="font-serif text-xl text-white font-normal">Circular Longevity</h3>
-            <p className="text-xs text-luxury-cream/80 font-light leading-relaxed">
-              We reject transient micro-trends. Our garments are intentionally designed to age with graceful patina and remain relevant across seasons and decades.
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {WHY_LAX360.map((prop, idx) => {
+              const Icon = prop.icon;
+              return (
+                <div
+                  key={idx}
+                  className="p-6 bg-[#1B2630] border border-white/10 space-y-4 shadow-xl"
+                >
+                  <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
+                    <Icon className="w-5 h-5" />
+                  </div>
+                  <h3 className="font-serif text-lg text-white font-medium">{prop.title}</h3>
+                  <p className="text-xs text-[#A9B0B5] font-light leading-relaxed">
+                    {prop.description}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* 6. FORWARD-LOOKING BRAND STORY */}
+        <div className="p-8 sm:p-12 bg-[#1B2630]/60 border border-white/10 max-w-4xl mx-auto space-y-4">
+          <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
+            OUR STORY
+          </span>
+          <h2 className="font-serif text-2xl sm:text-3xl text-white font-normal">
+            Building The Future of Everyday Commerce
+          </h2>
+          <div className="space-y-3 text-sm text-[#A9B0B5] font-light leading-relaxed">
+            <p>
+              LAX360 PVT LTD is built around a simple idea: shopping should be convenient, diverse and accessible from one place.
+            </p>
+            <p>
+              The platform brings multiple everyday categories together while keeping the shopping experience simple and modern. Whether furnishing a new home, upgrading everyday technology, stocking verified health care products, or refreshing your personal style, LAX360 delivers quality assurance, rapid fulfillment, and verified transparency.
             </p>
           </div>
         </div>
 
-        {/* Existing Brand Philosophy section */}
-        <div className="pt-6 border-t border-white/10">
-          <BrandPhilosophy />
+        {/* 7. EXPLORE OUR CATEGORIES GRID */}
+        <div className="space-y-8 pt-6 border-t border-white/10">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
+              DISCOVER
+            </span>
+            <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+              Explore Our Categories
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {CATEGORIES.map((cat) => {
+              const Icon = CATEGORY_ICONS[cat.slug] || Sparkles;
+              return (
+                <Link
+                  key={cat.id}
+                  to={`/category/${cat.slug}`}
+                  className="group relative overflow-hidden bg-[#1B2630] border border-white/10 hover:border-[#C9A45C] transition-all shadow-xl"
+                >
+                  <div className="relative aspect-[3/4] overflow-hidden bg-neutral-900">
+                    <img
+                      src={cat.image}
+                      alt={cat.name}
+                      className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 filter brightness-85"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-transparent to-transparent" />
+                    <div className="absolute bottom-4 left-4 right-4">
+                      <div className="flex items-center gap-1.5 text-[#C9A45C] text-xs font-semibold uppercase mb-1">
+                        <Icon className="w-3.5 h-3.5" />
+                        <span>{cat.name}</span>
+                      </div>
+                      <span className="text-[11px] text-[#A9B0B5]">Explore Store →</span>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
         {/* CTA to Shop */}
-        <div className="text-center py-12 space-y-6">
+        <div className="text-center py-8 space-y-6">
           <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
-            Experience the Atelier Wardrobe
+            Ready to Start Shopping?
           </h2>
           <Link
             to="/shop"
-            className="btn-shine inline-flex items-center gap-2 px-10 py-4 bg-white text-luxury-black hover:bg-luxury-champagne uppercase tracking-widest text-xs font-medium transition-all shadow-2xl"
+            className="btn-shine inline-flex items-center gap-2 px-10 py-4 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] uppercase tracking-widest text-xs font-semibold transition-all shadow-2xl"
           >
-            <span>Explore the Seasonal Collection</span>
+            <span>Explore All Marketplace Products</span>
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
+
+      <NewsletterSection />
     </main>
   );
 };

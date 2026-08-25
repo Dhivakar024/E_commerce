@@ -145,7 +145,7 @@ export const AdminBanners = () => {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g. THE AUTUMN ATELIER EDIT"
+                  placeholder="e.g. THE SEASONAL MARKETPLACE EDIT"
                   className="w-full bg-white/5 border border-white/15 px-3 py-2 text-white focus:outline-none"
                   required
                 />

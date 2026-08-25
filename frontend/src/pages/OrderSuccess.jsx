@@ -15,7 +15,7 @@ export const OrderSuccess = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     try {
-      const savedOrdersStr = localStorage.getItem('elan_orders');
+      const savedOrdersStr = localStorage.getItem('lax360_orders');
       if (savedOrdersStr) {
         const orders = JSON.parse(savedOrdersStr);
         const found = orders.find(
@@ -46,7 +46,7 @@ export const OrderSuccess = () => {
       });
 
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pt-28 sm:pt-32 pb-24">
+    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Success Hero Header */}
         <div className="text-center space-y-4 mb-12 animate-fade-in">
@@ -54,44 +54,44 @@ export const OrderSuccess = () => {
             <CheckCircle2 className="w-9 h-9 sm:w-11 sm:h-11" />
           </div>
 
-          <span className="text-xs uppercase tracking-ultra text-luxury-gold block font-medium">
-            TRANSACTION CONFIRMED
+          <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
+            ORDER CONFIRMED
           </span>
 
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white">
             Thank You for Your Order
           </h1>
 
-          <p className="text-xs sm:text-sm text-luxury-muted font-light max-w-lg mx-auto leading-relaxed">
-            Your bespoke order has been registered in our atelier system. A confirmation email and tracking link have been dispatched to your contact address.
+          <p className="text-xs sm:text-sm text-[#A9B0B5] font-light max-w-lg mx-auto leading-relaxed">
+            Your order has been registered successfully. A confirmation email and tracking link have been dispatched to your contact address.
           </p>
 
-          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/15 text-xs text-luxury-champagne font-mono">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/15 text-xs text-[#C9A45C] font-mono">
             <span>Order Reference:</span>
             <strong className="text-white font-medium">{displayOrderNumber}</strong>
           </div>
         </div>
 
         {/* Order Details Card */}
-        <div className="bg-luxury-charcoal/40 border border-white/10 p-6 sm:p-8 space-y-8 shadow-2xl animate-fade-in">
+        <div className="bg-[#1B2630] border border-white/10 p-6 sm:p-8 space-y-8 shadow-2xl animate-fade-in">
           {/* Top Meta Row */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pb-6 border-b border-white/10 text-xs">
             <div>
-              <span className="text-luxury-muted block uppercase tracking-wider text-[10px] mb-1">
+              <span className="text-[#A9B0B5] block uppercase tracking-wider text-[10px] mb-1">
                 Order Date
               </span>
               <span className="text-white font-medium">{orderDate}</span>
             </div>
             <div>
-              <span className="text-luxury-muted block uppercase tracking-wider text-[10px] mb-1">
-                Estimated Transit
+              <span className="text-[#A9B0B5] block uppercase tracking-wider text-[10px] mb-1">
+                Estimated Delivery
               </span>
-              <span className="text-luxury-champagne font-medium">
+              <span className="text-[#C9A45C] font-medium">
                 {order?.deliveryMethod?.estimate || '2–4 Business Days'}
               </span>
             </div>
             <div>
-              <span className="text-luxury-muted block uppercase tracking-wider text-[10px] mb-1">
+              <span className="text-[#A9B0B5] block uppercase tracking-wider text-[10px] mb-1">
                 Payment Method
               </span>
               <span className="text-white capitalize font-medium">
@@ -103,10 +103,10 @@ export const OrderSuccess = () => {
               </span>
             </div>
             <div>
-              <span className="text-luxury-muted block uppercase tracking-wider text-[10px] mb-1">
+              <span className="text-[#A9B0B5] block uppercase tracking-wider text-[10px] mb-1">
                 Total Amount
               </span>
-              <span className="font-serif text-base text-luxury-champagne font-medium">
+              <span className="font-serif text-base text-[#C9A45C] font-semibold">
                 ₹{(order?.total || 0).toLocaleString('en-IN')}
               </span>
             </div>
@@ -115,41 +115,41 @@ export const OrderSuccess = () => {
           {/* Shipping Address & Delivery Speed */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pb-6 border-b border-white/10 text-xs">
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-luxury-champagne font-medium uppercase tracking-wider text-[11px]">
-                <MapPin className="w-3.5 h-3.5 text-luxury-gold" />
+              <div className="flex items-center gap-2 text-[#C9A45C] font-medium uppercase tracking-wider text-[11px]">
+                <MapPin className="w-3.5 h-3.5" />
                 <span>Delivery Address</span>
               </div>
               {order?.shippingAddress ? (
-                <div className="text-luxury-cream/80 font-light space-y-0.5 pl-5 border-l border-white/15">
+                <div className="text-[#F7F3EA]/80 font-light space-y-0.5 pl-5 border-l border-white/15">
                   <p className="font-medium text-white">
                     {order.shippingAddress.firstName} {order.shippingAddress.lastName}
                   </p>
                   <p>{order.shippingAddress.addressLine1} {order.shippingAddress.addressLine2 ? `, ${order.shippingAddress.addressLine2}` : ''}</p>
                   <p>{order.shippingAddress.city}, {order.shippingAddress.state} – {order.shippingAddress.pinCode}</p>
-                  <p className="text-luxury-muted">+91 {order.shippingAddress.phone || order.customer?.phone}</p>
+                  <p className="text-[#A9B0B5]">+91 {order.shippingAddress.phone || order.customer?.phone}</p>
                 </div>
               ) : (
-                <p className="text-luxury-muted pl-5">Express Air Delivery Destination</p>
+                <p className="text-[#A9B0B5] pl-5">Express Insured Delivery Destination</p>
               )}
             </div>
 
             <div className="space-y-2">
-              <div className="flex items-center gap-2 text-luxury-champagne font-medium uppercase tracking-wider text-[11px]">
-                <Truck className="w-3.5 h-3.5 text-luxury-gold" />
+              <div className="flex items-center gap-2 text-[#C9A45C] font-medium uppercase tracking-wider text-[11px]">
+                <Truck className="w-3.5 h-3.5" />
                 <span>Shipping Carrier</span>
               </div>
-              <div className="text-luxury-cream/80 font-light space-y-0.5 pl-5 border-l border-white/15">
-                <p className="font-medium text-white">{order?.deliveryMethod?.name || 'Priority Express'}</p>
-                <p className="text-luxury-muted">Dispatched with signature verification & temperature-controlled packaging.</p>
+              <div className="text-[#F7F3EA]/80 font-light space-y-0.5 pl-5 border-l border-white/15">
+                <p className="font-medium text-white">{order?.deliveryMethod?.name || 'Express Delivery'}</p>
+                <p className="text-[#A9B0B5]">Dispatched with verified live tracking and signature delivery.</p>
               </div>
             </div>
           </div>
 
-          {/* Itemized Purchased Pieces */}
+          {/* Itemized Purchased Products */}
           {order?.items && order.items.length > 0 && (
             <div className="space-y-4">
               <h4 className="font-serif text-base text-white font-medium">
-                Purchased Pieces ({order.items.reduce((a, b) => a + b.quantity, 0)})
+                Purchased Items ({order.items.reduce((a, b) => a + b.quantity, 0)})
               </h4>
 
               <div className="divide-y divide-white/5 border-y border-white/5">
@@ -165,13 +165,13 @@ export const OrderSuccess = () => {
                         />
                         <div className="min-w-0">
                           <span className="font-medium text-white block truncate">{item.product?.name || item.name}</span>
-                          <span className="text-[11px] text-luxury-muted block">
-                            Size: {item.selectedSize} • Color: {item.selectedColor} • Qty: {item.quantity}
+                          <span className="text-[11px] text-[#A9B0B5] block">
+                            Qty: {item.quantity} {item.selectedSize ? `• ${item.selectedSize}` : ''} {item.selectedColor ? `• ${item.selectedColor}` : ''}
                           </span>
                         </div>
                       </div>
 
-                      <span className="font-serif text-sm text-luxury-champagne font-medium flex-shrink-0">
+                      <span className="font-serif text-sm text-[#C9A45C] font-semibold flex-shrink-0">
                         ₹{(price * item.quantity).toLocaleString('en-IN')}
                       </span>
                     </div>
@@ -185,15 +185,15 @@ export const OrderSuccess = () => {
           <div className="pt-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <Link
               to={`/account/orders/${displayOrderNumber}`}
-              className="btn-shine w-full sm:w-auto px-8 py-3.5 bg-white text-luxury-black hover:bg-luxury-champagne text-xs uppercase tracking-widest font-medium transition-all shadow-xl text-center flex items-center justify-center gap-2"
+              className="btn-shine w-full sm:w-auto px-8 py-3.5 bg-[#C9A45C] text-[#101820] hover:bg-[#D8B872] text-xs uppercase tracking-widest font-semibold transition-all shadow-xl text-center flex items-center justify-center gap-2 cursor-pointer"
             >
               <Package className="w-4 h-4" />
-              <span>View Order Timeline</span>
+              <span>Track Order</span>
             </Link>
 
             <Link
               to="/shop"
-              className="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-white/20 hover:border-white text-luxury-cream hover:text-white text-xs uppercase tracking-widest font-medium transition-all text-center flex items-center justify-center gap-2"
+              className="w-full sm:w-auto px-8 py-3.5 bg-transparent border border-white/20 hover:border-white text-[#F7F3EA] hover:text-white text-xs uppercase tracking-widest font-semibold transition-all text-center flex items-center justify-center gap-2"
             >
               <span>Continue Shopping</span>
               <ArrowRight className="w-3.5 h-3.5" />

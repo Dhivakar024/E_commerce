@@ -4,15 +4,15 @@ import { PRODUCTS } from '../../data/products';
 import { Search, X, ArrowRight, Sparkles, Clock } from 'lucide-react';
 
 const POPULAR_SEARCHES = [
+  'laptop',
+  'sofa',
+  'lipstick',
+  'shirt',
+  'vitamin',
   'Electronics',
   'Furniture',
   'Medicines',
   'Cosmetics',
-  'Linen Shirt',
-  'OLED Smart TV',
-  'Dining Table',
-  'Multivitamin',
-  'Hydrating Foundation',
 ];
 
 export const SearchModal = ({ isOpen, onClose }) => {
@@ -21,9 +21,9 @@ export const SearchModal = ({ isOpen, onClose }) => {
   const [recentSearches, setRecentSearches] = useState(() => {
     try {
       const local = localStorage.getItem('lax360_recent_searches');
-      return local ? JSON.parse(local) : ['Smartphone', 'Dining Table', 'Linen Shirt', 'Multivitamin'];
+      return local ? JSON.parse(local) : ['laptop', 'sofa', 'lipstick', 'shirt', 'vitamin'];
     } catch {
-      return ['Smartphone', 'Dining Table', 'Linen Shirt', 'Multivitamin'];
+      return ['laptop', 'sofa', 'lipstick', 'shirt', 'vitamin'];
     }
   });
 
@@ -109,7 +109,7 @@ export const SearchModal = ({ isOpen, onClose }) => {
             type="text"
             value={query}
             onChange={handleQueryChange}
-            placeholder="Search products, brands, categories (e.g. OLED TV, Linen Shirt, Sofa, Vitamins)..."
+            placeholder="Search across all categories (e.g. laptop, sofa, lipstick, shirt, vitamin)..."
             className="w-full bg-white/5 border border-white/15 focus:border-[#C9A45C] text-white pl-12 pr-12 py-3.5 text-sm sm:text-base focus:outline-none placeholder:text-[#A9B0B5]/50 transition-colors"
           />
           {query && (
@@ -119,7 +119,7 @@ export const SearchModal = ({ isOpen, onClose }) => {
                 setQuery('');
                 setResults([]);
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A9B0B5] hover:text-white"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A9B0B5] hover:text-white cursor-pointer"
             >
               <X className="w-4 h-4" />
             </button>
@@ -130,7 +130,7 @@ export const SearchModal = ({ isOpen, onClose }) => {
         {results.length > 0 ? (
           <div className="space-y-4">
             <span className="text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold block">
-              Direct Matches ({results.length})
+              Marketplace Matches ({results.length})
             </span>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto">
               {results.map((p) => (
@@ -143,10 +143,10 @@ export const SearchModal = ({ isOpen, onClose }) => {
                   <img
                     src={p.image}
                     alt={p.name}
-                    className="w-14 h-16 object-cover flex-shrink-0"
+                    className="w-14 h-16 object-cover flex-shrink-0 bg-neutral-900"
                   />
                   <div className="min-w-0 flex-grow">
-                    <span className="text-[9px] uppercase tracking-widest text-[#C9A45C] block">
+                    <span className="text-[9px] uppercase tracking-widest text-[#C9A45C] block font-semibold">
                       {p.category} • {p.brand || 'LAX360'}
                     </span>
                     <h5 className="text-xs font-serif text-white truncate group-hover:text-[#C9A45C] transition-colors">
@@ -173,7 +173,7 @@ export const SearchModal = ({ isOpen, onClose }) => {
           </div>
         ) : query.trim() ? (
           <div className="py-8 text-center text-xs text-[#A9B0B5]">
-            No direct matches found for "{query}". Press Enter to view full catalog search.
+            We couldn't find products matching "{query}". Press Enter to view full catalog search.
           </div>
         ) : (
           /* Suggestions & Recent Searches */
@@ -182,7 +182,7 @@ export const SearchModal = ({ isOpen, onClose }) => {
             <div className="space-y-3">
               <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-[#A9B0B5] font-semibold">
                 <Clock className="w-3.5 h-3.5 text-[#C9A45C]" />
-                <span>Recent Inquiries</span>
+                <span>Recent Searches</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {recentSearches.map((term) => (
@@ -198,11 +198,11 @@ export const SearchModal = ({ isOpen, onClose }) => {
               </div>
             </div>
 
-            {/* Popular Marketplace Categories */}
+            {/* Popular Marketplace Queries */}
             <div className="space-y-3">
               <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-[#A9B0B5] font-semibold">
                 <Sparkles className="w-3.5 h-3.5 text-[#C9A45C]" />
-                <span>Popular Categories</span>
+                <span>Popular Searches</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {POPULAR_SEARCHES.map((term) => (

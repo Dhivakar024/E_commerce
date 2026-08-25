@@ -19,7 +19,7 @@ export const DeliveryMethods = ({
     },
     {
       id: 'express',
-      name: 'Priority Atelier Express',
+      name: 'Priority Air Express',
       estimate: '1–2 Business Days',
       price: 199,
     },

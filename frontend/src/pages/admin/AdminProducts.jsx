@@ -75,7 +75,7 @@ export const AdminProducts = () => {
             CATALOG MANAGEMENT
           </span>
           <h1 className="font-serif text-2xl sm:text-3xl text-white font-normal">
-            Atelier Silhouettes ({products.length})
+            Marketplace Products ({products.length})
           </h1>
         </div>
 
@@ -84,7 +84,7 @@ export const AdminProducts = () => {
           className="btn-shine px-4 py-2.5 bg-white text-luxury-black hover:bg-luxury-champagne uppercase tracking-wider text-xs font-medium flex items-center gap-2 shadow-lg self-start sm:self-auto"
         >
           <Plus className="w-4 h-4" />
-          <span>New Silhouette</span>
+          <span>New Product</span>
         </Link>
       </div>
 
@@ -218,7 +218,7 @@ export const AdminProducts = () => {
           <div className="bg-luxury-black border border-white/15 p-6 max-w-sm w-full space-y-4 shadow-2xl">
             <h4 className="font-serif text-lg text-white">Confirm Removal</h4>
             <p className="text-xs text-luxury-muted leading-relaxed">
-              Are you certain you wish to archive this silhouette from the active atelier catalog? Historical orders will retain their records safely.
+              Are you certain you wish to archive this product from the active marketplace catalog? Historical orders will retain their records safely.
             </p>
             <div className="flex gap-3 justify-end pt-2 text-xs">
               <button

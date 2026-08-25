@@ -6,7 +6,7 @@ export const ShopProvider = ({ children }) => {
   // 1. Initialize Cart with localStorage persistence & basic validation
   const [cart, setCart] = useState(() => {
     try {
-      const saved = localStorage.getItem('elan_atelier_cart');
+      const saved = localStorage.getItem('lax360_cart') || localStorage.getItem('elan_atelier_cart');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -22,7 +22,7 @@ export const ShopProvider = ({ children }) => {
   // 2. Initialize Wishlist with localStorage persistence
   const [wishlist, setWishlist] = useState(() => {
     try {
-      const saved = localStorage.getItem('elan_atelier_wishlist');
+      const saved = localStorage.getItem('lax360_wishlist') || localStorage.getItem('elan_atelier_wishlist');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -38,7 +38,7 @@ export const ShopProvider = ({ children }) => {
   // 3. Applied Coupon state
   const [appliedCoupon, setAppliedCoupon] = useState(() => {
     try {
-      const saved = localStorage.getItem('elan_applied_coupon');
+      const saved = localStorage.getItem('lax360_applied_coupon') || localStorage.getItem('elan_applied_coupon');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -54,7 +54,7 @@ export const ShopProvider = ({ children }) => {
   // Sync cart to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('elan_atelier_cart', JSON.stringify(cart));
+      localStorage.setItem('lax360_cart', JSON.stringify(cart));
     } catch (e) {
       console.warn('Could not save cart to localStorage', e);
     }
@@ -63,7 +63,7 @@ export const ShopProvider = ({ children }) => {
   // Sync wishlist to localStorage
   useEffect(() => {
     try {
-      localStorage.setItem('elan_atelier_wishlist', JSON.stringify(wishlist));
+      localStorage.setItem('lax360_wishlist', JSON.stringify(wishlist));
     } catch (e) {
       console.warn('Could not save wishlist to localStorage', e);
     }
@@ -73,9 +73,9 @@ export const ShopProvider = ({ children }) => {
   useEffect(() => {
     try {
       if (appliedCoupon) {
-        localStorage.setItem('elan_applied_coupon', JSON.stringify(appliedCoupon));
+        localStorage.setItem('lax360_applied_coupon', JSON.stringify(appliedCoupon));
       } else {
-        localStorage.removeItem('elan_applied_coupon');
+        localStorage.removeItem('lax360_applied_coupon');
       }
     } catch (e) {
       console.warn('Could not save coupon to localStorage', e);

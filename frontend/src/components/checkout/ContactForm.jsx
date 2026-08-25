@@ -93,7 +93,7 @@ export const ContactForm = ({
             className="mt-0.5 rounded-none accent-luxury-gold w-4 h-4 bg-white/5 border-white/20 cursor-pointer"
           />
           <span className="text-luxury-cream/80 text-xs leading-relaxed font-light">
-            Email me private atelier previews, order milestones, and delivery updates.
+            Email me exclusive offers, order milestones, and marketplace delivery updates.
           </span>
         </label>
       </div>

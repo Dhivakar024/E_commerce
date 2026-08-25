@@ -209,7 +209,7 @@ export const ProductReviewsSection = ({ product }) => {
                   <CheckCircle className="w-10 h-10 text-luxury-gold mx-auto" />
                   <h5 className="font-serif text-lg text-white">Thank you for your review</h5>
                   <p className="text-xs text-luxury-muted">
-                    Your feedback has been submitted to the atelier for verification.
+                    Your review has been submitted for verification.
                   </p>
                 </div>
               ) : (

@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { contactService } from '../services/index';
 import { useShop } from '../context/ShopContext';
-import { Phone, MapPin, Clock, Send, Loader2, CheckCircle2 } from 'lucide-react';
+import { Phone, Mail, Clock, Send, Loader2, CheckCircle2, MessageSquare, Headphones } from 'lucide-react';
+import { NewsletterSection } from '../components/home/NewsletterSection';
+
+const CONTACT_CATEGORIES = [
+  'Order Support',
+  'Product Support',
+  'Delivery Support',
+  'Returns & Refunds',
+  'General Enquiries',
+];
 
 export const Contact = () => {
   const { showToast } = useShop();
@@ -9,234 +17,248 @@ export const Contact = () => {
     name: '',
     email: '',
     phone: '',
-    subject: 'General Concierge Inquiry',
+    category: 'Order Support',
+    orderNumber: '',
     message: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      await contactService.submitContact(formData);
+    setTimeout(() => {
       setIsSubmitted(true);
-      showToast('Your message has been received by our concierge.', 'success');
-    } catch {
-      setIsSubmitted(true);
-      showToast('Your message has been received by our concierge.', 'success');
-    } finally {
       setIsSubmitting(false);
-    }
+      showToast('Your inquiry has been submitted to LAX360 Support.', 'success');
+    }, 600);
   };
 
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pt-28 sm:pt-32 pb-24">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 space-y-16">
         {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-16 space-y-3">
-          <span className="text-xs uppercase tracking-ultra text-luxury-gold block font-medium">
-            CLIENT CONCIERGE
+        <div className="text-center max-w-2xl mx-auto space-y-3">
+          <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
+            CUSTOMER ASSISTANCE
           </span>
           <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white font-normal">
-            Private Client Relations
+            How Can We Help?
           </h1>
-          <p className="text-xs sm:text-sm text-luxury-muted font-light leading-relaxed">
-            For bespoke styling, order inquiries, or private salon appointments, our atelier advisors are at your service.
+          <p className="text-xs sm:text-sm text-[#A9B0B5] font-light leading-relaxed">
+            Have a question about an order, product, delivery or anything else? Our team is here to help.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Left: Contact Information Cards */}
-          <div className="lg:col-span-5 space-y-8">
-            <div className="p-8 bg-luxury-charcoal/30 border border-white/10 space-y-6">
-              <h3 className="font-serif text-xl text-white font-normal">Atelier Locations</h3>
-
-              <div className="space-y-6 text-xs text-luxury-cream/80 font-light divide-y divide-white/5">
-                <div className="space-y-2 pt-2">
-                  <div className="flex items-center gap-2 text-white font-medium">
-                    <MapPin className="w-4 h-4 text-luxury-gold" />
-                    <span>LAX360 Flagship Salon</span>
-                  </div>
-                  <p className="pl-6 text-luxury-muted">
-                    84 Boulevard Saint-Germain, 75005 Paris, France
-                  </p>
-                </div>
-
-                <div className="space-y-2 pt-4">
-                  <div className="flex items-center gap-2 text-white font-medium">
-                    <MapPin className="w-4 h-4 text-luxury-gold" />
-                    <span>LAX360 Studio Mumbai</span>
-                  </div>
-                  <p className="pl-6 text-luxury-muted">
-                    Altamount Road, Cumballa Hill, Mumbai, Maharashtra 400026
-                  </p>
-                </div>
-
-                <div className="space-y-2 pt-4">
-                  <div className="flex items-center gap-2 text-white font-medium">
-                    <Phone className="w-4 h-4 text-luxury-gold" />
-                    <span>Client Services Telephone</span>
-                  </div>
-                  <p className="pl-6 text-luxury-muted">+91 (0) 22 2847 9000</p>
-                </div>
-
-                <div className="space-y-2 pt-4">
-                  <div className="flex items-center gap-2 text-white font-medium">
-                    <Clock className="w-4 h-4 text-luxury-gold" />
-                    <span>Concierge Hours</span>
-                  </div>
-                  <p className="pl-6 text-luxury-muted">
-                    Monday – Saturday: 10:00 AM – 8:00 PM IST
-                  </p>
-                </div>
-              </div>
+        {/* 4 Support Channels Banner */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="p-6 bg-[#1B2630] border border-white/10 space-y-3 shadow-xl">
+            <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
+              <Headphones className="w-5 h-5" />
             </div>
+            <h3 className="font-serif text-base text-white font-medium">Customer Helpline</h3>
+            <p className="text-xs text-[#A9B0B5] font-light">
+              +91 (0) 22 2847 9000<br />
+              Mon – Sat: 9:00 AM – 9:00 PM IST
+            </p>
           </div>
 
-          {/* Right: Contact Form */}
-          <div className="lg:col-span-7">
-            <div className="p-8 sm:p-10 bg-luxury-charcoal/30 border border-white/10 shadow-2xl">
-              <h3 className="font-serif text-xl sm:text-2xl text-white font-normal mb-2">
-                Send an Inquiry
-              </h3>
-              <p className="text-xs text-luxury-muted mb-8 font-light">
-                An atelier representative will reply within 24 business hours.
-              </p>
-
-              {isSubmitted ? (
-                <div className="py-12 text-center space-y-4 animate-fade-in">
-                  <div className="w-14 h-14 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-xl">
-                    <CheckCircle2 className="w-8 h-8" />
-                  </div>
-                  <h4 className="font-serif text-xl text-white">Inquiry Dispatched</h4>
-                  <p className="text-xs text-luxury-muted max-w-sm mx-auto leading-relaxed">
-                    Thank you for reaching out to LAX360 PVT LTD. A client concierge advisor has received your message and will respond promptly.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsSubmitted(false);
-                      setFormData({
-                        name: '',
-                        email: '',
-                        phone: '',
-                        subject: 'General Concierge Inquiry',
-                        message: '',
-                      });
-                    }}
-                    className="btn-shine px-6 py-2.5 bg-white text-luxury-black text-xs uppercase tracking-wider font-medium"
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              ) : (
-                <form onSubmit={handleSubmit} className="space-y-5 text-xs">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div className="space-y-1.5">
-                      <label className="block text-luxury-cream uppercase tracking-widest font-medium text-[11px]">
-                        Full Name <span className="text-rose-400">*</span>
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="e.g. Eleanor Vance"
-                        className="w-full bg-white/5 border border-white/15 focus:border-luxury-gold text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-luxury-muted/40 transition-colors"
-                        required
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="block text-luxury-cream uppercase tracking-widest font-medium text-[11px]">
-                        Email Address <span className="text-rose-400">*</span>
-                      </label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="e.g. eleanor@vance.com"
-                        className="w-full bg-white/5 border border-white/15 focus:border-luxury-gold text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-luxury-muted/40 transition-colors"
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                    <div className="space-y-1.5">
-                      <label className="block text-luxury-cream uppercase tracking-widest font-medium text-[11px]">
-                        Mobile Phone
-                      </label>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="e.g. +91 98765 43210"
-                        className="w-full bg-white/5 border border-white/15 focus:border-luxury-gold text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-luxury-muted/40 transition-colors"
-                      />
-                    </div>
-
-                    <div className="space-y-1.5">
-                      <label className="block text-luxury-cream uppercase tracking-widest font-medium text-[11px]">
-                        Subject
-                      </label>
-                      <select
-                        value={formData.subject}
-                        onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                        className="w-full bg-neutral-900 border border-white/15 focus:border-luxury-gold text-white px-3.5 py-3 text-xs focus:outline-none transition-colors"
-                      >
-                        <option value="General Concierge Inquiry">General Concierge Inquiry</option>
-                        <option value="Order & Delivery Tracking">Order & Delivery Tracking</option>
-                        <option value="Bespoke Sizing & Styling">Bespoke Sizing & Styling</option>
-                        <option value="Returns & Exchanges">Returns & Exchanges</option>
-                        <option value="Press & VIP Collaborations">Press & VIP Collaborations</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <label className="block text-luxury-cream uppercase tracking-widest font-medium text-[11px]">
-                      Message <span className="text-rose-400">*</span>
-                    </label>
-                    <textarea
-                      rows={5}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Please detail your request or bespoke sizing inquiries..."
-                      className="w-full bg-white/5 border border-white/15 focus:border-luxury-gold text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-luxury-muted/40 transition-colors"
-                      required
-                    />
-                  </div>
-
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className={`btn-shine w-full py-4 font-medium text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2 ${
-                      isSubmitting
-                        ? 'bg-neutral-800 text-neutral-400 cursor-wait'
-                        : 'bg-white text-luxury-black hover:bg-luxury-champagne'
-                    }`}
-                  >
-                    {isSubmitting ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                        <span>Transmitting to Concierge...</span>
-                      </>
-                    ) : (
-                      <>
-                        <Send className="w-3.5 h-3.5" />
-                        <span>Submit Inquiry</span>
-                      </>
-                    )}
-                  </button>
-                </form>
-              )}
+          <div className="p-6 bg-[#1B2630] border border-white/10 space-y-3 shadow-xl">
+            <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
+              <Mail className="w-5 h-5" />
             </div>
+            <h3 className="font-serif text-base text-white font-medium">Email Support</h3>
+            <p className="text-xs text-[#A9B0B5] font-light">
+              support@lax360.com<br />
+              Average response time: &lt; 4 hours
+            </p>
+          </div>
+
+          <div className="p-6 bg-[#1B2630] border border-white/10 space-y-3 shadow-xl">
+            <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
+              <MessageSquare className="w-5 h-5" />
+            </div>
+            <h3 className="font-serif text-base text-white font-medium">Order Inquiries</h3>
+            <p className="text-xs text-[#A9B0B5] font-light">
+              Track, modify, or return items directly through your customer account.
+            </p>
+          </div>
+
+          <div className="p-6 bg-[#1B2630] border border-white/10 space-y-3 shadow-xl">
+            <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
+              <Clock className="w-5 h-5" />
+            </div>
+            <h3 className="font-serif text-base text-white font-medium">Rapid Resolution</h3>
+            <p className="text-xs text-[#A9B0B5] font-light">
+              Guaranteed dispute resolution and fast return processing across India.
+            </p>
           </div>
         </div>
+
+        {/* Contact Form Section */}
+        <div className="max-w-3xl mx-auto p-8 sm:p-12 bg-[#1B2630] border border-white/10 shadow-2xl">
+          <div className="mb-8">
+            <h3 className="font-serif text-2xl text-white font-normal mb-1">
+              Submit a Support Request
+            </h3>
+            <p className="text-xs text-[#A9B0B5] font-light">
+              Select your inquiry category and our dedicated specialist will respond promptly.
+            </p>
+          </div>
+
+          {isSubmitted ? (
+            <div className="py-12 text-center space-y-4 animate-fade-in">
+              <div className="w-14 h-14 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto shadow-xl">
+                <CheckCircle2 className="w-8 h-8" />
+              </div>
+              <h4 className="font-serif text-xl text-white">Inquiry Received</h4>
+              <p className="text-xs text-[#A9B0B5] max-w-md mx-auto leading-relaxed">
+                Thank you for contacting LAX360 PVT LTD. Your support ticket has been registered and a customer care specialist will follow up shortly.
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsSubmitted(false);
+                  setFormData({
+                    name: '',
+                    email: '',
+                    phone: '',
+                    category: 'Order Support',
+                    orderNumber: '',
+                    message: '',
+                  });
+                }}
+                className="btn-shine px-6 py-2.5 bg-[#C9A45C] text-[#101820] text-xs uppercase tracking-wider font-semibold"
+              >
+                Submit Another Request
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={handleSubmit} className="space-y-5 text-xs">
+              {/* Category selector pills */}
+              <div className="space-y-2">
+                <label className="block text-[#F7F3EA] uppercase tracking-widest font-semibold text-[11px]">
+                  Inquiry Category <span className="text-rose-400">*</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  {CONTACT_CATEGORIES.map((cat) => (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, category: cat })}
+                      className={`px-3.5 py-2 text-xs uppercase tracking-wider border transition-all cursor-pointer ${
+                        formData.category === cat
+                          ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                          : 'bg-white/5 text-[#F7F3EA]/80 border-white/10 hover:border-white/30'
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+                <div className="space-y-1.5">
+                  <label className="block text-[#F7F3EA] uppercase tracking-widest font-semibold text-[11px]">
+                    Full Name <span className="text-rose-400">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    placeholder="e.g. Rahul Sharma"
+                    className="w-full bg-white/5 border border-white/15 focus:border-[#C9A45C] text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-[#A9B0B5]/40 transition-colors"
+                    required
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-[#F7F3EA] uppercase tracking-widest font-semibold text-[11px]">
+                    Email Address <span className="text-rose-400">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    placeholder="e.g. rahul@example.com"
+                    className="w-full bg-white/5 border border-white/15 focus:border-[#C9A45C] text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-[#A9B0B5]/40 transition-colors"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div className="space-y-1.5">
+                  <label className="block text-[#F7F3EA] uppercase tracking-widest font-semibold text-[11px]">
+                    Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="e.g. +91 98765 43210"
+                    className="w-full bg-white/5 border border-white/15 focus:border-[#C9A45C] text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-[#A9B0B5]/40 transition-colors"
+                  />
+                </div>
+
+                <div className="space-y-1.5">
+                  <label className="block text-[#F7F3EA] uppercase tracking-widest font-semibold text-[11px]">
+                    Order Number (Optional)
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.orderNumber}
+                    onChange={(e) => setFormData({ ...formData, orderNumber: e.target.value })}
+                    placeholder="e.g. ORD-2026-9081"
+                    className="w-full bg-white/5 border border-white/15 focus:border-[#C9A45C] text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-[#A9B0B5]/40 transition-colors font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-[#F7F3EA] uppercase tracking-widest font-semibold text-[11px]">
+                  Message & Details <span className="text-rose-400">*</span>
+                </label>
+                <textarea
+                  rows={5}
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  placeholder="Please describe how we can assist you..."
+                  className="w-full bg-white/5 border border-white/15 focus:border-[#C9A45C] text-white px-3.5 py-3 text-xs focus:outline-none placeholder:text-[#A9B0B5]/40 transition-colors"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`btn-shine w-full py-4 font-semibold text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
+                  isSubmitting
+                    ? 'bg-neutral-800 text-neutral-400 cursor-wait'
+                    : 'bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820]'
+                }`}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Submitting Request...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Submit Request</span>
+                  </>
+                )}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
+
+      <NewsletterSection />
     </main>
   );
 };

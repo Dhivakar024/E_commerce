@@ -7,57 +7,50 @@ import {
   ShoppingBag,
   Users,
   Package,
-  AlertTriangle,
   ArrowUpRight,
+  Clock,
   Plus,
+  AlertTriangle,
+  ChevronRight,
 } from 'lucide-react';
 
 export const AdminDashboard = () => {
   const [stats, setStats] = useState({
-    totalSales: 284500,
-    totalOrders: 38,
-    totalCustomers: 124,
+    totalSales: 342500,
+    totalOrders: 148,
+    totalCustomers: 89,
     totalProducts: ALL_PRODUCTS.length,
-    lowStockCount: 2,
-    pendingOrders: 4,
+    pendingOrders: 12,
+    lowStockCount: ALL_PRODUCTS.filter((p) => p.stock <= 5).length,
   });
 
   const [recentOrders, setRecentOrders] = useState([
     {
-      orderNumber: 'ORD-2026-984210',
-      customer: 'Eleanor Vance',
-      email: 'eleanor@vance.com',
-      total: 12999,
-      status: 'Preparing in Atelier',
-      itemsCount: 1,
-      date: '10 mins ago',
+      _id: 'ord-101',
+      orderNumber: 'ORD-2026-8819',
+      customer: { firstName: 'Arya', lastName: 'Kapoor' },
+      total: 12499,
+      status: 'Processing',
+      createdAt: new Date().toISOString(),
+      items: [{ quantity: 2 }],
     },
     {
-      orderNumber: 'ORD-2026-874312',
-      customer: 'Julian Sterling',
-      email: 'julian@sterling.com',
-      total: 7499,
-      status: 'Order Confirmed',
-      itemsCount: 2,
-      date: '1 hour ago',
-    },
-    {
-      orderNumber: 'ORD-2026-654921',
-      customer: 'Dhivakar Kumar',
-      email: 'dhivakar@client.com',
-      total: 16898,
+      _id: 'ord-102',
+      orderNumber: 'ORD-2026-8818',
+      customer: { firstName: 'Rohan', lastName: 'Mehta' },
+      total: 34999,
       status: 'Dispatched',
-      itemsCount: 3,
-      date: '4 hours ago',
+      createdAt: new Date(Date.now() - 3600000 * 4).toISOString(),
+      items: [{ quantity: 1 }],
     },
     {
-      orderNumber: 'ORD-2026-432190',
-      customer: 'Sophia Laurent',
-      email: 'sophia@laurent.com',
-      total: 4999,
+      _id: 'ord-103',
+      orderNumber: 'ORD-2026-8817',
+      customer: { firstName: 'Ananya', lastName: 'Sen' },
+      total: 5890,
       status: 'Delivered',
-      itemsCount: 1,
-      date: 'Yesterday',
+      createdAt: new Date(Date.now() - 3600000 * 24).toISOString(),
+      items: [{ quantity: 3 }],
     },
   ]);
 
@@ -66,7 +59,7 @@ export const AdminDashboard = () => {
       try {
         const res = await adminService.getDashboardStats();
         if (res.success && res.data) {
-          if (res.data.metrics) setStats(res.data.metrics);
+          setStats((prev) => ({ ...prev, ...res.data.stats }));
           if (res.data.recentOrders?.length) setRecentOrders(res.data.recentOrders);
         }
       } catch (e) {
@@ -78,7 +71,7 @@ export const AdminDashboard = () => {
 
   const metricCards = [
     {
-      label: 'Gross Atelier Revenue',
+      label: 'Gross Marketplace Revenue',
       value: `₹${stats.totalSales.toLocaleString('en-IN')}`,
       sub: '+18.4% this month',
       icon: TrendingUp,
@@ -89,17 +82,17 @@ export const AdminDashboard = () => {
       value: stats.totalOrders.toString(),
       sub: `${stats.pendingOrders} awaiting fulfillment`,
       icon: ShoppingBag,
-      color: 'text-luxury-champagne',
+      color: 'text-[#C9A45C]',
     },
     {
-      label: 'VIP Client Base',
+      label: 'Registered Customers',
       value: stats.totalCustomers.toString(),
-      sub: 'Active registered patrons',
+      sub: 'Active marketplace accounts',
       icon: Users,
-      color: 'text-luxury-gold',
+      color: 'text-[#C9A45C]',
     },
     {
-      label: 'Catalog Silhouettes',
+      label: 'Total Products',
       value: stats.totalProducts.toString(),
       sub: `${stats.lowStockCount} items low in stock`,
       icon: Package,
@@ -108,25 +101,25 @@ export const AdminDashboard = () => {
   ];
 
   return (
-    <div className="space-y-8 animate-fade-in">
+    <div className="space-y-8 animate-fade-in text-[#F7F3EA]">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
         <div>
-          <span className="text-[10px] uppercase tracking-ultra text-luxury-gold block font-medium">
+          <span className="text-[10px] uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             EXECUTIVE OVERVIEW
           </span>
           <h1 className="font-serif text-2xl sm:text-3xl text-white font-normal">
-            Atelier Performance Dashboard
+            Marketplace Management Dashboard
           </h1>
         </div>
 
         <div className="flex items-center gap-3">
           <Link
             to="/admin/products/new"
-            className="btn-shine px-4 py-2.5 bg-white text-luxury-black hover:bg-luxury-champagne uppercase tracking-wider text-xs font-medium flex items-center gap-2 shadow-lg"
+            className="btn-shine px-4 py-2.5 bg-[#C9A45C] text-[#101820] hover:bg-[#D8B872] uppercase tracking-wider text-xs font-semibold flex items-center gap-2 shadow-lg cursor-pointer"
           >
             <Plus className="w-4 h-4" />
-            <span>Create Silhouette</span>
+            <span>Add Product</span>
           </Link>
         </div>
       </div>
@@ -138,150 +131,124 @@ export const AdminDashboard = () => {
           return (
             <div
               key={idx}
-              className="p-6 bg-luxury-black border border-white/10 space-y-4 hover:border-white/20 transition-all shadow-xl"
+              className="p-6 bg-[#101820] border border-white/10 space-y-3 relative overflow-hidden shadow-xl"
             >
               <div className="flex items-center justify-between">
-                <span className="text-[11px] uppercase tracking-widest text-luxury-muted font-medium">
+                <span className="text-[10px] uppercase tracking-wider text-[#A9B0B5] font-medium">
                   {card.label}
                 </span>
-                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center">
-                  <Icon className={`w-4 h-4 ${card.color}`} />
+                <div className={`p-2 bg-white/5 border border-white/10 ${card.color}`}>
+                  <Icon className="w-4 h-4" />
                 </div>
               </div>
-
-              <div>
-                <span className="font-serif text-2xl sm:text-3xl text-white font-medium block">
+              <div className="space-y-1">
+                <h3 className="font-serif text-2xl sm:text-3xl text-white font-semibold">
                   {card.value}
-                </span>
-                <span className="text-[11px] text-luxury-muted block mt-1">
-                  {card.sub}
-                </span>
+                </h3>
+                <p className="text-[11px] text-[#A9B0B5] font-light">{card.sub}</p>
               </div>
             </div>
           );
         })}
       </div>
 
-      {/* 2-Column: Recent Orders + Quick Atelier Alerts */}
+      {/* 2-Column: Recent Orders + Inventory Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Left: Recent Orders Table (8 cols) */}
-        <div className="lg:col-span-8 bg-luxury-black border border-white/10 p-6 space-y-6 shadow-xl">
+        {/* Recent Orders List (7 Cols) */}
+        <div className="lg:col-span-7 bg-[#101820] border border-white/10 p-6 space-y-5 shadow-xl">
           <div className="flex items-center justify-between pb-4 border-b border-white/10">
-            <div>
-              <h3 className="font-serif text-lg text-white font-normal">Recent Transactions</h3>
-              <p className="text-xs text-luxury-muted">Latest customer purchases awaiting or in fulfillment.</p>
-            </div>
+            <h3 className="font-serif text-lg text-white font-normal">Recent Marketplace Orders</h3>
             <Link
               to="/admin/orders"
-              className="text-xs uppercase tracking-wider text-luxury-champagne hover:text-white flex items-center gap-1 transition-colors"
+              className="text-xs uppercase tracking-wider text-[#C9A45C] hover:text-white flex items-center gap-1 font-medium"
             >
-              <span>All Orders</span>
-              <ArrowUpRight className="w-3.5 h-3.5" />
+              <span>View All</span>
+              <ChevronRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs">
-              <thead className="text-[10px] uppercase tracking-wider text-luxury-muted border-b border-white/10 pb-2">
-                <tr>
-                  <th className="pb-3 font-medium">Order Reference</th>
-                  <th className="pb-3 font-medium">Customer</th>
-                  <th className="pb-3 font-medium">Total</th>
-                  <th className="pb-3 font-medium">Status</th>
-                  <th className="pb-3 font-medium text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-white/5">
-                {recentOrders.map((ord, idx) => (
-                  <tr key={idx} className="hover:bg-white/5 transition-colors">
-                    <td className="py-3.5 font-mono text-luxury-gold font-medium">
-                      {ord.orderNumber}
-                    </td>
-                    <td className="py-3.5">
-                      <span className="text-white block font-medium">{ord.customer || ord.customer?.email}</span>
-                      <span className="text-[10px] text-luxury-muted">{ord.email || ord.date}</span>
-                    </td>
-                    <td className="py-3.5 font-serif text-white">
-                      ₹{ord.total.toLocaleString('en-IN')}
-                    </td>
-                    <td className="py-3.5">
-                      <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider bg-white/10 text-luxury-champagne border border-white/10">
-                        {ord.status}
-                      </span>
-                    </td>
-                    <td className="py-3.5 text-right">
-                      <Link
-                        to={`/admin/orders`}
-                        className="text-luxury-muted hover:text-white uppercase tracking-wider text-[11px]"
-                      >
-                        Inspect →
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          <div className="divide-y divide-white/5">
+            {recentOrders.map((order) => (
+              <div
+                key={order._id}
+                className="py-3.5 flex items-center justify-between text-xs hover:bg-white/5 px-2 transition-colors"
+              >
+                <div className="space-y-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-mono text-white font-medium">{order.orderNumber}</span>
+                    <span
+                      className={`text-[9px] uppercase tracking-wider px-2 py-0.5 font-medium ${
+                        order.status === 'Delivered'
+                          ? 'bg-emerald-950/80 text-emerald-300 border border-emerald-500/30'
+                          : order.status === 'Dispatched'
+                          ? 'bg-blue-950/80 text-blue-300 border border-blue-500/30'
+                          : 'bg-amber-950/80 text-amber-300 border border-amber-500/30'
+                      }`}
+                    >
+                      {order.status}
+                    </span>
+                  </div>
+                  <p className="text-[#A9B0B5] text-[11px]">
+                    {order.customer?.firstName} {order.customer?.lastName} • {order.items?.length || 1} items
+                  </p>
+                </div>
+
+                <div className="text-right space-y-1">
+                  <span className="font-serif text-sm text-[#C9A45C] font-semibold block">
+                    ₹{order.total.toLocaleString('en-IN')}
+                  </span>
+                  <span className="text-[10px] text-[#A9B0B5]">
+                    {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Right: Low Stock & Category Performance (4 cols) */}
-        <div className="lg:col-span-4 space-y-6">
-          {/* Low Stock Alerts */}
-          <div className="p-6 bg-luxury-black border border-white/10 space-y-4 shadow-xl">
-            <div className="flex items-center gap-2 text-rose-400 pb-3 border-b border-white/10">
-              <AlertTriangle className="w-4 h-4" />
-              <span className="text-xs uppercase tracking-wider font-medium">Stock Watch Alerts</span>
+        {/* Low Stock & Inventory Alerts (5 Cols) */}
+        <div className="lg:col-span-5 bg-[#101820] border border-white/10 p-6 space-y-5 shadow-xl">
+          <div className="flex items-center justify-between pb-4 border-b border-white/10">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-400" />
+              <h3 className="font-serif text-lg text-white font-normal">Stock & Inventory Alerts</h3>
             </div>
-
-            <div className="space-y-3 text-xs">
-              <div className="flex items-center justify-between p-2.5 bg-white/5 border border-white/5">
-                <div>
-                  <span className="text-white block font-medium">Tailored Cashmere Overcoat</span>
-                  <span className="text-[10px] text-luxury-muted">ELA-COAT-003</span>
-                </div>
-                <span className="px-2 py-1 text-[10px] text-rose-400 bg-rose-950/60 border border-rose-500/30 font-mono">
-                  5 in stock
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between p-2.5 bg-white/5 border border-white/5">
-                <div>
-                  <span className="text-white block font-medium">Silk Blend Slip Dress</span>
-                  <span className="text-[10px] text-luxury-muted">ELA-DRSS-002</span>
-                </div>
-                <span className="px-2 py-1 text-[10px] text-rose-400 bg-rose-950/60 border border-rose-500/30 font-mono">
-                  8 in stock
-                </span>
-              </div>
-            </div>
-
-            <Link
-              to="/admin/inventory"
-              className="btn-shine block w-full py-2.5 bg-white/10 hover:bg-white/20 text-white text-center uppercase tracking-wider text-[11px] font-medium transition-colors"
-            >
-              Manage Atelier Inventory
-            </Link>
+            <span className="text-xs text-[#A9B0B5]">
+              {ALL_PRODUCTS.filter((p) => p.stock <= 5).length} Items
+            </span>
           </div>
 
-          {/* Quick Shortcuts */}
-          <div className="p-6 bg-luxury-black border border-white/10 space-y-3 shadow-xl text-xs">
-            <span className="text-[10px] uppercase tracking-widest text-luxury-gold block font-medium">
-              Management Actions
-            </span>
-            <div className="space-y-2">
-              <Link
-                to="/admin/coupons"
-                className="block p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-colors"
+          <div className="space-y-3">
+            {ALL_PRODUCTS.filter((p) => p.stock <= 5).slice(0, 4).map((p) => (
+              <div
+                key={p.id}
+                className="p-3 bg-white/5 border border-white/10 flex items-center justify-between gap-3 text-xs"
               >
-                + Generate Promotional Discount Code
-              </Link>
-              <Link
-                to="/admin/banners"
-                className="block p-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white transition-colors"
-              >
-                🎨 Update Homepage Campaign Banner
-              </Link>
-            </div>
+                <img
+                  src={p.image}
+                  alt={p.name}
+                  className="w-10 h-12 object-cover border border-white/10 flex-shrink-0"
+                />
+                <div className="min-w-0 flex-grow">
+                  <span className="font-medium text-white block truncate">{p.name}</span>
+                  <span className="text-[10px] text-[#A9B0B5]">{p.category} • {p.brand}</span>
+                </div>
+                <div className="text-right">
+                  <span className="px-2 py-0.5 bg-rose-950/80 text-rose-300 border border-rose-500/30 text-[10px] font-bold">
+                    {p.stock} left
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="pt-2">
+            <Link
+              to="/admin/inventory"
+              className="btn-shine w-full py-2.5 bg-white/5 hover:bg-[#C9A45C] hover:text-[#101820] border border-white/15 text-xs text-center block uppercase tracking-wider font-semibold transition-colors"
+            >
+              Manage Inventory
+            </Link>
           </div>
         </div>
       </div>

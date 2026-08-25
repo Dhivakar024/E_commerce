@@ -20,8 +20,8 @@ export const CheckoutHeader = () => {
             <span className="font-serif tracking-widest text-lg sm:text-xl text-white group-hover:text-luxury-champagne transition-colors font-medium">
               LAX360 PVT LTD
             </span>
-            <span className="text-[8px] uppercase tracking-widest text-luxury-gold block -mt-1 font-light">
-              HAUTE COUTURE
+            <span className="text-[8px] uppercase tracking-widest text-[#C9A45C] block -mt-1 font-semibold">
+              MULTI-CATEGORY MARKETPLACE
             </span>
           </Link>
         </div>
