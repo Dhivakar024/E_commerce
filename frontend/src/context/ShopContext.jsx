@@ -2,11 +2,20 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ShopContext = createContext(undefined);
 
+// Initial multi-category demo wishlist items for rich marketplace showcase
+const INITIAL_DEMO_WISHLIST = [
+  'prod_fash_01', // Classic Pure Linen Shirt (Fashion)
+  'prod_furn_01', // Solid Teak Dining Table (Furniture)
+  'prod_elec_01', // Aura Wireless ANC Headphones (Electronics)
+  'prod_med_01',  // Daily Multivitamin Complex (Medicines)
+  'prod_cosm_01', // Hyaluronic Deep Hydration Serum (Cosmetics)
+];
+
 export const ShopProvider = ({ children }) => {
   // 1. Initialize Cart with localStorage persistence & basic validation
   const [cart, setCart] = useState(() => {
     try {
-      const saved = localStorage.getItem('lax360_cart') || localStorage.getItem('elan_atelier_cart');
+      const saved = localStorage.getItem('lax360_cart');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
@@ -19,26 +28,26 @@ export const ShopProvider = ({ children }) => {
     }
   });
 
-  // 2. Initialize Wishlist with localStorage persistence
+  // 2. Initialize Wishlist with multi-category demo defaults
   const [wishlist, setWishlist] = useState(() => {
     try {
-      const saved = localStorage.getItem('lax360_wishlist') || localStorage.getItem('elan_atelier_wishlist');
+      const saved = localStorage.getItem('lax360_wishlist');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
           return parsed;
         }
       }
-      return [];
+      return INITIAL_DEMO_WISHLIST;
     } catch {
-      return [];
+      return INITIAL_DEMO_WISHLIST;
     }
   });
 
   // 3. Applied Coupon state
   const [appliedCoupon, setAppliedCoupon] = useState(() => {
     try {
-      const saved = localStorage.getItem('lax360_applied_coupon') || localStorage.getItem('elan_applied_coupon');
+      const saved = localStorage.getItem('lax360_applied_coupon');
       return saved ? JSON.parse(saved) : null;
     } catch {
       return null;
@@ -83,7 +92,7 @@ export const ShopProvider = ({ children }) => {
   }, [appliedCoupon]);
 
   const showToast = (message, type = 'success') => {
-    const id = Date.now();
+    const id = Date.now() + Math.random();
     setToasts((prev) => [...prev, { id, message, type }]);
     setTimeout(() => {
       setToasts((prev) => prev.filter((t) => t.id !== id));
@@ -114,11 +123,11 @@ export const ShopProvider = ({ children }) => {
 
       if (existingIndex > -1) {
         const updated = [...prev];
-        const newQty = Math.min(product.stock, updated[existingIndex].quantity + quantity);
+        const newQty = Math.min(product.stock || 99, updated[existingIndex].quantity + quantity);
         updated[existingIndex].quantity = newQty;
         return updated;
       } else {
-        const newQty = Math.min(product.stock, quantity);
+        const newQty = Math.min(product.stock || 99, quantity);
         return [...prev, { product, quantity: newQty, selectedSize: size, selectedColor: color }];
       }
     });
@@ -161,9 +170,10 @@ export const ShopProvider = ({ children }) => {
           (!selectedSize || item.selectedSize === selectedSize) &&
           (!selectedColor || item.selectedColor === selectedColor)
         ) {
-          const clampedQty = Math.min(item.product.stock, quantity);
-          if (quantity > item.product.stock) {
-            showToast(`Only ${item.product.stock} units available in stock.`, 'info');
+          const maxStock = item.product.stock || 99;
+          const clampedQty = Math.min(maxStock, quantity);
+          if (quantity > maxStock) {
+            showToast(`Only ${maxStock} units available in stock.`, 'info');
           }
           return { ...item, quantity: clampedQty };
         }
@@ -219,6 +229,16 @@ export const ShopProvider = ({ children }) => {
     });
   };
 
+  const removeFromWishlist = (productId) => {
+    setWishlist((prev) => prev.filter((id) => id !== productId));
+    showToast('Item removed from wishlist.', 'info');
+  };
+
+  const clearWishlist = () => {
+    setWishlist([]);
+    showToast('Your wishlist has been cleared.', 'info');
+  };
+
   const isWishlisted = (productId) => wishlist.includes(productId);
   const wishlistCount = wishlist.length;
 
@@ -241,6 +261,8 @@ export const ShopProvider = ({ children }) => {
         setAppliedCoupon,
         wishlist,
         toggleWishlist,
+        removeFromWishlist,
+        clearWishlist,
         isWishlisted,
         wishlistCount,
         quickViewProduct,

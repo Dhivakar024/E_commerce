@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useShop } from '../../context/ShopContext';
-import { X, Star, ShoppingBag, Heart, ArrowRight, Check, FileText } from 'lucide-react';
+import { X, Star, ShoppingBag, Heart, ArrowRight, Check, FileText, Sparkles } from 'lucide-react';
 
 export const QuickViewModal = () => {
   const { quickViewProduct, closeQuickView, addToCart, isWishlisted, toggleWishlist } = useShop();
@@ -11,6 +11,9 @@ export const QuickViewModal = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [isAdded, setIsAdded] = useState(false);
+  const [imageTilt, setImageTilt] = useState({ rotateX: 0, rotateY: 0 });
+
+  const imageContainerRef = useRef(null);
 
   useEffect(() => {
     if (quickViewProduct) {
@@ -19,6 +22,7 @@ export const QuickViewModal = () => {
       setSelectedImageIndex(0);
       setQuantity(1);
       setIsAdded(false);
+      setImageTilt({ rotateX: 0, rotateY: 0 });
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -39,6 +43,28 @@ export const QuickViewModal = () => {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [closeQuickView]);
 
+  // Gentle 3D depth movement for product image on desktop
+  const handleImageMouseMove = (e) => {
+    if (window.innerWidth < 768 || window.matchMedia('(hover: none)').matches) return;
+    const el = imageContainerRef.current;
+    if (!el) return;
+
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((centerY - y) / centerY) * 4.5;
+    const rotateY = ((x - centerX) / centerX) * 4.5;
+
+    setImageTilt({ rotateX, rotateY });
+  };
+
+  const handleImageMouseLeave = () => {
+    setImageTilt({ rotateX: 0, rotateY: 0 });
+  };
+
   if (!quickViewProduct) return null;
 
   const images = quickViewProduct.images && quickViewProduct.images.length > 0
@@ -55,6 +81,11 @@ export const QuickViewModal = () => {
 
   const wishlisted = isWishlisted(quickViewProduct.id);
 
+  const hasDiscount = quickViewProduct.compareAtPrice && quickViewProduct.compareAtPrice > quickViewProduct.price;
+  const discountPercent = hasDiscount
+    ? Math.round(((quickViewProduct.compareAtPrice - quickViewProduct.price) / quickViewProduct.compareAtPrice) * 100)
+    : 0;
+
   return (
     <>
       {/* Backdrop */}
@@ -65,9 +96,9 @@ export const QuickViewModal = () => {
       />
 
       {/* Modal Container */}
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 pointer-events-none">
+      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8 pointer-events-none">
         <div
-          className="relative w-full max-w-4xl max-h-[90vh] bg-[#101820] text-[#F7F3EA] border border-white/15 overflow-y-auto shadow-2xl pointer-events-auto flex flex-col md:flex-row animate-fade-in"
+          className="relative w-full max-w-4xl max-h-[90vh] bg-[#101820] text-[#F7F3EA] border border-white/15 overflow-y-auto shadow-2xl pointer-events-auto flex flex-col md:flex-row animate-mega-menu rounded-none"
           role="dialog"
           aria-modal="true"
           aria-label={`Quick view: ${quickViewProduct.name}`}
@@ -81,25 +112,41 @@ export const QuickViewModal = () => {
             <X className="w-5 h-5" />
           </button>
 
-          {/* Left: Gallery (50% on Desktop) */}
+          {/* Left: Gallery with 3D Depth Hover (50% on Desktop) */}
           <div className="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between bg-[#1B2630]/60 border-b md:border-b-0 md:border-r border-white/10">
-            <div className="relative aspect-[3/4] overflow-hidden bg-neutral-900 mb-4">
+            <div
+              ref={imageContainerRef}
+              onMouseMove={handleImageMouseMove}
+              onMouseLeave={handleImageMouseLeave}
+              className="relative aspect-[4/5] overflow-hidden bg-neutral-900 mb-4 perspective-1000 select-none"
+            >
               <img
                 src={images[selectedImageIndex] || quickViewProduct.image}
                 alt={quickViewProduct.name}
-                className="w-full h-full object-cover object-center transition-all duration-500"
+                style={{
+                  transform: `rotateX(${imageTilt.rotateX}deg) rotateY(${imageTilt.rotateY}deg) scale(1.02)`,
+                  transition: imageTilt.rotateX === 0 ? 'transform 0.4s ease' : 'transform 0.1s ease-out',
+                }}
+                className="w-full h-full object-cover object-center filter brightness-95"
               />
-              {quickViewProduct.prescriptionRequired && (
-                <span className="absolute top-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 bg-amber-950/90 backdrop-blur-md border border-amber-500/40 text-[9px] uppercase tracking-wider text-amber-200 font-semibold">
-                  <FileText className="w-2.5 h-2.5" />
-                  <span>Rx Required</span>
+
+              {/* Badges */}
+              <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10 pointer-events-none">
+                <span className="px-2.5 py-0.5 bg-black/70 backdrop-blur-md border border-[#C9A45C]/30 text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold">
+                  {quickViewProduct.category || 'Marketplace'}
                 </span>
-              )}
-              {quickViewProduct.isNew && !quickViewProduct.prescriptionRequired && (
-                <span className="absolute top-3 left-3 px-2 py-0.5 bg-black/80 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold">
-                  NEW
-                </span>
-              )}
+                {quickViewProduct.prescriptionRequired && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-950/90 backdrop-blur-md border border-amber-500/40 text-[9px] uppercase tracking-wider text-amber-200 font-semibold">
+                    <FileText className="w-2.5 h-2.5" />
+                    <span>Rx Required</span>
+                  </span>
+                )}
+                {hasDiscount && (
+                  <span className="px-2 py-0.5 bg-rose-950/90 backdrop-blur-md border border-rose-500/40 text-[9px] uppercase tracking-widest text-rose-200 font-medium">
+                    -{discountPercent}%
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Thumbnail Selectors */}
@@ -133,7 +180,7 @@ export const QuickViewModal = () => {
               {/* Category, Brand & Rating */}
               <div className="flex items-center justify-between text-xs text-[#A9B0B5] mb-2">
                 <span className="uppercase tracking-widest text-[#C9A45C] font-semibold">
-                  {quickViewProduct.brand || quickProductCategory(quickViewProduct)}
+                  {quickViewProduct.brand || quickViewProduct.category}
                 </span>
                 {quickViewProduct.rating && (
                   <div className="flex items-center gap-1 text-[#C9A45C]">
@@ -148,12 +195,12 @@ export const QuickViewModal = () => {
                 {quickViewProduct.name}
               </h2>
 
-              {/* Price */}
+              {/* Price & Discount */}
               <div className="flex items-center gap-3 mb-4">
                 <span className="font-serif text-xl sm:text-2xl text-[#C9A45C] font-semibold">
                   ₹{quickViewProduct.price.toLocaleString('en-IN')}
                 </span>
-                {quickViewProduct.compareAtPrice && (
+                {hasDiscount && (
                   <span className="text-xs text-[#A9B0B5] line-through">
                     ₹{quickViewProduct.compareAtPrice.toLocaleString('en-IN')}
                   </span>
@@ -190,7 +237,7 @@ export const QuickViewModal = () => {
                 </div>
               )}
 
-              {/* Sizes / Variants */}
+              {/* Sizes / Options */}
               {quickViewProduct.sizes && quickViewProduct.sizes.length > 0 && (
                 <div className="mb-6">
                   <span className="text-xs uppercase tracking-widest text-[#A9B0B5] block mb-2 font-medium">
@@ -245,9 +292,9 @@ export const QuickViewModal = () => {
                 <button
                   type="button"
                   onClick={() => toggleWishlist(quickViewProduct.id)}
-                  className={`p-3.5 border transition-colors cursor-pointer ${
+                  className={`p-3.5 border transition-all cursor-pointer ${
                     wishlisted
-                      ? 'border-[#C9A45C] bg-[#C9A45C] text-[#101820]'
+                      ? 'border-[#C9A45C] bg-[#C9A45C] text-[#101820] scale-105'
                       : 'border-white/20 text-[#A9B0B5] hover:text-white hover:border-white'
                   }`}
                   aria-label="Wishlist"
@@ -271,7 +318,3 @@ export const QuickViewModal = () => {
     </>
   );
 };
-
-function quickProductCategory(p) {
-  return p.category || 'LAX360 Selection';
-}
