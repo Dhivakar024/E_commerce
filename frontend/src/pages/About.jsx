@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { CATEGORIES } from '../data/categories';
 import { NewsletterSection } from '../components/home/NewsletterSection';
+import { MagneticButton } from '../components/common/MagneticButton';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 
 const CATEGORY_ICONS = {
   fashion: Shirt,
@@ -80,11 +82,24 @@ const WHY_LAX360 = [
 ];
 
 export const About = () => {
+  const [heroRef, isHeroVisible] = useScrollReveal({ threshold: 0.1 });
+  const [missionRef, isMissionVisible] = useScrollReveal({ threshold: 0.1 });
+  const [offerRef, isOfferVisible] = useScrollReveal({ threshold: 0.1 });
+  const [whyRef, isWhyVisible] = useScrollReveal({ threshold: 0.1 });
+  const [storyRef, isStoryVisible] = useScrollReveal({ threshold: 0.1 });
+
   return (
-    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24">
+    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 space-y-20">
         {/* 1. Hero Section */}
-        <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div
+          ref={heroRef}
+          className="text-center max-w-3xl mx-auto space-y-4 transition-all duration-700 ease-out"
+          style={{
+            opacity: isHeroVisible ? 1 : 0,
+            transform: isHeroVisible ? 'translateY(0)' : 'translateY(24px)',
+          }}
+        >
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             ABOUT LAX360 PVT LTD
           </span>
@@ -101,7 +116,7 @@ export const About = () => {
           <img
             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80"
             alt="LAX360 Multi-Category Marketplace"
-            className="w-full h-full object-cover filter brightness-60"
+            className="w-full h-full object-cover filter brightness-60 scale-105"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-transparent to-[#101820]/40" />
           <div className="absolute bottom-6 left-6 sm:bottom-10 sm:left-10 max-w-lg space-y-2">
@@ -115,7 +130,14 @@ export const About = () => {
         </div>
 
         {/* 3. OUR MISSION */}
-        <div className="p-8 sm:p-12 bg-[#1B2630] border border-white/10 shadow-xl text-center max-w-4xl mx-auto space-y-4">
+        <div
+          ref={missionRef}
+          className="p-8 sm:p-12 bg-[#1B2630] border border-white/10 shadow-xl text-center max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out"
+          style={{
+            opacity: isMissionVisible ? 1 : 0,
+            transform: isMissionVisible ? 'translateY(0)' : 'translateY(24px)',
+          }}
+        >
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             OUR MISSION
           </span>
@@ -128,8 +150,14 @@ export const About = () => {
         </div>
 
         {/* 4. WHAT WE OFFER (5 Category Blocks) */}
-        <div className="space-y-8">
-          <div className="text-center max-w-2xl mx-auto">
+        <div ref={offerRef} className="space-y-8">
+          <div
+            className="text-center max-w-2xl mx-auto transition-all duration-700 ease-out"
+            style={{
+              opacity: isOfferVisible ? 1 : 0,
+              transform: isOfferVisible ? 'translateY(0)' : 'translateY(20px)',
+            }}
+          >
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               CORE CATEGORIES
             </span>
@@ -139,13 +167,19 @@ export const About = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-            {WHAT_WE_OFFER.map((item) => {
+            {WHAT_WE_OFFER.map((item, idx) => {
               const Icon = item.icon;
               return (
                 <Link
                   key={item.category}
                   to={`/category/${item.slug}`}
                   className="p-6 bg-[#1B2630] border border-white/10 hover:border-[#C9A45C] transition-all duration-300 flex flex-col justify-between space-y-4 group shadow-xl hover:-translate-y-1"
+                  style={{
+                    opacity: isOfferVisible ? 1 : 0,
+                    transform: isOfferVisible ? 'translateY(0)' : 'translateY(28px)',
+                    transition: 'opacity 0.6s ease-out, transform 0.6s ease-out, border-color 0.3s ease',
+                    transitionDelay: `${idx * 80}ms`,
+                  }}
                 >
                   <div className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C] group-hover:bg-[#C9A45C] group-hover:text-[#101820] transition-colors">
                     <Icon className="w-6 h-6" />
@@ -171,8 +205,14 @@ export const About = () => {
         </div>
 
         {/* 5. WHY LAX360? */}
-        <div className="space-y-8 pt-6 border-t border-white/10">
-          <div className="text-center max-w-2xl mx-auto">
+        <div ref={whyRef} className="space-y-8 pt-6 border-t border-white/10">
+          <div
+            className="text-center max-w-2xl mx-auto transition-all duration-700 ease-out"
+            style={{
+              opacity: isWhyVisible ? 1 : 0,
+              transform: isWhyVisible ? 'translateY(0)' : 'translateY(20px)',
+            }}
+          >
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               ADVANTAGES
             </span>
@@ -187,7 +227,13 @@ export const About = () => {
               return (
                 <div
                   key={idx}
-                  className="p-6 bg-[#1B2630] border border-white/10 space-y-4 shadow-xl"
+                  className="p-6 bg-[#1B2630] border border-white/10 space-y-4 shadow-xl hover:border-[#C9A45C]/60 hover:-translate-y-1 transition-all duration-300"
+                  style={{
+                    opacity: isWhyVisible ? 1 : 0,
+                    transform: isWhyVisible ? 'translateY(0)' : 'translateY(28px)',
+                    transition: 'opacity 0.6s ease-out, transform 0.6s ease-out, border-color 0.3s ease',
+                    transitionDelay: `${idx * 90}ms`,
+                  }}
                 >
                   <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
                     <Icon className="w-5 h-5" />
@@ -203,7 +249,14 @@ export const About = () => {
         </div>
 
         {/* 6. FORWARD-LOOKING BRAND STORY */}
-        <div className="p-8 sm:p-12 bg-[#1B2630]/60 border border-white/10 max-w-4xl mx-auto space-y-4">
+        <div
+          ref={storyRef}
+          className="p-8 sm:p-12 bg-[#1B2630]/60 border border-white/10 max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out"
+          style={{
+            opacity: isStoryVisible ? 1 : 0,
+            transform: isStoryVisible ? 'translateY(0)' : 'translateY(24px)',
+          }}
+        >
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             OUR STORY
           </span>
@@ -266,13 +319,13 @@ export const About = () => {
           <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
             Ready to Start Shopping?
           </h2>
-          <Link
+          <MagneticButton
             to="/shop"
             className="btn-shine inline-flex items-center gap-2 px-10 py-4 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] uppercase tracking-widest text-xs font-semibold transition-all shadow-2xl"
           >
             <span>Explore All Marketplace Products</span>
             <ArrowRight className="w-4 h-4" />
-          </Link>
+          </MagneticButton>
         </div>
       </div>
 

@@ -2,6 +2,7 @@ import React, { lazy, Suspense } from 'react';
 import { HeroVideo } from '../components/hero/HeroVideo';
 import { HeroContent } from '../components/hero/HeroContent';
 import { ScrollIndicator } from '../components/hero/ScrollIndicator';
+import { MarketplaceStats } from '../components/home/MarketplaceStats';
 
 const ShopByCategory = lazy(() =>
   import('../components/home/ShopByCategory').then((m) => ({ default: m.ShopByCategory }))
@@ -27,7 +28,8 @@ const NewsletterSection = lazy(() =>
 
 export const Home = () => {
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream overflow-x-hidden">
+    <main className="w-full bg-[#101820] text-[#F7F3EA] overflow-x-hidden">
+      {/* 1. Cinematic Hero Section with Subtle Parallax */}
       <section className="relative flex h-[100svh] min-h-[100svh] w-full items-center overflow-hidden">
         <HeroVideo videoSrc="/videos/hero-fashion.mp4" />
 
@@ -38,13 +40,30 @@ export const Home = () => {
         <ScrollIndicator targetId="shop-by-category" />
       </section>
 
-      <Suspense fallback={<div className="min-h-[40vh] bg-luxury-black" aria-hidden="true" />}>
+      {/* 2. Interactive Marketplace Sections */}
+      <Suspense fallback={<div className="min-h-[40vh] bg-[#101820]" aria-hidden="true" />}>
+        {/* Shop by Category (Interactive 3D Cards) */}
         <ShopByCategory />
+
+        {/* Curated Category Hubs */}
         <FeaturedCollection />
+
+        {/* Animated Marketplace Stats Counter */}
+        <MarketplaceStats />
+
+        {/* Trending Now (Interactive Carousel & Category Filter Tabs) */}
         <TrendingNow />
-        <PromotionalBanner />
-        <NewArrivals />
+
+        {/* Why Shop with LAX360 Benefits */}
         <BrandStatement />
+
+        {/* Promotional Section */}
+        <PromotionalBanner />
+
+        {/* New Arrivals Horizontal Carousel */}
+        <NewArrivals />
+
+        {/* Marketplace Newsletter */}
         <NewsletterSection />
       </Suspense>
     </main>

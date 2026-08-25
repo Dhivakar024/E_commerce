@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Mail, CheckCircle2, AlertCircle } from 'lucide-react';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 export const NewsletterSection = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.15 });
 
   const validateEmail = (val) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -32,8 +34,20 @@ export const NewsletterSection = () => {
   };
 
   return (
-    <section className="py-24 sm:py-32 bg-[#101820] relative z-10">
-      <div className="max-w-3xl mx-auto px-6 sm:px-8 text-center">
+    <section
+      ref={sectionRef}
+      className="py-24 sm:py-32 bg-[#101820] relative z-10 overflow-hidden"
+    >
+      {/* Floating decorative elements */}
+      <div className="absolute top-10 right-1/4 w-36 h-36 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
+
+      <div
+        className="max-w-3xl mx-auto px-6 sm:px-8 text-center transition-all duration-700 ease-out"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+        }}
+      >
         <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-3 font-semibold">
           MARKETPLACE DISPATCH
         </span>

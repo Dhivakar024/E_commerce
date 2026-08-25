@@ -61,17 +61,17 @@ const AppContent = () => {
   const isAdminRoute = pathname.startsWith('/admin');
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#101820] text-[#F7F3EA] selection:bg-[#C9A45C]/30 selection:text-white">
+    <div className="flex flex-col min-h-screen bg-[#101820] text-[#F7F3EA] selection:bg-[#C9A45C]/30 selection:text-white overflow-x-hidden">
       <ScrollToTop />
 
       {/* Global Floating Toast Notifications */}
       <ToastNotification />
 
-      {/* Sticky Glassmorphic Navbar */}
+      {/* Sticky Glassmorphic Navbar with Full-Width Mega Menu & Progress Indicator */}
       {!isCheckoutPage && !isAdminRoute && <Navbar />}
 
-      {/* Main Content Viewport */}
-      <div className="flex-grow">
+      {/* Main Content Viewport with subtle page fade */}
+      <div key={pathname} className="flex-grow animate-fade-in">
         <Routes>
           {/* Customer Storefront Routes */}
           <Route path="/" element={<Home />} />

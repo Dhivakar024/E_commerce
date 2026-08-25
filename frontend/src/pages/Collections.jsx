@@ -4,6 +4,7 @@ import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/common/ProductCard';
 import { QuickViewModal } from '../components/shop/QuickViewModal';
 import { NewsletterSection } from '../components/home/NewsletterSection';
+import { useScrollReveal } from '../hooks/useScrollReveal';
 import {
   Sparkles,
   ArrowRight,
@@ -113,6 +114,7 @@ const CATEGORY_TABS = [
 export const Collections = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [selectedCollectionId, setSelectedCollectionId] = useState('all');
+  const [headerRef, isHeaderVisible] = useScrollReveal({ threshold: 0.1 });
 
   // Filter collections based on active category
   const filteredCollections = useMemo(() => {
@@ -144,10 +146,17 @@ export const Collections = () => {
   }, [activeCategory, selectedCollectionId]);
 
   return (
-    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24">
+    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 space-y-12">
         {/* Page Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-3">
+        <div
+          ref={headerRef}
+          className="text-center max-w-3xl mx-auto space-y-3 transition-all duration-700 ease-out"
+          style={{
+            opacity: isHeaderVisible ? 1 : 0,
+            transform: isHeaderVisible ? 'translateY(0)' : 'translateY(24px)',
+          }}
+        >
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             LAX360 CURATED DISCOVERIES
           </span>
@@ -201,7 +210,7 @@ export const Collections = () => {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredCollections.map((col) => {
+            {filteredCollections.map((col, idx) => {
               const Icon = col.icon;
               const isSelected = selectedCollectionId === col.id;
 
@@ -213,15 +222,17 @@ export const Collections = () => {
                   }
                   className={`p-6 bg-[#1B2630] border transition-all duration-300 flex flex-col justify-between space-y-4 cursor-pointer shadow-xl ${
                     isSelected
-                      ? 'border-[#C9A45C] ring-1 ring-[#C9A45C] -translate-y-1'
-                      : 'border-white/10 hover:border-[#C9A45C]/60 hover:-translate-y-0.5'
+                      ? 'border-[#C9A45C] ring-1 ring-[#C9A45C] -translate-y-1 shadow-2xl'
+                      : 'border-white/10 hover:border-[#C9A45C]/70 hover:-translate-y-1 hover:shadow-2xl'
                   }`}
                 >
                   <div className="flex items-start justify-between">
-                    <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
+                    <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C] transition-transform group-hover:scale-105">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[10px] uppercase tracking-wider text-[#A9B0B5] px-2 py-0.5 bg-black/40">
+                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 ${
+                      isSelected ? 'bg-[#C9A45C] text-[#101820] font-semibold' : 'text-[#A9B0B5] bg-black/40'
+                    }`}>
                       {isSelected ? 'Active Filter' : 'Click to Filter'}
                     </span>
                   </div>

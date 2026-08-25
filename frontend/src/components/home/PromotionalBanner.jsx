@@ -1,25 +1,41 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
+import { MagneticButton } from '../common/MagneticButton';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 export const PromotionalBanner = () => {
+  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.15 });
+
   return (
-    <section className="relative w-full py-28 sm:py-36 md:py-40 bg-[#101820] overflow-hidden flex items-center justify-center">
+    <section
+      ref={sectionRef}
+      className="relative w-full py-28 sm:py-36 md:py-40 bg-[#101820] overflow-hidden flex items-center justify-center"
+    >
       {/* Background Image with modern multi-category ambiance */}
       <div className="absolute inset-0 z-0">
         <img
           src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1800&auto=format&fit=crop"
           alt="LAX360 Marketplace"
           loading="lazy"
-          className="w-full h-full object-cover object-center filter brightness-50"
+          className="w-full h-full object-cover object-center filter brightness-50 scale-105"
         />
         {/* Subtle Dark Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-[#101820]/95 via-[#101820]/80 to-[#101820]/95" />
         <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-transparent to-[#101820]/60" />
       </div>
 
-      {/* Content Container */}
-      <div className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 text-center">
+      {/* Floating decorative elements */}
+      <div className="absolute top-10 left-10 w-24 h-24 border border-[#C9A45C]/15 rounded-full pointer-events-none animate-float-slow" />
+      <div className="absolute bottom-10 right-10 w-32 h-32 border border-white/10 rounded-full pointer-events-none animate-float-reverse" />
+
+      {/* Content Container with Scroll Reveal */}
+      <div
+        className="relative z-10 max-w-4xl mx-auto px-6 sm:px-8 text-center transition-all duration-700 ease-out"
+        style={{
+          opacity: isVisible ? 1 : 0,
+          transform: isVisible ? 'translateY(0)' : 'translateY(28px)',
+        }}
+      >
         {/* Label */}
         <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-none bg-white/10 backdrop-blur-md border border-white/15 mb-5 sm:mb-6">
           <Sparkles className="w-3.5 h-3.5 text-[#C9A45C]" />
@@ -38,15 +54,15 @@ export const PromotionalBanner = () => {
           From your wardrobe to your home, your technology and everyday essentials — discover it all at LAX360 PVT LTD.
         </p>
 
-        {/* CTA Button */}
+        {/* Magnetic CTA Button */}
         <div>
-          <Link
+          <MagneticButton
             to="/shop"
             className="btn-shine group inline-flex items-center justify-center gap-3 px-9 py-4 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] font-semibold text-xs sm:text-sm uppercase tracking-widest transition-all duration-300 transform hover:scale-105 shadow-2xl"
           >
             <span>EXPLORE STORE</span>
             <ArrowRight className="w-4 h-4 text-[#101820] transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          </MagneticButton>
         </div>
       </div>
     </section>

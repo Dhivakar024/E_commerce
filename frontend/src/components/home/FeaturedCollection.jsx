@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Shirt, Armchair, Smartphone, Pill, Sparkles } from 'lucide-react';
+import { useScrollReveal } from '../../hooks/useScrollReveal';
 
 const STORE_BLOCKS = [
   {
@@ -51,11 +52,26 @@ const STORE_BLOCKS = [
 ];
 
 export const FeaturedCollection = () => {
+  const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.1 });
+
   return (
-    <section className="py-20 sm:py-28 bg-[#1B2630]/40 border-y border-white/5 relative z-10 overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+    <section
+      ref={sectionRef}
+      className="py-20 sm:py-28 bg-[#1B2630]/40 border-y border-white/5 relative z-10 overflow-hidden"
+    >
+      {/* Subtle floating background decoration */}
+      <div className="absolute top-12 right-12 w-64 h-64 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
+      <div className="absolute bottom-8 left-8 w-48 h-48 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-reverse" />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 border-b border-white/10 pb-6">
+        <div
+          className="flex flex-col md:flex-row md:items-end justify-between mb-12 sm:mb-16 border-b border-white/10 pb-6 transition-all duration-700 ease-out"
+          style={{
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+          }}
+        >
           <div>
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               EXPLORE OUR STORE
@@ -70,25 +86,28 @@ export const FeaturedCollection = () => {
 
           <Link
             to="/shop"
-            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#C9A45C] hover:text-white mt-4 md:mt-0 font-semibold transition-colors"
+            className="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#C9A45C] hover:text-white mt-4 md:mt-0 font-semibold transition-colors group"
           >
             <span>View Complete Marketplace</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
 
-        {/* 5 Category Shopping Blocks */}
+        {/* 5 Category Shopping Blocks with Staggered Scroll Reveal */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
           {STORE_BLOCKS.map((block, idx) => {
             const Icon = block.icon;
-            const isLarge = idx === 0 || idx === 1;
 
             return (
               <div
                 key={block.category}
-                className={`group relative flex flex-col justify-between overflow-hidden bg-[#101820] border border-white/10 hover:border-[#C9A45C] transition-all duration-500 shadow-xl ${
-                  isLarge ? 'md:col-span-1 lg:col-span-1' : ''
-                }`}
+                className="group relative flex flex-col justify-between overflow-hidden bg-[#101820] border border-white/10 hover:border-[#C9A45C] transition-all duration-500 shadow-xl hover:shadow-2xl hover:shadow-black/50 hover:-translate-y-1"
+                style={{
+                  opacity: isVisible ? 1 : 0,
+                  transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
+                  transition: 'opacity 0.6s ease-out, transform 0.6s ease-out, border-color 0.3s ease, box-shadow 0.3s ease',
+                  transitionDelay: `${idx * 110}ms`,
+                }}
               >
                 {/* Background Image Container */}
                 <div className="relative aspect-[16/10] overflow-hidden bg-neutral-900">
@@ -100,9 +119,9 @@ export const FeaturedCollection = () => {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-[#101820]/30 to-transparent" />
 
-                  {/* Category Pill Tag */}
-                  <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 bg-[#101820]/90 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold">
-                    <Icon className="w-3 h-3" />
+                  {/* Category Pill Tag with Icon micro-interaction */}
+                  <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 px-3 py-1 bg-[#101820]/90 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold transition-transform duration-300 group-hover:scale-105">
+                    <Icon className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-6" />
                     <span>{block.category}</span>
                   </div>
                 </div>
