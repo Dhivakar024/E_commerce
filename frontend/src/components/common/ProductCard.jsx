@@ -25,11 +25,11 @@ export const ProductCard = ({ product, className = '' }) => {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Very subtle, clamped tilt (max 4.5 degrees)
-    const rotateX = ((centerY - y) / centerY) * 4.5;
-    const rotateY = ((x - centerX) / centerX) * 4.5;
+    // Very subtle clamped tilt (max 4 degrees)
+    const rotateX = ((centerY - y) / centerY) * 4;
+    const rotateY = ((x - centerX) / centerX) * 4;
 
-    setTilt({ rotateX, rotateY, scale: 1.015 });
+    setTilt({ rotateX, rotateY, scale: 1.012 });
   };
 
   const handleMouseLeave = () => {
@@ -55,7 +55,7 @@ export const ProductCard = ({ product, className = '' }) => {
     setIsAdded(true);
     setTimeout(() => {
       setIsAdded(false);
-    }, 2200);
+    }, 2000);
   };
 
   const secondaryImage =
@@ -76,7 +76,7 @@ export const ProductCard = ({ product, className = '' }) => {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className={`perspective-1000 ${className}`}
+      className={`perspective-1000 h-full flex flex-col ${className}`}
     >
       <div
         style={{
@@ -86,10 +86,10 @@ export const ProductCard = ({ product, className = '' }) => {
               ? 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s ease'
               : 'transform 0.12s ease-out, box-shadow 0.12s ease-out',
         }}
-        className="group flex flex-col bg-white border border-black/10 hover:border-[#C9A45C]/70 shadow-sm hover:shadow-xl hover:shadow-black/20 preserve-3d transition-all duration-300 overflow-hidden"
+        className="group flex flex-col h-full bg-white border border-black/10 hover:border-[#C9A45C]/70 shadow-sm hover:shadow-xl hover:shadow-black/20 preserve-3d transition-all duration-300 overflow-hidden"
       >
-        {/* Image Container */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-[#F7F3EA]">
+        {/* 1. FIXED IMAGE CONTAINER (Consistent Aspect Ratio) */}
+        <div className="relative aspect-[4/5] w-full overflow-hidden bg-[#F7F3EA] flex-shrink-0 select-none">
           <Link to={productUrl} className="block w-full h-full">
             {/* Primary Image */}
             <img
@@ -136,7 +136,7 @@ export const ProductCard = ({ product, className = '' }) => {
 
           {/* Action Buttons Top Right: Wishlist & Quick View */}
           <div className="absolute top-3 right-3 flex flex-col gap-2 z-10">
-            {/* Wishlist Button with Bounce Hover */}
+            {/* Wishlist Button */}
             <button
               onClick={handleWishlistToggle}
               className={`w-8 h-8 rounded-full flex items-center justify-center transition-all duration-300 backdrop-blur-md border shadow-sm cursor-pointer ${
@@ -194,28 +194,36 @@ export const ProductCard = ({ product, className = '' }) => {
           </div>
         </div>
 
-        {/* Product Details */}
-        <div className="p-4 sm:p-5 flex flex-col justify-between flex-grow bg-white">
-          <div>
-            <div className="flex items-center justify-between text-[10px] uppercase tracking-widest text-[#A9B0B5] mb-1">
-              <span className="font-semibold text-[#C9A45C]">{product.brand || product.category}</span>
-              {product.rating && (
-                <div className="flex items-center gap-1 text-[#C9A45C]">
-                  <Star className="w-3 h-3 fill-[#C9A45C] text-[#C9A45C]" />
-                  <span className="text-[#101820] font-semibold">{product.rating}</span>
-                </div>
-              )}
+        {/* 2. UNIFORM CONTENT AREA (Consistent Height & Internal Alignment) */}
+        <div className="p-4 sm:p-5 flex flex-col flex-grow justify-between bg-white text-[#101820]">
+          {/* Top content block */}
+          <div className="space-y-1">
+            {/* Brand and Rating Row (Fixed Height: h-5) */}
+            <div className="h-5 flex items-center justify-between text-[10px] uppercase tracking-widest text-[#A9B0B5]">
+              <span className="font-semibold text-[#C9A45C] truncate max-w-[65%]">
+                {product.brand || product.category}
+              </span>
+              <div className="flex items-center gap-1 text-[#C9A45C] flex-shrink-0">
+                <Star className="w-3 h-3 fill-[#C9A45C] text-[#C9A45C]" />
+                <span className="text-[#101820] font-semibold text-[11px]">
+                  {product.rating || '4.8'}
+                </span>
+              </div>
             </div>
 
-            <Link
-              to={productUrl}
-              className="font-serif text-sm sm:text-base text-[#101820] font-semibold hover:text-[#C9A45C] transition-colors line-clamp-1 block mb-1"
-            >
-              {product.name}
-            </Link>
+            {/* Product Name (Strict Fixed Height for 2 lines: h-11) */}
+            <div className="h-11 flex items-start">
+              <Link
+                to={productUrl}
+                className="font-serif text-sm sm:text-base text-[#101820] font-semibold hover:text-[#C9A45C] transition-colors line-clamp-2 leading-snug"
+                title={product.name}
+              >
+                {product.name}
+              </Link>
+            </div>
 
-            {/* Subcategory & Key spec pill */}
-            <div className="text-[11px] text-[#A9B0B5] flex items-center gap-2 mb-2">
+            {/* Subcategory & Key Specification (Fixed Height: h-4) */}
+            <div className="h-4 text-[11px] text-[#A9B0B5] flex items-center gap-1.5 truncate">
               <span>{product.subcategory || product.category}</span>
               {product.ram && <span>• {product.ram}</span>}
               {product.dimensions && <span>• {product.dimensions}</span>}
@@ -225,63 +233,67 @@ export const ProductCard = ({ product, className = '' }) => {
             </div>
           </div>
 
-          <div className="mt-2 pt-3 border-t border-black/5 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-xs sm:text-sm font-semibold text-[#101820]">
-                ₹{product.price.toLocaleString('en-IN')}
-              </span>
-              {product.compareAtPrice && (
-                <span className="text-[11px] text-[#A9B0B5] line-through">
-                  ₹{product.compareAtPrice.toLocaleString('en-IN')}
+          {/* Bottom content block (Pinned to bottom: mt-auto) */}
+          <div className="mt-4 pt-3 border-t border-black/5">
+            {/* Price and Swatches/Stock Row (Fixed Height: h-6) */}
+            <div className="h-6 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="text-xs sm:text-sm font-semibold text-[#101820]">
+                  ₹{product.price.toLocaleString('en-IN')}
+                </span>
+                {product.compareAtPrice && product.compareAtPrice > product.price && (
+                  <span className="text-[11px] text-[#A9B0B5] line-through">
+                    ₹{product.compareAtPrice.toLocaleString('en-IN')}
+                  </span>
+                )}
+              </div>
+
+              {/* Color Swatches or Stock indicator */}
+              {product.colorHexes && product.colorHexes.length > 0 ? (
+                <div className="flex items-center gap-1">
+                  {product.colorHexes.slice(0, 3).map((col, idx) => (
+                    <span
+                      key={idx}
+                      className="w-2.5 h-2.5 rounded-full border border-black/20"
+                      style={{ backgroundColor: col.hex }}
+                      title={col.name}
+                    />
+                  ))}
+                  {product.colorHexes.length > 3 && (
+                    <span className="text-[9px] text-[#A9B0B5]">+{product.colorHexes.length - 3}</span>
+                  )}
+                </div>
+              ) : (
+                <span className="text-[10px] text-emerald-800 bg-emerald-50 px-1.5 py-0.5 border border-emerald-200 rounded-xs font-medium">
+                  In Stock
                 </span>
               )}
             </div>
 
-            {/* Color Swatches or Stock indicator */}
-            {product.colorHexes && product.colorHexes.length > 0 ? (
-              <div className="flex items-center gap-1">
-                {product.colorHexes.slice(0, 3).map((col, idx) => (
-                  <span
-                    key={idx}
-                    className="w-2.5 h-2.5 rounded-full border border-black/20"
-                    style={{ backgroundColor: col.hex }}
-                    title={col.name}
-                  />
-                ))}
-                {product.colorHexes.length > 3 && (
-                  <span className="text-[9px] text-[#A9B0B5]">+{product.colorHexes.length - 3}</span>
+            {/* Mobile Quick Add Button */}
+            <div className="mt-3 sm:hidden">
+              <button
+                onClick={handleAddToCart}
+                disabled={isAdded}
+                className={`w-full py-2 text-[10px] tracking-widest uppercase font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer ${
+                  isAdded
+                    ? 'bg-emerald-700 text-white'
+                    : 'bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820]'
+                }`}
+              >
+                {isAdded ? (
+                  <>
+                    <Check className="w-3 h-3" />
+                    <span>Added</span>
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="w-3 h-3" />
+                    <span>Add to Bag</span>
+                  </>
                 )}
-              </div>
-            ) : (
-              <span className="text-[10px] text-emerald-800 bg-emerald-50 px-1.5 py-0.5 border border-emerald-200 rounded-xs font-medium">
-                In Stock
-              </span>
-            )}
-          </div>
-
-          {/* Mobile Quick Add Button (Visible on mobile touchscreens) */}
-          <div className="mt-3 sm:hidden">
-            <button
-              onClick={handleAddToCart}
-              disabled={isAdded}
-              className={`w-full py-2 text-[10px] tracking-widest uppercase font-semibold flex items-center justify-center gap-1.5 transition-colors ${
-                isAdded
-                  ? 'bg-emerald-700 text-white'
-                  : 'bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820]'
-              }`}
-            >
-              {isAdded ? (
-                <>
-                  <Check className="w-3 h-3" />
-                  <span>Added</span>
-                </>
-              ) : (
-                <>
-                  <ShoppingBag className="w-3 h-3" />
-                  <span>Add to Bag</span>
-                </>
-              )}
-            </button>
+              </button>
+            </div>
           </div>
         </div>
       </div>
