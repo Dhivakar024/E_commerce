@@ -15,9 +15,10 @@
     --accent-gold-hover: #D8B872;
     --border-subtle: rgba(247, 243, 234, 0.10);
     --border-light: rgba(247, 243, 234, 0.18);
-    --nav-bg: rgba(16, 24, 32, 0.94);
+    --nav-bg: rgba(16, 24, 32, 0.88);
     --nav-border: rgba(247, 243, 234, 0.10);
-    --card-hover-border: rgba(201, 164, 92, 0.5);
+    --card-hover-border: rgba(201, 164, 92, 0.6);
+    --card-glow: rgba(201, 164, 92, 0.12);
     color-scheme: dark;
   }
 
@@ -33,9 +34,10 @@
     --accent-gold-hover: #C9A45C;
     --border-subtle: rgba(16, 24, 32, 0.10);
     --border-light: rgba(16, 24, 32, 0.18);
-    --nav-bg: rgba(248, 246, 240, 0.95);
+    --nav-bg: rgba(248, 246, 240, 0.90);
     --nav-border: rgba(16, 24, 32, 0.08);
-    --card-hover-border: rgba(176, 139, 67, 0.6);
+    --card-hover-border: rgba(176, 139, 67, 0.65);
+    --card-glow: rgba(176, 139, 67, 0.10);
     color-scheme: light;
   }
 
@@ -61,31 +63,32 @@
 /* Custom Glassmorphism - Adaptive for Dark and Light */
 .glass-nav {
   background: var(--nav-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border-bottom: 1px solid var(--nav-border);
-  transition: background-color 0.25s ease, border-color 0.25s ease, padding 0.3s ease;
+  transition: background-color 0.25s ease, border-color 0.25s ease, padding 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
 }
 
 .glass-nav-transparent {
-  background: linear-gradient(180deg, rgba(16, 24, 32, 0.8) 0%, rgba(16, 24, 32, 0.2) 60%, transparent 100%);
+  background: linear-gradient(180deg, rgba(16, 24, 32, 0.85) 0%, rgba(16, 24, 32, 0.2) 60%, transparent 100%);
   border-bottom: 1px solid transparent;
 }
 
 html.light .glass-nav-transparent {
-  background: linear-gradient(180deg, rgba(248, 246, 240, 0.9) 0%, rgba(248, 246, 240, 0.25) 60%, transparent 100%);
+  background: linear-gradient(180deg, rgba(248, 246, 240, 0.92) 0%, rgba(248, 246, 240, 0.25) 60%, transparent 100%);
 }
 
 .glass-card {
   background: var(--bg-surface);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
   transition: background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .glass-card:hover {
   border-color: var(--card-hover-border);
+  box-shadow: 0 12px 32px -4px var(--card-glow);
 }
 
 /* 3D Transform & Perspective Utilities */
@@ -93,24 +96,79 @@ html.light .glass-nav-transparent {
   perspective: 1000px;
 }
 
+.perspective-800 {
+  perspective: 800px;
+}
+
 .preserve-3d {
   transform-style: preserve-3d;
+  backface-visibility: hidden;
 }
 
 .backface-hidden {
   backface-visibility: hidden;
 }
 
-/* Cinematic Video Overlay Gradients — Adaptive */
-.cinematic-overlay {
-  background: linear-gradient(
-    180deg,
-    rgba(16, 24, 32, 0.45) 0%,
-    rgba(16, 24, 32, 0.12) 32%,
-    rgba(16, 24, 32, 0.06) 52%,
-    rgba(16, 24, 32, 0.28) 78%,
-    rgba(16, 24, 32, 0.65) 100%
-  );
+/* Floating 3D Cards Keyframes */
+@keyframes float-element-1 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) translateZ(20px);
+  }
+  50% {
+    transform: translateY(-8px) rotate(1.5deg) translateZ(25px);
+  }
+}
+
+@keyframes float-element-2 {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg) translateZ(15px);
+  }
+  50% {
+    transform: translateY(8px) rotate(-1.5deg) translateZ(20px);
+  }
+}
+
+@keyframes float-element-3 {
+  0%, 100% {
+    transform: translateY(0px) scale(1) translateZ(10px);
+  }
+  50% {
+    transform: translateY(-6px) scale(1.02) translateZ(18px);
+  }
+}
+
+@keyframes heart-pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.32) rotate(-8deg); }
+  75% { transform: scale(0.92) rotate(4deg); }
+  100% { transform: scale(1); }
+}
+
+@keyframes badge-bump {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.35) rotate(-6deg); }
+  80% { transform: scale(0.9); }
+  100% { transform: scale(1); }
+}
+
+.animate-3d-float-1 {
+  animation: float-element-1 7s ease-in-out infinite;
+}
+
+.animate-3d-float-2 {
+  animation: float-element-2 8s ease-in-out infinite;
+}
+
+.animate-3d-float-3 {
+  animation: float-element-3 9s ease-in-out infinite;
+}
+
+.animate-heart-pop {
+  animation: heart-pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animate-badge-bump {
+  animation: badge-bump 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 /* Luxury Button Shine Effect */
@@ -129,7 +187,7 @@ html.light .glass-nav-transparent {
   background: linear-gradient(
     60deg,
     transparent 20%,
-    rgba(255, 255, 255, 0.22) 50%,
+    rgba(255, 255, 255, 0.24) 50%,
     transparent 80%
   );
   transform: translateX(-100%);
@@ -138,6 +196,22 @@ html.light .glass-nav-transparent {
 
 .btn-shine:hover::after {
   transform: translateX(100%);
+}
+
+/* Luxury 3D Card Sheen on Hover */
+.card-sheen-overlay {
+  pointer-events: none;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(201, 164, 92, 0.15),
+    transparent 65%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.group:hover .card-sheen-overlay {
+  opacity: 1;
 }
 
 /* Subtle Scrollbar — Adaptive */

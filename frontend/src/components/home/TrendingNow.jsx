@@ -276,7 +276,7 @@ export const TrendingNow = () => {
           })}
         </div>
 
-        {/* Auto-scrolling Sliding Product Track with Drag & Touch Support */}
+        {/* Auto-scrolling Sliding Product Track with Drag & Touch Support & 3D Perspective */}
         <div
           ref={containerRef}
           onMouseEnter={() => setIsPaused(true)}
@@ -289,7 +289,7 @@ export const TrendingNow = () => {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-2 sm:-mx-2.5"
+          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-2 sm:-mx-2.5 perspective-1000"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(28px)',
@@ -298,7 +298,7 @@ export const TrendingNow = () => {
           }}
         >
           <div
-            className="flex transition-transform duration-500 ease-out"
+            className="flex transition-transform duration-500 ease-out preserve-3d"
             style={{
               transform: `translate3d(${baseTranslate}%, 0, 0) translate3d(${dragOffset}px, 0, 0)`,
               transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',

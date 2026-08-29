@@ -203,7 +203,7 @@ export const NewArrivals = () => {
           </div>
         </div>
 
-        {/* Multi-Category Products Sliding Carousel */}
+        {/* Multi-Category Products Sliding Carousel with 3D Depth */}
         <div
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => {
@@ -215,7 +215,7 @@ export const NewArrivals = () => {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-2 sm:-mx-2.5"
+          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-2 sm:-mx-2.5 perspective-1000"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(28px)',
@@ -224,7 +224,7 @@ export const NewArrivals = () => {
           }}
         >
           <div
-            className="flex transition-transform duration-500 ease-out"
+            className="flex transition-transform duration-500 ease-out preserve-3d"
             style={{
               transform: `translate3d(${baseTranslate}%, 0, 0) translate3d(${dragOffset}px, 0, 0)`,
               transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',

@@ -52,10 +52,10 @@ const MARKETPLACE_CATEGORIES = [
   },
 ];
 
-// Single Compact 3D Interactive Category Card
+// Single Compact 3D Interactive Category Card with Image Depth & Light Sheen
 const CategoryCard3D = ({ cat, index, isDark }) => {
   const cardRef = useRef(null);
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1, imageX: 0, imageY: 0, mouseX: 50, mouseY: 50 });
   const IconComponent = cat.icon;
 
   const handleMouseMove = (e) => {
@@ -71,14 +71,20 @@ const CategoryCard3D = ({ cat, index, isDark }) => {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((centerY - y) / centerY) * 3.5;
-    const rotateY = ((x - centerX) / centerX) * 3.5;
+    const rotateX = ((centerY - y) / centerY) * 4;
+    const rotateY = ((x - centerX) / centerX) * 4;
 
-    setTilt({ rotateX, rotateY, scale: 1.01 });
+    const imageX = ((x - centerX) / centerX) * -6;
+    const imageY = ((y - centerY) / centerY) * -6;
+
+    const mouseX = Math.round((x / rect.width) * 100);
+    const mouseY = Math.round((y / rect.height) * 100);
+
+    setTilt({ rotateX, rotateY, scale: 1.015, imageX, imageY, mouseX, mouseY });
   };
 
   const handleMouseLeave = () => {
-    setTilt({ rotateX: 0, rotateY: 0, scale: 1 });
+    setTilt({ rotateX: 0, rotateY: 0, scale: 1, imageX: 0, imageY: 0, mouseX: 50, mouseY: 50 });
   };
 
   return (
@@ -92,25 +98,34 @@ const CategoryCard3D = ({ cat, index, isDark }) => {
         to={`/category/${cat.slug}`}
         style={{
           transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${tilt.scale})`,
+          '--mouse-x': `${tilt.mouseX}%`,
+          '--mouse-y': `${tilt.mouseY}%`,
           transition:
             tilt.scale === 1
-              ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease'
+              ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease'
               : 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
         }}
-        className={`group relative flex flex-col h-full overflow-hidden rounded-none shadow-md hover:shadow-xl preserve-3d block select-none border transition-all duration-300 ${
+        className={`group relative flex flex-col h-full overflow-hidden rounded-none shadow-md hover:shadow-2xl preserve-3d block select-none border transition-all duration-300 ${
           isDark
-            ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C] hover:shadow-black/70'
-            : 'bg-white border-black/10 hover:border-[#B08B43] hover:shadow-black/15'
+            ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C] hover:shadow-[#C9A45C]/10'
+            : 'bg-white border-black/10 hover:border-[#B08B43] hover:shadow-[#B08B43]/15'
         }`}
       >
-        {/* Compact Visual Image Area (Equal Aspect Ratio) */}
+        {/* Dynamic Light Sheen Overlay */}
+        <div className="card-sheen-overlay absolute inset-0 z-20 pointer-events-none" />
+
+        {/* Compact Visual Image Area with Parallax Depth */}
         <div className="relative aspect-[16/11] overflow-hidden bg-neutral-900 flex-shrink-0">
           <img
             src={cat.image}
             alt={cat.name}
             loading="lazy"
             draggable={false}
-            className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-106 filter brightness-90 group-hover:brightness-100"
+            style={{
+              transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.08 : 1})`,
+              transition: tilt.scale === 1 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
+            }}
+            className="w-full h-full object-cover object-center filter brightness-90 group-hover:brightness-100"
           />
 
           {/* Gradient Overlay */}
@@ -183,13 +198,13 @@ export const ShopByCategory = () => {
     const updateVisibleItems = () => {
       const width = window.innerWidth;
       if (width >= 1280) {
-        setItemsVisible(4); // Desktop Large: 4 cards
+        setItemsVisible(4);
       } else if (width >= 1024) {
-        setItemsVisible(3); // Desktop: 3 cards
+        setItemsVisible(3);
       } else if (width >= 640) {
-        setItemsVisible(2); // Tablet: 2 cards
+        setItemsVisible(2);
       } else {
-        setItemsVisible(1.2); // Mobile: 1 card + peek of next (or 1)
+        setItemsVisible(1.2);
       }
     };
 
@@ -290,7 +305,7 @@ export const ShopByCategory = () => {
     <section
       id="shop-by-category"
       ref={sectionRef}
-      className={`py-16 sm:py-24 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
+      className={`py-14 sm:py-20 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
         isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
       }`}
     >

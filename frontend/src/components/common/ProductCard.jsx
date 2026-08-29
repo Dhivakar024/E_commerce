@@ -8,13 +8,13 @@ export const ProductCard = ({ product, className = '' }) => {
   const { addToCart, isWishlisted, toggleWishlist, openQuickView } = useShop();
   const { isDark } = useTheme();
   const [isAdded, setIsAdded] = useState(false);
-  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
+  const [isHeartPopping, setIsHeartPopping] = useState(false);
+  const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1, imageX: 0, imageY: 0, mouseX: 50, mouseY: 50 });
   const cardRef = useRef(null);
 
   const wishlisted = isWishlisted(product.id);
 
   const handleMouseMove = (e) => {
-    // Disable 3D tilt on mobile/touch screens
     if (window.innerWidth < 768 || window.matchMedia('(hover: none)').matches) return;
 
     const el = cardRef.current;
@@ -27,21 +27,28 @@ export const ProductCard = ({ product, className = '' }) => {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    // Very subtle clamped tilt (max 3.5 degrees)
     const rotateX = ((centerY - y) / centerY) * 3.5;
     const rotateY = ((x - centerX) / centerX) * 3.5;
 
-    setTilt({ rotateX, rotateY, scale: 1.01 });
+    const imageX = ((x - centerX) / centerX) * -4;
+    const imageY = ((y - centerY) / centerY) * -4;
+
+    const mouseX = Math.round((x / rect.width) * 100);
+    const mouseY = Math.round((y / rect.height) * 100);
+
+    setTilt({ rotateX, rotateY, scale: 1.015, imageX, imageY, mouseX, mouseY });
   };
 
   const handleMouseLeave = () => {
-    setTilt({ rotateX: 0, rotateY: 0, scale: 1 });
+    setTilt({ rotateX: 0, rotateY: 0, scale: 1, imageX: 0, imageY: 0, mouseX: 50, mouseY: 50 });
   };
 
   const handleWishlistToggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
+    setIsHeartPopping(true);
     toggleWishlist(product.id);
+    setTimeout(() => setIsHeartPopping(false), 450);
   };
 
   const handleQuickViewClick = (e) => {
@@ -83,18 +90,23 @@ export const ProductCard = ({ product, className = '' }) => {
       <div
         style={{
           transform: `rotateX(${tilt.rotateX}deg) rotateY(${tilt.rotateY}deg) scale(${tilt.scale})`,
+          '--mouse-x': `${tilt.mouseX}%`,
+          '--mouse-y': `${tilt.mouseY}%`,
           transition:
             tilt.scale === 1
-              ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease'
+              ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease'
               : 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
         }}
-        className={`group flex flex-col h-full border shadow-sm hover:shadow-lg preserve-3d transition-all duration-300 overflow-hidden ${
+        className={`group flex flex-col h-full border shadow-sm hover:shadow-2xl preserve-3d transition-all duration-300 overflow-hidden ${
           isDark
-            ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C]/70 hover:shadow-black/40 text-white'
-            : 'bg-white border-black/10 hover:border-[#B08B43]/70 hover:shadow-black/10 text-[#101820]'
+            ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C]/80 hover:shadow-[#C9A45C]/10 text-white'
+            : 'bg-white border-black/10 hover:border-[#B08B43]/80 hover:shadow-[#B08B43]/15 text-[#101820]'
         }`}
       >
-        {/* 1. FIXED IMAGE CONTAINER (Compact 1:1 Square Aspect Ratio) */}
+        {/* Dynamic Light Sheen Overlay */}
+        <div className="card-sheen-overlay absolute inset-0 z-20 pointer-events-none" />
+
+        {/* 1. FIXED IMAGE CONTAINER (Compact 1:1 Square Aspect Ratio with Parallax Depth) */}
         <div className="relative aspect-square w-full overflow-hidden bg-[#EFECE6] dark:bg-[#141E28] flex-shrink-0 select-none">
           <Link to={productUrl} className="block w-full h-full">
             {/* Primary Image */}
@@ -102,10 +114,12 @@ export const ProductCard = ({ product, className = '' }) => {
               src={product.image}
               alt={product.name}
               loading="lazy"
-              className={`w-full h-full object-cover object-center transition-all duration-700 ease-out filter brightness-95 group-hover:brightness-100 ${
-                secondaryImage
-                  ? 'group-hover:opacity-0 group-hover:scale-105'
-                  : 'group-hover:scale-105'
+              style={{
+                transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.06 : 1})`,
+                transition: tilt.scale === 1 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
+              }}
+              className={`w-full h-full object-cover object-center filter brightness-95 group-hover:brightness-100 ${
+                secondaryImage ? 'group-hover:opacity-0' : ''
               }`}
             />
 
@@ -115,7 +129,11 @@ export const ProductCard = ({ product, className = '' }) => {
                 src={secondaryImage}
                 alt={`${product.name} alternate view`}
                 loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover object-center transition-all duration-700 ease-out opacity-0 group-hover:opacity-100 scale-100 group-hover:scale-105 filter brightness-100"
+                style={{
+                  transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.06 : 1})`,
+                  transition: tilt.scale === 1 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
+                }}
+                className="absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100 filter brightness-100"
               />
             )}
           </Link>
@@ -140,15 +158,17 @@ export const ProductCard = ({ product, className = '' }) => {
             )}
           </div>
 
-          {/* Action Buttons Top Right: Wishlist & Quick View */}
+          {/* Action Buttons Top Right: Wishlist & Quick View with 3D Pop */}
           <div className="absolute top-2 right-2 flex flex-col gap-1.5 z-10">
             {/* Wishlist Button */}
             <button
               onClick={handleWishlistToggle}
-              className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-md border shadow-xs cursor-pointer ${
+              className={`w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-md border shadow-sm cursor-pointer ${
+                isHeartPopping ? 'animate-heart-pop' : ''
+              } ${
                 wishlisted
-                  ? 'bg-white text-[#C9A45C] border-[#C9A45C] opacity-100 scale-105'
-                  : 'bg-white/90 text-[#101820] border-black/10 hover:text-[#C9A45C] hover:bg-white hover:scale-105 sm:opacity-0 sm:group-hover:opacity-100 opacity-100'
+                  ? 'bg-white text-[#C9A45C] border-[#C9A45C] opacity-100 scale-105 shadow-[#C9A45C]/20'
+                  : 'bg-white/90 text-[#101820] border-black/10 hover:text-[#C9A45C] hover:bg-white hover:scale-110 sm:opacity-0 sm:group-hover:opacity-100 opacity-100'
               }`}
               aria-label={
                 wishlisted
@@ -166,7 +186,7 @@ export const ProductCard = ({ product, className = '' }) => {
             {/* Quick View Button */}
             <button
               onClick={handleQuickViewClick}
-              className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-md border bg-white/90 text-[#101820] border-black/10 hover:text-[#C9A45C] hover:bg-white hover:scale-105 sm:opacity-0 sm:group-hover:opacity-100 opacity-100 shadow-xs cursor-pointer"
+              className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-md border bg-white/90 text-[#101820] border-black/10 hover:text-[#C9A45C] hover:bg-white hover:scale-110 sm:opacity-0 sm:group-hover:opacity-100 opacity-100 shadow-sm cursor-pointer"
               aria-label={`Quick view ${product.name}`}
             >
               <Eye className="w-3 h-3" />

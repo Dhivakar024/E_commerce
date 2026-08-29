@@ -21,6 +21,7 @@ export const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
   const [cartBouncing, setCartBouncing] = useState(false);
+  const [wishlistBouncing, setWishlistBouncing] = useState(false);
 
   const headerRef = useRef(null);
   const location = useLocation();
@@ -45,14 +46,23 @@ export const Navbar = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Animate cart icon on count increase
+  // Animate cart icon on count change
   useEffect(() => {
     if (cartCount > 0) {
       setCartBouncing(true);
-      const timer = setTimeout(() => setCartBouncing(false), 600);
+      const timer = setTimeout(() => setCartBouncing(false), 500);
       return () => clearTimeout(timer);
     }
   }, [cartCount]);
+
+  // Animate wishlist icon on count change
+  useEffect(() => {
+    if (wishlistCount > 0) {
+      setWishlistBouncing(true);
+      const timer = setTimeout(() => setWishlistBouncing(false), 500);
+      return () => clearTimeout(timer);
+    }
+  }, [wishlistCount]);
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -72,15 +82,15 @@ export const Navbar = () => {
         ref={headerRef}
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out ${
           isScrolled
-            ? 'glass-nav py-3 shadow-xl'
+            ? 'glass-nav py-2.5 sm:py-3 shadow-xl'
             : 'glass-nav-transparent py-4 sm:py-5'
         }`}
       >
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex items-center justify-between">
-          {/* LEFT: Brand Logo */}
+          {/* LEFT: Brand Logo with 3D Hover Depth */}
           <Link
             to="/"
-            className="group flex items-center gap-2 text-decoration-none focus:outline-none"
+            className="group flex items-center gap-2 text-decoration-none focus:outline-none transition-transform duration-300 hover:scale-102"
             aria-label="LAX360 PVT LTD Home"
           >
             <div className="flex flex-col">
@@ -104,7 +114,7 @@ export const Navbar = () => {
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `relative py-1 text-xs uppercase tracking-widest transition-colors duration-300 font-medium ${
+                `relative py-1 text-xs uppercase tracking-widest transition-all duration-300 font-medium hover:-translate-y-0.5 ${
                   isActive
                     ? isDark ? 'text-white font-semibold' : 'text-[#101820] font-semibold'
                     : isDark ? 'text-[#F7F3EA]/80 hover:text-white' : 'text-[#101820]/75 hover:text-[#101820]'
@@ -115,7 +125,7 @@ export const Navbar = () => {
                 <>
                   <span>Home</span>
                   {isActive && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300 shadow-xs shadow-[#C9A45C]" />
                   )}
                 </>
               )}
@@ -125,7 +135,7 @@ export const Navbar = () => {
             <NavLink
               to="/shop"
               className={({ isActive }) =>
-                `relative py-1 text-xs uppercase tracking-widest transition-colors duration-300 font-medium ${
+                `relative py-1 text-xs uppercase tracking-widest transition-all duration-300 font-medium hover:-translate-y-0.5 ${
                   isActive
                     ? isDark ? 'text-white font-semibold' : 'text-[#101820] font-semibold'
                     : isDark ? 'text-[#F7F3EA]/80 hover:text-white' : 'text-[#101820]/75 hover:text-[#101820]'
@@ -136,7 +146,7 @@ export const Navbar = () => {
                 <>
                   <span>Shop</span>
                   {isActive && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300 shadow-xs shadow-[#C9A45C]" />
                   )}
                 </>
               )}
@@ -146,7 +156,7 @@ export const Navbar = () => {
             <NavLink
               to="/collections"
               className={({ isActive }) =>
-                `relative py-1 text-xs uppercase tracking-widest transition-colors duration-300 font-medium ${
+                `relative py-1 text-xs uppercase tracking-widest transition-all duration-300 font-medium hover:-translate-y-0.5 ${
                   isActive
                     ? isDark ? 'text-white font-semibold' : 'text-[#101820] font-semibold'
                     : isDark ? 'text-[#F7F3EA]/80 hover:text-white' : 'text-[#101820]/75 hover:text-[#101820]'
@@ -157,7 +167,7 @@ export const Navbar = () => {
                 <>
                   <span>Collections</span>
                   {isActive && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300 shadow-xs shadow-[#C9A45C]" />
                   )}
                 </>
               )}
@@ -167,7 +177,7 @@ export const Navbar = () => {
             <NavLink
               to="/about"
               className={({ isActive }) =>
-                `relative py-1 text-xs uppercase tracking-widest transition-colors duration-300 font-medium ${
+                `relative py-1 text-xs uppercase tracking-widest transition-all duration-300 font-medium hover:-translate-y-0.5 ${
                   isActive
                     ? isDark ? 'text-white font-semibold' : 'text-[#101820] font-semibold'
                     : isDark ? 'text-[#F7F3EA]/80 hover:text-white' : 'text-[#101820]/75 hover:text-[#101820]'
@@ -178,7 +188,7 @@ export const Navbar = () => {
                 <>
                   <span>About</span>
                   {isActive && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300 shadow-xs shadow-[#C9A45C]" />
                   )}
                 </>
               )}
@@ -188,7 +198,7 @@ export const Navbar = () => {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                `relative py-1 text-xs uppercase tracking-widest transition-colors duration-300 font-medium ${
+                `relative py-1 text-xs uppercase tracking-widest transition-all duration-300 font-medium hover:-translate-y-0.5 ${
                   isActive
                     ? isDark ? 'text-white font-semibold' : 'text-[#101820] font-semibold'
                     : isDark ? 'text-[#F7F3EA]/80 hover:text-white' : 'text-[#101820]/75 hover:text-[#101820]'
@@ -199,7 +209,7 @@ export const Navbar = () => {
                 <>
                   <span>Contact</span>
                   {isActive && (
-                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300" />
+                    <span className="absolute -bottom-1 left-0 right-0 h-[1.5px] bg-[#C9A45C] transform origin-left transition-transform duration-300 shadow-xs shadow-[#C9A45C]" />
                   )}
                 </>
               )}
@@ -212,7 +222,7 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setSearchModalOpen(true)}
-              className={`p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 cursor-pointer ${
+              className={`p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 hover:scale-105 active:scale-95 cursor-pointer ${
                 isDark
                   ? 'text-[#F7F3EA]/80 hover:text-white hover:bg-white/10'
                   : 'text-[#101820]/80 hover:text-[#101820] hover:bg-black/5'
@@ -225,16 +235,16 @@ export const Navbar = () => {
             {/* Wishlist Icon */}
             <Link
               to="/wishlist"
-              className={`relative hidden sm:inline-flex p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 group ${
+              className={`relative hidden sm:inline-flex p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 hover:scale-105 active:scale-95 group ${
                 isDark
                   ? 'text-[#F7F3EA]/80 hover:text-white hover:bg-white/10'
                   : 'text-[#101820]/80 hover:text-[#101820] hover:bg-black/5'
               }`}
               aria-label={`Wishlist (${wishlistCount} items)`}
             >
-              <Heart className="w-4 h-4 sm:w-[18px] sm:h-[18px] group-hover:scale-110 group-hover:text-[#C9A45C] transition-transform" />
+              <Heart className={`w-4 h-4 sm:w-[18px] sm:h-[18px] group-hover:scale-110 group-hover:text-[#C9A45C] transition-transform ${wishlistBouncing ? 'animate-heart-pop text-[#C9A45C]' : ''}`} />
               {wishlistCount > 0 && (
-                <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-[#C9A45C] text-[#101820] font-bold text-[9px] flex items-center justify-center rounded-full leading-none animate-fade-in">
+                <span className={`absolute top-1 right-1 w-3.5 h-3.5 bg-[#C9A45C] text-[#101820] font-bold text-[9px] flex items-center justify-center rounded-full leading-none shadow-xs ${wishlistBouncing ? 'animate-badge-bump' : ''}`}>
                   {wishlistCount}
                 </span>
               )}
@@ -243,16 +253,16 @@ export const Navbar = () => {
             {/* Cart Icon with Bounce */}
             <Link
               to="/cart"
-              className={`relative p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 group ${
+              className={`relative p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 hover:scale-105 active:scale-95 group ${
                 isDark
                   ? 'text-[#F7F3EA]/80 hover:text-white hover:bg-white/10'
                   : 'text-[#101820]/80 hover:text-[#101820] hover:bg-black/5'
-              } ${cartBouncing ? 'animate-cart-bounce text-[#C9A45C]' : ''}`}
+              }`}
               aria-label={`Shopping Cart (${cartCount} items)`}
             >
-              <ShoppingBag className="w-4 h-4 sm:w-[18px] sm:h-[18px] group-hover:scale-110 transition-transform" />
+              <ShoppingBag className={`w-4 h-4 sm:w-[18px] sm:h-[18px] group-hover:scale-110 transition-transform ${cartBouncing ? 'animate-cart-bounce text-[#C9A45C]' : ''}`} />
               {cartCount > 0 && (
-                <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-[#C9A45C] text-[#101820] font-bold text-[9px] flex items-center justify-center rounded-full leading-none animate-fade-in">
+                <span className={`absolute top-1 right-1 w-3.5 h-3.5 bg-[#C9A45C] text-[#101820] font-bold text-[9px] flex items-center justify-center rounded-full leading-none shadow-xs ${cartBouncing ? 'animate-badge-bump' : ''}`}>
                   {cartCount}
                 </span>
               )}
@@ -272,7 +282,7 @@ export const Navbar = () => {
             {/* Account Icon */}
             <Link
               to={isAuthenticated ? '/account' : '/login'}
-              className={`hidden sm:inline-flex p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 ${
+              className={`hidden sm:inline-flex p-2 transition-all rounded-full focus:outline-none focus:ring-1 focus:ring-[#C9A45C]/50 hover:scale-105 active:scale-95 ${
                 isDark
                   ? 'text-[#F7F3EA]/80 hover:text-white hover:bg-white/10'
                   : 'text-[#101820]/80 hover:text-[#101820] hover:bg-black/5'
