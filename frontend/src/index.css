@@ -55,8 +55,25 @@
     background-color: var(--bg-page);
     color: var(--text-primary);
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
     overflow-x: hidden;
     transition: background-color 0.25s ease, color 0.25s ease;
+  }
+
+  /* Clear 5-Level Typography Hierarchy */
+  h1, .heading-l1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.015em;
+  }
+
+  h2, .heading-l2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    letter-spacing: -0.01em;
+  }
+
+  h3, .heading-l3 {
+    font-family: 'Playfair Display', Georgia, serif;
   }
 }
 
@@ -109,7 +126,20 @@ html.light .glass-nav-transparent {
   backface-visibility: hidden;
 }
 
-/* Floating 3D Cards Keyframes */
+/* Scroll-based Section Reveal Transition Helper */
+.section-reveal {
+  opacity: 0;
+  transform: translateY(32px) scale(0.985);
+  transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+
+.section-reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Floating 3D Keyframes */
 @keyframes float-element-1 {
   0%, 100% {
     transform: translateY(0px) rotate(0deg) translateZ(20px);
@@ -160,6 +190,15 @@ html.light .glass-nav-transparent {
   }
 }
 
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
 .animate-3d-float-1 {
   animation: float-element-1 7s ease-in-out infinite;
 }
@@ -184,10 +223,31 @@ html.light .glass-nav-transparent {
   animation: gold-travel 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee-scroll 35s linear infinite;
+  will-change: transform;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+
 /* Luxury Button Shine Effect */
 .btn-shine {
   position: relative;
   overflow: hidden;
+  letter-spacing: 0.14em;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.btn-shine:hover {
+  transform: translateY(-2px);
+}
+
+.btn-shine:active {
+  transform: translateY(0);
 }
 
 .btn-shine::after {
@@ -253,5 +313,8 @@ html.light .glass-nav-transparent {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  .animate-marquee {
+    animation: none !important;
   }
 }

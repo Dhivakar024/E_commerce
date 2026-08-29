@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useScrollReveal } from '../hooks/useScrollReveal';
 import { useTheme } from '../context/ThemeContext';
 import { NewsletterSection } from '../components/home/NewsletterSection';
+import { MarketplaceMarquee } from '../components/common/MarketplaceMarquee';
 import {
   ArrowRight,
   Shirt,
@@ -142,8 +143,8 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
       className="perspective-1000 h-full flex flex-col"
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
-        transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
+        transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(28px) scale(0.985)',
+        transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
         transitionDelay: `${idx * 80}ms`,
       }}
     >
@@ -157,7 +158,7 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
               ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease'
               : 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
         }}
-        className={`group relative flex flex-col justify-between h-full border preserve-3d shadow-md hover:shadow-2xl overflow-hidden transition-all duration-300 ${
+        className={`group relative flex flex-col justify-between h-full border preserve-3d shadow-md hover:shadow-2xl hover:-translate-y-1.5 overflow-hidden transition-all duration-300 ${
           isDark
             ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C] hover:shadow-[#C9A45C]/15 text-white'
             : 'bg-white border-black/10 hover:border-[#B08B43] hover:shadow-[#B08B43]/20 text-[#101820]'
@@ -166,7 +167,7 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
         {/* Dynamic Light Sheen Overlay */}
         <div className="card-sheen-overlay absolute inset-0 z-20 pointer-events-none" />
 
-        {/* 1. Compact Visual Image Container (16:8 / 2:1 Aspect Ratio) */}
+        {/* 1. Compact Visual Image Container (16:8 / 2:1 Aspect Ratio) with Scale Reveal */}
         <div className="relative aspect-[16/8] w-full overflow-hidden bg-neutral-900 flex-shrink-0 select-none">
           <img
             src={col.image}
@@ -174,9 +175,9 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
             loading="lazy"
             style={{
               transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${
-                tilt.scale > 1 ? 1.05 : 1
+                tilt.scale > 1 ? 1.05 : isVisible ? 1 : 1.04
               })`,
-              transition: tilt.scale === 1 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
+              transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease',
             }}
             className="w-full h-full object-cover object-center filter brightness-90 group-hover:brightness-100"
           />
@@ -186,26 +187,26 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
 
           {/* Category Number & Department Badge */}
           <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5 z-10">
-            <span className="px-2 py-0.5 bg-black/70 backdrop-blur-md border border-[#C9A45C]/40 text-[#C9A45C] font-serif text-[11px] font-semibold tracking-wider">
+            <span className="px-2.5 py-0.5 bg-black/70 backdrop-blur-md border border-[#C9A45C]/40 text-[#C9A45C] font-serif text-[11.5px] font-semibold tracking-wider">
               {col.number}
             </span>
-            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-black/60 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-white font-medium">
-              <Icon className="w-2.5 h-2.5 text-[#C9A45C]" />
+            <div className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-black/60 backdrop-blur-md border border-white/15 text-[9.5px] uppercase tracking-widest text-white font-medium">
+              <Icon className="w-3 h-3 text-[#C9A45C]" />
               <span>{col.name}</span>
             </div>
           </div>
 
           {/* Item Count Pill */}
-          <div className="absolute top-2.5 right-2.5 px-2 py-0.5 bg-black/60 backdrop-blur-md border border-white/10 text-[8px] uppercase tracking-wider text-[#A9B0B5] z-10">
+          <div className="absolute top-2.5 right-2.5 px-2.5 py-0.5 bg-black/60 backdrop-blur-md border border-white/10 text-[8.5px] uppercase tracking-wider text-[#A9B0B5] z-10">
             {col.itemCount}
           </div>
 
           {/* Floating Category Title inside Image Area */}
           <div className="absolute bottom-2.5 left-3 right-3 z-10">
-            <span className="text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold block">
+            <span className="text-[9.5px] uppercase tracking-widest text-[#C9A45C] font-semibold block">
               {col.subtitle}
             </span>
-            <h3 className="font-serif text-lg sm:text-xl text-white font-normal leading-tight">
+            <h3 className="font-serif text-lg sm:text-[21px] text-white font-normal leading-tight">
               {col.name}
             </h3>
           </div>
@@ -220,7 +221,7 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
           <div className="space-y-2.5">
             {/* Description (Strict 2-line height: h-8 sm:h-9) */}
             <p
-              className={`h-8 sm:h-9 text-[11px] sm:text-xs font-light leading-relaxed line-clamp-2 ${
+              className={`h-8 sm:h-9 text-[12px] sm:text-[13px] font-light leading-relaxed line-clamp-2 ${
                 isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
               }`}
             >
@@ -232,7 +233,7 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
               {col.tags.map((tag, tagIdx) => (
                 <span
                   key={tagIdx}
-                  className={`text-[9px] px-2 py-0.5 font-medium border transition-colors truncate flex-shrink-0 ${
+                  className={`text-[9.5px] px-2.5 py-0.5 font-medium border transition-colors truncate flex-shrink-0 ${
                     isDark
                       ? 'bg-white/5 border-white/10 text-[#F7F3EA]/80'
                       : 'bg-black/5 border-black/10 text-[#101820]/80'
@@ -248,14 +249,14 @@ const CollectionShowcaseCard3D = ({ col, idx, isVisible, isDark }) => {
           <div className="pt-2.5 border-t border-black/5 dark:border-white/10">
             <Link
               to={col.link}
-              className={`btn-shine inline-flex items-center justify-between w-full px-4 py-2 text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold border transition-all duration-300 shadow-xs group-hover:scale-[1.01] ${
+              className={`btn-shine inline-flex items-center justify-between w-full px-4 py-2.5 text-[11px] sm:text-[12px] uppercase tracking-wider font-semibold border transition-all duration-300 shadow-xs group-hover:scale-[1.01] ${
                 isDark
                   ? 'bg-[#101820] hover:bg-[#C9A45C] hover:text-[#101820] text-[#F7F3EA] border-white/15 hover:border-[#C9A45C]'
                   : 'bg-[#101820] hover:bg-[#B08B43] text-white border-black/15 hover:border-[#B08B43]'
               }`}
             >
               <span>EXPLORE COLLECTION</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
             </Link>
           </div>
         </div>
@@ -281,21 +282,21 @@ export const Collections = () => {
         {/* 1. COLLECTION HERO SECTION */}
         <section
           ref={headerRef}
-          className="text-center max-w-2xl mx-auto space-y-3 pt-2 transition-all duration-700 ease-out"
+          className="text-center max-w-2xl mx-auto space-y-3.5 pt-2 transition-all duration-700 ease-out"
           style={{
             opacity: isHeaderVisible ? 1 : 0,
-            transform: isHeaderVisible ? 'translateY(0)' : 'translateY(20px)',
+            transform: isHeaderVisible ? 'translateY(0)' : 'translateY(24px)',
           }}
         >
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 bg-[#C9A45C]/10 border border-[#C9A45C]/30 mb-0.5">
+          <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#C9A45C]/10 border border-[#C9A45C]/30 mb-0.5 animate-fade-in opacity-0">
             <span className="w-1.5 h-1.5 rounded-full bg-[#C9A45C] animate-pulse" />
-            <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A45C]">
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.24em] text-[#C9A45C]">
               COLLECTIONS
             </span>
           </div>
 
           <h1
-            className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal leading-tight ${
+            className={`font-serif text-3xl sm:text-4xl md:text-5xl lg:text-[3.6rem] font-normal leading-[1.1] tracking-tight ${
               isDark ? 'text-white' : 'text-[#101820]'
             }`}
           >
@@ -303,7 +304,7 @@ export const Collections = () => {
           </h1>
 
           <p
-            className={`text-xs sm:text-sm font-light leading-relaxed max-w-xl mx-auto ${
+            className={`text-sm sm:text-base font-light leading-relaxed max-w-xl mx-auto ${
               isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
             }`}
           >
@@ -316,11 +317,11 @@ export const Collections = () => {
         <section ref={gridRef} className="max-w-5xl mx-auto space-y-5">
           <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
             <div>
-              <span className="text-[9px] sm:text-[10px] uppercase tracking-ultra text-[#C9A45C] font-semibold block">
+              <span className="text-[10px] sm:text-[11px] uppercase tracking-ultra text-[#C9A45C] font-semibold block">
                 DEPARTMENT DISCOVERY
               </span>
               <h2
-                className={`font-serif text-xl sm:text-2xl font-normal ${
+                className={`font-serif text-2xl sm:text-3xl font-normal ${
                   isDark ? 'text-white' : 'text-[#101820]'
                 }`}
               >
@@ -358,13 +359,18 @@ export const Collections = () => {
           </div>
         </section>
 
+        {/* Marquee Banner */}
+        <div className="max-w-5xl mx-auto">
+          <MarketplaceMarquee />
+        </div>
+
         {/* 3. COMPACT PREMIUM MARKETPLACE STATS STRIP */}
         <section
           ref={statsRef}
           className="max-w-5xl mx-auto border-y border-black/10 dark:border-white/10 py-8 transition-all duration-700 ease-out"
           style={{
             opacity: isStatsVisible ? 1 : 0,
-            transform: isStatsVisible ? 'translateY(0)' : 'translateY(20px)',
+            transform: isStatsVisible ? 'translateY(0)' : 'translateY(24px)',
           }}
         >
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
@@ -373,24 +379,24 @@ export const Collections = () => {
               return (
                 <div
                   key={idx}
-                  className={`p-4 sm:p-5 border flex flex-col items-center text-center space-y-1.5 transition-all duration-300 hover:-translate-y-0.5 ${
+                  className={`p-4 sm:p-5 border flex flex-col items-center text-center space-y-1.5 transition-all duration-300 hover:-translate-y-1 ${
                     isDark
                       ? 'bg-[#1B2630]/50 border-white/5 hover:border-[#C9A45C]/40'
                       : 'bg-white border-black/5 hover:border-[#B08B43]/40 shadow-xs'
                   }`}
                 >
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center mb-0.5 ${
+                    className={`w-9 h-9 rounded-full flex items-center justify-center mb-0.5 ${
                       isDark ? 'bg-white/5 text-[#C9A45C]' : 'bg-black/5 text-[#B08B43]'
                     }`}
                   >
-                    <StatIcon className="w-3.5 h-3.5" />
+                    <StatIcon className="w-4 h-4" />
                   </div>
-                  <span className="font-serif text-xl sm:text-2xl font-semibold text-[#C9A45C]">
+                  <span className="font-serif text-2xl sm:text-3xl font-semibold text-[#C9A45C]">
                     {stat.value}
                   </span>
                   <span
-                    className={`text-[9px] uppercase tracking-widest font-semibold ${
+                    className={`text-[9.5px] sm:text-[10px] uppercase tracking-widest font-semibold ${
                       isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
                     }`}
                   >
@@ -408,15 +414,15 @@ export const Collections = () => {
           className="text-center max-w-xl mx-auto space-y-4 py-4 transition-all duration-700 ease-out"
           style={{
             opacity: isCtaVisible ? 1 : 0,
-            transform: isCtaVisible ? 'translateY(0)' : 'translateY(20px)',
+            transform: isCtaVisible ? 'translateY(0)' : 'translateY(24px)',
           }}
         >
           <div className="space-y-2">
-            <span className="text-[9px] sm:text-[10px] uppercase tracking-ultra text-[#C9A45C] font-semibold block">
+            <span className="text-[10px] sm:text-[11px] uppercase tracking-ultra text-[#C9A45C] font-semibold block">
               FIND SOMETHING MADE FOR YOU
             </span>
             <h2
-              className={`font-serif text-2xl sm:text-3xl font-normal ${
+              className={`font-serif text-2xl sm:text-3xl md:text-4xl font-normal ${
                 isDark ? 'text-white' : 'text-[#101820]'
               }`}
             >
@@ -435,10 +441,10 @@ export const Collections = () => {
           <div className="pt-1">
             <Link
               to="/shop"
-              className="btn-shine inline-flex items-center gap-2 px-7 py-3 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] text-xs uppercase tracking-widest font-semibold transition-all shadow-md active:scale-95"
+              className="btn-shine inline-flex items-center gap-2 px-8 py-3.5 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] text-xs uppercase tracking-widest font-semibold transition-all shadow-md active:scale-95"
             >
               <span>EXPLORE MARKETPLACE</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5" />
             </Link>
           </div>
         </section>

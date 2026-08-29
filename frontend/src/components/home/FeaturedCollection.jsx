@@ -71,8 +71,8 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((centerY - y) / centerY) * 3.5;
-    const rotateY = ((x - centerX) / centerX) * 3.5;
+    const rotateX = ((centerY - y) / centerY) * 3;
+    const rotateY = ((x - centerX) / centerX) * 3;
 
     const imageX = ((x - centerX) / centerX) * -5;
     const imageY = ((y - centerY) / centerY) * -5;
@@ -80,7 +80,7 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
     const mouseX = Math.round((x / rect.width) * 100);
     const mouseY = Math.round((y / rect.height) * 100);
 
-    setTilt({ rotateX, rotateY, scale: 1.015, imageX, imageY, mouseX, mouseY });
+    setTilt({ rotateX, rotateY, scale: 1.012, imageX, imageY, mouseX, mouseY });
   };
 
   const handleMouseLeave = () => {
@@ -95,9 +95,9 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
       className="perspective-1000 h-full"
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
-        transition: 'opacity 0.5s ease-out, transform 0.5s ease-out',
-        transitionDelay: `${idx * 75}ms`,
+        transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(28px) scale(0.985)',
+        transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        transitionDelay: `${idx * 80}ms`,
       }}
     >
       <div
@@ -110,10 +110,10 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
               ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease'
               : 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
         }}
-        className={`group relative flex flex-col justify-between h-full overflow-hidden border preserve-3d shadow-md hover:shadow-2xl transition-all duration-300 ${
+        className={`group relative flex flex-col justify-between h-full overflow-hidden border preserve-3d shadow-md hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-300 ${
           isDark
-            ? 'bg-[#101820] border-white/10 hover:border-[#C9A45C] hover:shadow-[#C9A45C]/10 text-white'
-            : 'bg-white border-black/10 hover:border-[#B08B43] hover:shadow-[#B08B43]/15 text-[#101820]'
+            ? 'bg-[#101820] border-white/10 hover:border-[#C9A45C] hover:shadow-[#C9A45C]/12 text-white'
+            : 'bg-white border-black/10 hover:border-[#B08B43] hover:shadow-[#B08B43]/18 text-[#101820]'
         }`}
       >
         {/* Dynamic Light Sheen Overlay */}
@@ -126,7 +126,7 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
             alt={block.title}
             loading="lazy"
             style={{
-              transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.08 : 1})`,
+              transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.05 : 1})`,
               transition: tilt.scale === 1 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
             }}
             className="w-full h-full object-cover object-center filter brightness-85 group-hover:brightness-95"
@@ -134,7 +134,7 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
           {/* Category Pill Tag */}
-          <div className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 px-2 py-0.5 bg-black/80 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold transition-transform duration-300 group-hover:scale-105">
+          <div className="absolute top-2.5 left-2.5 inline-flex items-center gap-1 px-2.5 py-0.5 bg-black/80 backdrop-blur-md border border-white/15 text-[9.5px] uppercase tracking-widest text-[#C9A45C] font-semibold transition-transform duration-300 group-hover:scale-105">
             <Icon className="w-3 h-3 text-[#C9A45C]" />
             <span>{block.category}</span>
           </div>
@@ -145,19 +145,24 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
           <div>
             {/* Fixed Height Title */}
             <div className="h-6 sm:h-7 flex items-center mb-1">
-              <h3 className={`font-serif text-sm sm:text-base font-medium truncate transition-colors ${
-                isDark
-                  ? 'text-white group-hover:text-[#C9A45C]'
-                  : 'text-[#101820] group-hover:text-[#B08B43]'
-              }`} title={block.title}>
+              <h3
+                className={`font-serif text-[14px] sm:text-[15.5px] font-medium truncate transition-colors ${
+                  isDark
+                    ? 'text-white group-hover:text-[#C9A45C]'
+                    : 'text-[#101820] group-hover:text-[#B08B43]'
+                }`}
+                title={block.title}
+              >
                 {block.title}
               </h3>
             </div>
 
             {/* Fixed Height Description (2 lines) */}
-            <p className={`h-8 sm:h-9 text-[11px] sm:text-xs font-light leading-relaxed line-clamp-2 ${
-              isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
-            }`}>
+            <p
+              className={`h-8 sm:h-9 text-[11.5px] sm:text-xs font-light leading-relaxed line-clamp-2 ${
+                isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+              }`}
+            >
               {block.description}
             </p>
           </div>
@@ -166,14 +171,14 @@ const HubCard3D = ({ block, idx, isVisible, isDark }) => {
           <div className="pt-2.5 border-t border-black/5 dark:border-white/10">
             <Link
               to={block.link}
-              className={`btn-shine inline-flex items-center justify-center gap-1.5 w-full py-2 text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold border transition-all ${
+              className={`btn-shine inline-flex items-center justify-center gap-1.5 w-full py-2 text-[10.5px] sm:text-[11px] uppercase tracking-wider font-semibold border transition-all ${
                 isDark
                   ? 'bg-white/5 hover:bg-[#C9A45C] hover:text-[#101820] text-[#F7F3EA] border-white/10 hover:border-[#C9A45C]'
                   : 'bg-[#F8F6F0] hover:bg-[#B08B43] hover:text-white text-[#101820] border-black/10 hover:border-[#B08B43]'
               }`}
             >
               <span>{block.cta}</span>
-              <ArrowRight className="w-3 h-3 transition-transform duration-300 group-hover:translate-x-1" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
         </div>
@@ -196,8 +201,8 @@ export const FeaturedCollection = () => {
       }`}
     >
       {/* Subtle floating background decoration */}
-      <div className="absolute top-12 right-12 w-48 h-48 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
-      <div className="absolute bottom-8 left-8 w-40 h-40 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-reverse" />
+      <div className="absolute top-12 right-12 w-48 h-48 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-3d-float-1" />
+      <div className="absolute bottom-8 left-8 w-40 h-40 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-3d-float-2" />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Section Header */}
@@ -212,14 +217,18 @@ export const FeaturedCollection = () => {
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               EXPLORE OUR STORE
             </span>
-            <h2 className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal mb-2 ${
-              isDark ? 'text-white' : 'text-[#101820]'
-            }`}>
+            <h2
+              className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal mb-2 ${
+                isDark ? 'text-white' : 'text-[#101820]'
+              }`}
+            >
               Curated Category Hubs
             </h2>
-            <p className={`text-xs sm:text-sm font-light ${
-              isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
-            }`}>
+            <p
+              className={`text-xs sm:text-sm font-light ${
+                isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+              }`}
+            >
               Shop across 5 dedicated marketplace departments with guaranteed authenticity and fast delivery.
             </p>
           </div>
@@ -229,7 +238,7 @@ export const FeaturedCollection = () => {
             className="inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#C9A45C] hover:text-[#B08B43] mt-3 md:mt-0 font-semibold transition-colors group"
           >
             <span>View Complete Marketplace</span>
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1.5 transition-transform" />
           </Link>
         </div>
 

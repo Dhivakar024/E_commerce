@@ -4,7 +4,7 @@ import { useShop } from '../../context/ShopContext';
 import { useTheme } from '../../context/ThemeContext';
 import { ShoppingBag, Heart, Eye, Check, Star, FileText } from 'lucide-react';
 
-export const ProductCard = ({ product, className = '' }) => {
+export const ProductCard = ({ product, className = '', staggerDelay = 0 }) => {
   const { addToCart, isWishlisted, toggleWishlist, openQuickView } = useShop();
   const { isDark } = useTheme();
   const [isAdded, setIsAdded] = useState(false);
@@ -27,8 +27,8 @@ export const ProductCard = ({ product, className = '' }) => {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((centerY - y) / centerY) * 3.5;
-    const rotateY = ((x - centerX) / centerX) * 3.5;
+    const rotateX = ((centerY - y) / centerY) * 3;
+    const rotateY = ((x - centerX) / centerX) * 3;
 
     const imageX = ((x - centerX) / centerX) * -4;
     const imageY = ((y - centerY) / centerY) * -4;
@@ -36,7 +36,7 @@ export const ProductCard = ({ product, className = '' }) => {
     const mouseX = Math.round((x / rect.width) * 100);
     const mouseY = Math.round((y / rect.height) * 100);
 
-    setTilt({ rotateX, rotateY, scale: 1.015, imageX, imageY, mouseX, mouseY });
+    setTilt({ rotateX, rotateY, scale: 1.012, imageX, imageY, mouseX, mouseY });
   };
 
   const handleMouseLeave = () => {
@@ -86,6 +86,9 @@ export const ProductCard = ({ product, className = '' }) => {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       className={`perspective-1000 h-full flex flex-col ${className}`}
+      style={{
+        transitionDelay: staggerDelay ? `${staggerDelay}ms` : undefined,
+      }}
     >
       <div
         style={{
@@ -97,10 +100,10 @@ export const ProductCard = ({ product, className = '' }) => {
               ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.3s ease'
               : 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
         }}
-        className={`group flex flex-col h-full border shadow-sm hover:shadow-2xl preserve-3d transition-all duration-300 overflow-hidden ${
+        className={`group flex flex-col h-full border shadow-sm hover:shadow-2xl hover:-translate-y-1.5 preserve-3d transition-all duration-300 overflow-hidden ${
           isDark
-            ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C]/80 hover:shadow-[#C9A45C]/10 text-white'
-            : 'bg-white border-black/10 hover:border-[#B08B43]/80 hover:shadow-[#B08B43]/15 text-[#101820]'
+            ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C]/80 hover:shadow-[#C9A45C]/12 text-white'
+            : 'bg-white border-black/10 hover:border-[#B08B43]/80 hover:shadow-[#B08B43]/18 text-[#101820]'
         }`}
       >
         {/* Dynamic Light Sheen Overlay */}
@@ -115,7 +118,7 @@ export const ProductCard = ({ product, className = '' }) => {
               alt={product.name}
               loading="lazy"
               style={{
-                transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.06 : 1})`,
+                transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.05 : 1})`,
                 transition: tilt.scale === 1 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
               }}
               className={`w-full h-full object-cover object-center filter brightness-95 group-hover:brightness-100 ${
@@ -130,7 +133,7 @@ export const ProductCard = ({ product, className = '' }) => {
                 alt={`${product.name} alternate view`}
                 loading="lazy"
                 style={{
-                  transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.06 : 1})`,
+                  transform: `translate3d(${tilt.imageX}px, ${tilt.imageY}px, 0) scale(${tilt.scale > 1 ? 1.05 : 1})`,
                   transition: tilt.scale === 1 ? 'transform 0.5s ease-out' : 'transform 0.1s ease-out',
                 }}
                 className="absolute inset-0 w-full h-full object-cover object-center opacity-0 group-hover:opacity-100 filter brightness-100"
@@ -141,18 +144,18 @@ export const ProductCard = ({ product, className = '' }) => {
           {/* Badges Container */}
           <div className="absolute top-2 left-2 flex flex-col gap-1 z-10 pointer-events-none">
             {product.prescriptionRequired && (
-              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-amber-950/90 backdrop-blur-md border border-amber-500/50 text-[8px] uppercase tracking-wider text-amber-200 font-semibold shadow-xs">
-                <FileText className="w-2 h-2" />
+              <span className="inline-flex items-center gap-1 px-1.5 py-0.5 bg-amber-950/90 backdrop-blur-md border border-amber-500/50 text-[8.5px] uppercase tracking-wider text-amber-200 font-semibold shadow-xs">
+                <FileText className="w-2.5 h-2.5" />
                 <span>Rx Required</span>
               </span>
             )}
             {product.isNew && (
-              <span className="px-1.5 py-0.5 bg-[#101820]/90 backdrop-blur-md border border-[#C9A45C]/40 text-[8px] uppercase tracking-widest text-[#C9A45C] font-semibold">
+              <span className="px-1.5 py-0.5 bg-[#101820]/90 backdrop-blur-md border border-[#C9A45C]/40 text-[8.5px] uppercase tracking-widest text-[#C9A45C] font-semibold">
                 NEW
               </span>
             )}
             {hasDiscount && (
-              <span className="px-1.5 py-0.5 bg-rose-950/90 backdrop-blur-md border border-rose-500/40 text-[8px] uppercase tracking-widest text-rose-200 font-medium">
+              <span className="px-1.5 py-0.5 bg-rose-950/90 backdrop-blur-md border border-rose-500/40 text-[8.5px] uppercase tracking-widest text-rose-200 font-medium">
                 -{discountPercent}%
               </span>
             )}
@@ -177,7 +180,7 @@ export const ProductCard = ({ product, className = '' }) => {
               }
             >
               <Heart
-                className={`w-3 h-3 transition-transform duration-200 ${
+                className={`w-3.5 h-3.5 transition-transform duration-200 ${
                   wishlisted ? 'fill-[#C9A45C] scale-110 text-[#C9A45C]' : ''
                 }`}
               />
@@ -189,7 +192,7 @@ export const ProductCard = ({ product, className = '' }) => {
               className="w-7 h-7 rounded-full flex items-center justify-center transition-all duration-200 backdrop-blur-md border bg-white/90 text-[#101820] border-black/10 hover:text-[#C9A45C] hover:bg-white hover:scale-110 sm:opacity-0 sm:group-hover:opacity-100 opacity-100 shadow-sm cursor-pointer"
               aria-label={`Quick view ${product.name}`}
             >
-              <Eye className="w-3 h-3" />
+              <Eye className="w-3.5 h-3.5" />
             </button>
           </div>
 
@@ -198,7 +201,7 @@ export const ProductCard = ({ product, className = '' }) => {
             <button
               onClick={handleAddToCart}
               disabled={isAdded}
-              className={`btn-shine w-full py-2 px-2.5 text-[10px] tracking-wider uppercase font-semibold flex items-center justify-center gap-1.5 transition-all duration-200 shadow-md cursor-pointer ${
+              className={`btn-shine w-full py-2 px-2.5 text-[10.5px] tracking-wider uppercase font-semibold flex items-center justify-center gap-1.5 transition-all duration-200 shadow-md cursor-pointer ${
                 isAdded
                   ? 'bg-emerald-700 text-white'
                   : isDark
@@ -209,12 +212,12 @@ export const ProductCard = ({ product, className = '' }) => {
             >
               {isAdded ? (
                 <>
-                  <Check className="w-3 h-3" />
+                  <Check className="w-3.5 h-3.5" />
                   <span>Added</span>
                 </>
               ) : (
                 <>
-                  <ShoppingBag className="w-3 h-3" />
+                  <ShoppingBag className="w-3.5 h-3.5" />
                   <span>Add to Bag</span>
                 </>
               )}
@@ -222,32 +225,36 @@ export const ProductCard = ({ product, className = '' }) => {
           </div>
         </div>
 
-        {/* 2. UNIFORM COMPACT CONTENT AREA (Strict Equal Heights) */}
-        <div className={`p-3 sm:p-3.5 flex flex-col flex-grow justify-between ${
-          isDark ? 'bg-[#1B2630] text-white' : 'bg-white text-[#101820]'
-        }`}>
+        {/* 2. UNIFORM COMPACT CONTENT AREA (Strict Equal Heights & Enhanced Typography Hierarchy) */}
+        <div
+          className={`p-3 sm:p-3.5 flex flex-col flex-grow justify-between ${
+            isDark ? 'bg-[#1B2630] text-white' : 'bg-white text-[#101820]'
+          }`}
+        >
           {/* Top content block */}
           <div className="space-y-1">
-            {/* Brand and Rating Row (Fixed Height: h-4) */}
-            <div className="h-4 flex items-center justify-between text-[9px] sm:text-[10px] uppercase tracking-wider text-[#A9B0B5]">
+            {/* Level 5 Metadata: Brand and Rating Row (Fixed Height: h-4) */}
+            <div className="h-4 flex items-center justify-between text-[10px] sm:text-[11px] uppercase tracking-wider text-[#A9B0B5]">
               <span className="font-semibold text-[#C9A45C] truncate max-w-[65%]">
                 {product.brand || product.category}
               </span>
               <div className="flex items-center gap-0.5 text-[#C9A45C] flex-shrink-0">
-                <Star className="w-2.5 h-2.5 fill-[#C9A45C] text-[#C9A45C]" />
-                <span className={`font-semibold text-[10px] sm:text-[11px] ${
-                  isDark ? 'text-white' : 'text-[#101820]'
-                }`}>
+                <Star className="w-3 h-3 fill-[#C9A45C] text-[#C9A45C]" />
+                <span
+                  className={`font-semibold text-[11px] sm:text-[12px] ${
+                    isDark ? 'text-white' : 'text-[#101820]'
+                  }`}
+                >
                   {product.rating || '4.8'}
                 </span>
               </div>
             </div>
 
-            {/* Product Name (Strict Fixed Height for 2 lines: h-8 sm:h-9) */}
+            {/* Level 3 Card Title: Product Name (Strict Fixed Height for 2 lines: h-8 sm:h-9) */}
             <div className="h-8 sm:h-9 flex items-start">
               <Link
                 to={productUrl}
-                className={`font-serif text-xs sm:text-[13px] font-medium transition-colors line-clamp-2 leading-tight ${
+                className={`font-serif text-[13px] sm:text-[14px] font-medium transition-colors line-clamp-2 leading-tight ${
                   isDark ? 'text-white hover:text-[#C9A45C]' : 'text-[#101820] hover:text-[#B08B43]'
                 }`}
                 title={product.name}
@@ -256,10 +263,12 @@ export const ProductCard = ({ product, className = '' }) => {
               </Link>
             </div>
 
-            {/* Subcategory & Key Specification (Fixed Height: h-3.5) */}
-            <div className={`h-3.5 text-[10px] flex items-center gap-1 truncate ${
-              isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
-            }`}>
+            {/* Level 4 Description / Key Spec (Fixed Height: h-3.5) */}
+            <div
+              className={`h-3.5 text-[10.5px] sm:text-[11px] flex items-center gap-1 truncate ${
+                isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+              }`}
+            >
               <span>{product.subcategory || product.category}</span>
               {product.ram && <span>• {product.ram}</span>}
               {product.dimensions && <span>• {product.dimensions}</span>}
@@ -274,13 +283,15 @@ export const ProductCard = ({ product, className = '' }) => {
             {/* Price and Swatches/Stock Row (Fixed Height: h-5) */}
             <div className="h-5 flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <span className={`text-xs sm:text-[13px] font-semibold ${
-                  isDark ? 'text-white' : 'text-[#101820]'
-                }`}>
+                <span
+                  className={`text-[13px] sm:text-[14.5px] font-semibold ${
+                    isDark ? 'text-white' : 'text-[#101820]'
+                  }`}
+                >
                   ₹{product.price.toLocaleString('en-IN')}
                 </span>
                 {product.compareAtPrice && product.compareAtPrice > product.price && (
-                  <span className="text-[10px] text-[#A9B0B5] line-through">
+                  <span className="text-[10.5px] sm:text-[11px] text-[#A9B0B5] line-through">
                     ₹{product.compareAtPrice.toLocaleString('en-IN')}
                   </span>
                 )}
@@ -292,17 +303,17 @@ export const ProductCard = ({ product, className = '' }) => {
                   {product.colorHexes.slice(0, 3).map((col, idx) => (
                     <span
                       key={idx}
-                      className="w-2 h-2 rounded-full border border-black/20"
+                      className="w-2.5 h-2.5 rounded-full border border-black/20"
                       style={{ backgroundColor: col.hex }}
                       title={col.name}
                     />
                   ))}
                   {product.colorHexes.length > 3 && (
-                    <span className="text-[8px] text-[#A9B0B5]">+{product.colorHexes.length - 3}</span>
+                    <span className="text-[8.5px] text-[#A9B0B5]">+{product.colorHexes.length - 3}</span>
                   )}
                 </div>
               ) : (
-                <span className="text-[9px] text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded-xs font-medium">
+                <span className="text-[9.5px] text-emerald-700 dark:text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-xs font-medium">
                   In Stock
                 </span>
               )}
@@ -313,7 +324,7 @@ export const ProductCard = ({ product, className = '' }) => {
               <button
                 onClick={handleAddToCart}
                 disabled={isAdded}
-                className={`w-full py-1.5 text-[9px] tracking-wider uppercase font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer ${
+                className={`w-full py-1.5 text-[9.5px] tracking-wider uppercase font-semibold flex items-center justify-center gap-1 transition-colors cursor-pointer ${
                   isAdded
                     ? 'bg-emerald-700 text-white'
                     : 'bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820]'
@@ -321,12 +332,12 @@ export const ProductCard = ({ product, className = '' }) => {
               >
                 {isAdded ? (
                   <>
-                    <Check className="w-2.5 h-2.5" />
+                    <Check className="w-3 h-3" />
                     <span>Added</span>
                   </>
                 ) : (
                   <>
-                    <ShoppingBag className="w-2.5 h-2.5" />
+                    <ShoppingBag className="w-3 h-3" />
                     <span>Add to Bag</span>
                   </>
                 )}

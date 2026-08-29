@@ -1,6 +1,7 @@
 import React, { lazy, Suspense } from 'react';
 import { HeroBackground } from '../components/hero/HeroBackground';
 import { HeroContent } from '../components/hero/HeroContent';
+import { MarketplaceMarquee } from '../components/common/MarketplaceMarquee';
 import { MarketplaceStats } from '../components/home/MarketplaceStats';
 import { useTheme } from '../context/ThemeContext';
 
@@ -40,7 +41,10 @@ export const Home = () => {
         </div>
       </section>
 
-      {/* 2. Interactive Marketplace Sections */}
+      {/* 2. Premium Horizontal Marketplace Marquee Ribbon */}
+      <MarketplaceMarquee />
+
+      {/* 3. Interactive Marketplace Sections */}
       <Suspense fallback={<div className="min-h-[40vh] bg-[var(--bg-page)]" aria-hidden="true" />}>
         {/* Shop by Category (Interactive Compact 3D Carousel) */}
         <ShopByCategory />
