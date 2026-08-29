@@ -1,7 +1,6 @@
 import React, { lazy, Suspense } from 'react';
 import { HeroBackground } from '../components/hero/HeroBackground';
 import { HeroContent } from '../components/hero/HeroContent';
-import { ScrollIndicator } from '../components/hero/ScrollIndicator';
 import { MarketplaceStats } from '../components/home/MarketplaceStats';
 import { useTheme } from '../context/ThemeContext';
 
@@ -32,15 +31,13 @@ export const Home = () => {
 
   return (
     <main className="w-full bg-[var(--bg-page)] text-[var(--text-primary)] overflow-x-hidden transition-colors duration-250">
-      {/* 1. Hero Section with Clean Architectural Background */}
-      <section className="relative flex min-h-[90vh] lg:min-h-[100svh] w-full items-center overflow-hidden pt-20 sm:pt-24 pb-16">
+      {/* 1. Compact Hero Section with Clean Architectural Background */}
+      <section className="relative flex min-h-[62vh] md:min-h-[68vh] lg:min-h-[72vh] w-full items-center overflow-hidden pt-24 sm:pt-28 pb-8 sm:pb-10">
         <HeroBackground />
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-4 sm:px-8 lg:px-12">
           <HeroContent />
         </div>
-
-        <ScrollIndicator targetId="shop-by-category" />
       </section>
 
       {/* 2. Interactive Marketplace Sections */}
@@ -48,7 +45,7 @@ export const Home = () => {
         {/* Shop by Category (Interactive Compact 3D Carousel) */}
         <ShopByCategory />
 
-        {/* Curated Category Hubs */}
+        {/* Curated Category Hubs (Compact 5-Column Grid with Equal Dimensions) */}
         <FeaturedCollection />
 
         {/* Animated Marketplace Stats Counter */}
