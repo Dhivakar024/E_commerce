@@ -151,6 +151,15 @@ html.light .glass-nav-transparent {
   100% { transform: scale(1); }
 }
 
+@keyframes gold-travel {
+  0% {
+    transform: translateX(-100%);
+  }
+  40%, 100% {
+    transform: translateX(350%);
+  }
+}
+
 .animate-3d-float-1 {
   animation: float-element-1 7s ease-in-out infinite;
 }
@@ -169,6 +178,10 @@ html.light .glass-nav-transparent {
 
 .animate-badge-bump {
   animation: badge-bump 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.animate-gold-travel {
+  animation: gold-travel 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 /* Luxury Button Shine Effect */
