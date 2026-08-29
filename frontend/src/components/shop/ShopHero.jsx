@@ -3,23 +3,24 @@ import { Link } from 'react-router-dom';
 import { ChevronRight } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
 
-export const ShopHero = ({ categoryTitle }) => {
+export const ShopHero = ({ categoryTitle, activeCategory }) => {
   const { isDark } = useTheme();
-  const isAll = !categoryTitle || categoryTitle.toLowerCase() === 'all';
-  const heading = isAll ? 'All Marketplace Products' : `${categoryTitle}'s Department`;
+  const currentCat = categoryTitle || activeCategory;
+  const isAll = !currentCat || currentCat.toLowerCase() === 'all';
+  const heading = isAll ? 'All Marketplace Products' : `${currentCat}'s Department`;
 
   return (
-    <section className={`relative pt-32 pb-14 sm:pt-36 sm:pb-16 border-b overflow-hidden transition-colors duration-250 ${
+    <section className={`relative pt-2 pb-6 sm:pt-3 sm:pb-8 border-b overflow-hidden transition-colors duration-250 ${
       isDark
-        ? 'bg-gradient-to-b from-[#1B2630] via-[#101820] to-[#101820] border-white/10 text-white'
-        : 'bg-gradient-to-b from-[#EFECE6] via-[#F8F6F0] to-[#F8F6F0] border-black/10 text-[#101820]'
+        ? 'bg-gradient-to-b from-[#1B2630]/70 via-[#101820] to-[#101820] border-white/10 text-white'
+        : 'bg-gradient-to-b from-[#EFECE6]/80 via-[#F8F6F0] to-[#F8F6F0] border-black/10 text-[#101820]'
     }`}>
       {/* Subtle Ambient Glow */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-48 bg-[#C9A45C]/5 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-36 bg-[#C9A45C]/5 blur-[90px] pointer-events-none" />
 
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className={`flex items-center gap-2 text-xs tracking-wider mb-6 ${
+        <nav aria-label="Breadcrumb" className={`flex items-center gap-1.5 sm:gap-2 text-xs tracking-wider mb-3.5 sm:mb-4 ${
           isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
         }`}>
           <Link to="/" className="hover:text-[#C9A45C] transition-colors">
@@ -33,18 +34,18 @@ export const ShopHero = ({ categoryTitle }) => {
             <>
               <ChevronRight className="w-3.5 h-3.5 opacity-50" />
               <span className="text-[#C9A45C] font-semibold capitalize">
-                {categoryTitle}
+                {currentCat}
               </span>
             </>
           )}
         </nav>
 
         {/* Hero Header Content */}
-        <div className="max-w-3xl">
-          <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-3 font-semibold">
+        <div className="max-w-3xl space-y-1.5 sm:space-y-2">
+          <span className="text-[10px] sm:text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             LAX360 MARKETPLACE
           </span>
-          <h1 className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal mb-4 leading-tight tracking-tight ${
+          <h1 className={`font-serif text-2xl sm:text-3xl md:text-4xl lg:text-[2.75rem] font-normal leading-tight tracking-tight ${
             isDark ? 'text-white' : 'text-[#101820]'
           }`}>
             {heading}

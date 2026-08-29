@@ -257,13 +257,13 @@ export const Shop = ({ categoryName }) => {
   }, [filters]);
 
   return (
-    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 transition-colors duration-250 ${
+    <main className={`w-full min-h-screen pt-16 sm:pt-20 pb-20 sm:pb-24 transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
-        {/* 1. Header & Dynamic Category Description */}
-        <ShopHero activeCategory={filters.category} />
+      {/* 1. Header & Dynamic Category Description */}
+      <ShopHero categoryTitle={filters.category} />
 
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-5 sm:pt-6">
         {/* 2. Primary Category Navigation Tabs */}
         <CategoryNavTabs
           activeCategory={filters.category}
