@@ -1,7 +1,19 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { MagneticButton } from '../common/MagneticButton';
+import { useTheme } from '../../context/ThemeContext';
+import { Shirt, Armchair, Smartphone, Pill, Sparkles, ShieldCheck, Truck, ArrowRight } from 'lucide-react';
+
+const HERO_CATEGORIES = [
+  { name: 'Fashion', slug: 'fashion', icon: Shirt },
+  { name: 'Furniture', slug: 'furniture', icon: Armchair },
+  { name: 'Electronics', slug: 'electronics', icon: Smartphone },
+  { name: 'Medicines', slug: 'medicines', icon: Pill },
+  { name: 'Cosmetics', slug: 'cosmetics', icon: Sparkles },
+];
 
 export const HeroContent = () => {
+  const { isDark } = useTheme();
   const [offsetY, setOffsetY] = useState(0);
 
   useEffect(() => {
@@ -15,8 +27,7 @@ export const HeroContent = () => {
         window.requestAnimationFrame(() => {
           const scrollY = window.scrollY;
           if (scrollY < window.innerHeight) {
-            // Foreground content moves slightly upwards or at a different pace
-            setOffsetY(scrollY * -0.12);
+            setOffsetY(scrollY * -0.1);
           }
           ticking = false;
         });
@@ -41,35 +52,93 @@ export const HeroContent = () => {
         transform: `translate3d(0, ${offsetY}px, 0)`,
         transition: 'transform 0.1s ease-out',
       }}
-      className="relative z-10 max-w-xl lg:max-w-3xl px-1 pt-20 sm:pt-24 md:pt-8 pb-20"
+      className="relative z-10 w-full max-w-4xl py-12 sm:py-16 md:py-20"
     >
-      <p className="mb-3 text-[11px] sm:text-xs font-semibold uppercase tracking-[0.32em] text-[#C9A45C] animate-fade-in opacity-0">
-        LAX360 PVT LTD
-      </p>
+      {/* Brand Badge */}
+      <div className="inline-flex items-center gap-2 px-3 py-1 bg-[#C9A45C]/10 border border-[#C9A45C]/30 mb-4 sm:mb-5 animate-fade-in opacity-0">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#C9A45C]" />
+        <span className="text-[10px] sm:text-xs font-semibold uppercase tracking-[0.28em] text-[#C9A45C]">
+          LAX360 PVT LTD • MULTI-CATEGORY MARKETPLACE
+        </span>
+      </div>
 
-      <h1 className="font-serif text-[2.25rem] leading-[1.12] tracking-[0.01em] text-[#F7F3EA] sm:text-5xl md:text-6xl lg:text-[4.25rem] lg:leading-[1.08] mb-4 sm:mb-6 animate-fade-in opacity-0 [animation-delay:120ms]">
+      {/* Main Headline */}
+      <h1 className={`font-serif text-[2.4rem] leading-[1.1] tracking-tight sm:text-5xl md:text-6xl lg:text-[4.25rem] lg:leading-[1.08] mb-4 sm:mb-6 animate-fade-in opacity-0 [animation-delay:120ms] ${
+        isDark ? 'text-[#F7F3EA]' : 'text-[#101820]'
+      }`}>
         Everything You Need.<br />
         <span className="text-[#C9A45C] italic font-normal">All in One Place.</span>
       </h1>
 
-      <p className="max-w-xl text-sm sm:text-base md:text-lg font-light leading-relaxed text-[#F7F3EA]/90 mb-8 sm:mb-10 animate-fade-in opacity-0 [animation-delay:240ms]">
-        Discover fashion, furniture, electronics, cosmetics and everyday essentials — all from one modern marketplace.
+      {/* Subheading */}
+      <p className={`max-w-2xl text-sm sm:text-base md:text-lg font-light leading-relaxed mb-8 sm:mb-10 animate-fade-in opacity-0 [animation-delay:240ms] ${
+        isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+      }`}>
+        Discover fashion, furniture, electronics, medicines, and cosmetics — curated with quality assurance, transparent pricing, and fast nationwide delivery.
       </p>
 
-      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 animate-fade-in opacity-0 [animation-delay:380ms]">
+      {/* CTA Buttons */}
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-10 sm:mb-12 animate-fade-in opacity-0 [animation-delay:360ms]">
         <MagneticButton
           to="/shop"
-          className="btn-shine inline-flex items-center justify-center rounded-none bg-[#C9A45C] hover:bg-[#D8B872] px-8 py-3.5 text-xs sm:text-[13px] font-semibold uppercase tracking-[0.18em] text-[#101820] shadow-lg shadow-black/40 transition-all duration-300 hover:scale-[1.03] active:scale-[0.98]"
+          className="btn-shine inline-flex items-center justify-center rounded-none bg-[#C9A45C] hover:bg-[#D8B872] px-8 py-3.5 text-xs sm:text-[13px] font-semibold uppercase tracking-[0.18em] text-[#101820] shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
         >
-          SHOP NOW
+          <span>SHOP NOW</span>
+          <ArrowRight className="w-4 h-4 ml-1.5" />
         </MagneticButton>
 
         <MagneticButton
           onClick={scrollToCategories}
-          className="inline-flex items-center justify-center rounded-none border border-[#F7F3EA]/60 bg-transparent px-8 py-3.5 text-xs sm:text-[13px] font-medium uppercase tracking-[0.18em] text-[#F7F3EA] transition-all duration-300 hover:border-[#F7F3EA] hover:bg-[#F7F3EA]/10 hover:scale-[1.03] active:scale-[0.98] cursor-pointer"
+          className={`inline-flex items-center justify-center rounded-none border px-8 py-3.5 text-xs sm:text-[13px] font-medium uppercase tracking-[0.18em] transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] cursor-pointer ${
+            isDark
+              ? 'border-white/30 bg-white/5 text-[#F7F3EA] hover:border-white hover:bg-white/10'
+              : 'border-black/25 bg-black/5 text-[#101820] hover:border-black hover:bg-black/10'
+          }`}
         >
           EXPLORE CATEGORIES
         </MagneticButton>
+      </div>
+
+      {/* Quick Category Badges Bar */}
+      <div className="pt-6 border-t border-black/10 dark:border-white/10 animate-fade-in opacity-0 [animation-delay:480ms]">
+        <div className="flex items-center gap-2 flex-wrap mb-4">
+          <span className={`text-[11px] uppercase tracking-wider font-semibold mr-1 ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+          }`}>
+            Core Departments:
+          </span>
+          {HERO_CATEGORIES.map((cat) => {
+            const Icon = cat.icon;
+            return (
+              <Link
+                key={cat.slug}
+                to={`/category/${cat.slug}`}
+                className={`inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium border transition-all duration-200 hover:-translate-y-0.5 shadow-xs ${
+                  isDark
+                    ? 'bg-[#1B2630]/70 hover:bg-[#1B2630] border-white/10 hover:border-[#C9A45C] text-[#F7F3EA]'
+                    : 'bg-white hover:bg-white border-black/10 hover:border-[#B08B43] text-[#101820]'
+                }`}
+              >
+                <Icon className="w-3.5 h-3.5 text-[#C9A45C]" />
+                <span>{cat.name}</span>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Marketplace Trust Features */}
+        <div className={`flex items-center gap-4 sm:gap-6 text-[11px] uppercase tracking-wider font-medium flex-wrap ${
+          isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+        }`}>
+          <div className="flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#C9A45C]" />
+            <span>100% Genuine Products</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Truck className="w-3.5 h-3.5 text-[#C9A45C]" />
+            <span>Express Delivery Nationwide</span>
+          </div>
+        </div>
       </div>
     </div>
   );

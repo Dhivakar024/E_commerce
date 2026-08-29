@@ -1,5 +1,5 @@
 import React, { lazy, Suspense } from 'react';
-import { HeroVideo } from '../components/hero/HeroVideo';
+import { HeroBackground } from '../components/hero/HeroBackground';
 import { HeroContent } from '../components/hero/HeroContent';
 import { ScrollIndicator } from '../components/hero/ScrollIndicator';
 import { MarketplaceStats } from '../components/home/MarketplaceStats';
@@ -32,9 +32,9 @@ export const Home = () => {
 
   return (
     <main className="w-full bg-[var(--bg-page)] text-[var(--text-primary)] overflow-x-hidden transition-colors duration-250">
-      {/* 1. Cinematic Hero Section with Subtle Parallax */}
-      <section className="relative flex h-[100svh] min-h-[100svh] w-full items-center overflow-hidden">
-        <HeroVideo videoSrc="/videos/hero-fashion.mp4" />
+      {/* 1. Hero Section with Clean Architectural Background */}
+      <section className="relative flex min-h-[90vh] lg:min-h-[100svh] w-full items-center overflow-hidden pt-20 sm:pt-24 pb-16">
+        <HeroBackground />
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-4 sm:px-8 lg:px-12">
           <HeroContent />
@@ -45,7 +45,7 @@ export const Home = () => {
 
       {/* 2. Interactive Marketplace Sections */}
       <Suspense fallback={<div className="min-h-[40vh] bg-[var(--bg-page)]" aria-hidden="true" />}>
-        {/* Shop by Category (Interactive 3D Carousel) */}
+        {/* Shop by Category (Interactive Compact 3D Carousel) */}
         <ShopByCategory />
 
         {/* Curated Category Hubs */}

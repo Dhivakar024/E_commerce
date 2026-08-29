@@ -98,105 +98,104 @@ export const Wishlist = () => {
     return counts;
   }, [wishlistedProducts]);
 
-  // Filter & sort products
+  // Multi-Category Filter + Sort
   const displayedProducts = useMemo(() => {
-    let result = wishlistedProducts;
+    let list = [...wishlistedProducts];
 
+    // 1. Category Filter
     if (activeCategory !== 'all') {
-      result = result.filter(
-        (p) => (p.categorySlug || p.category || '').toLowerCase() === activeCategory.toLowerCase()
-      );
+      list = list.filter((p) => {
+        const cat = (p.categorySlug || p.category || '').toLowerCase();
+        return cat === activeCategory.toLowerCase();
+      });
     }
 
-    return [...result].sort((a, b) => {
+    // 2. Sorting
+    list.sort((a, b) => {
       if (sortBy === 'price-low') return a.price - b.price;
       if (sortBy === 'price-high') return b.price - a.price;
       if (sortBy === 'rating') return (b.rating || 0) - (a.rating || 0);
       if (sortBy === 'discount') {
-        const discA = a.compareAtPrice ? (a.compareAtPrice - a.price) / a.compareAtPrice : 0;
-        const discB = b.compareAtPrice ? (b.compareAtPrice - b.price) / b.compareAtPrice : 0;
+        const discA = a.compareAtPrice && a.compareAtPrice > a.price ? a.compareAtPrice - a.price : 0;
+        const discB = b.compareAtPrice && b.compareAtPrice > b.price ? b.compareAtPrice - b.price : 0;
         return discB - discA;
       }
-      return 0;
+      return 0; // 'recent' order preserves default
     });
+
+    return list;
   }, [wishlistedProducts, activeCategory, sortBy]);
 
-  // Share Wishlist action
-  const handleShareWishlist = () => {
-    const shareUrl = window.location.href;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(shareUrl).then(() => {
-        setIsCopied(true);
-        showToast('Wishlist link copied to clipboard!', 'success');
-        setTimeout(() => setIsCopied(false), 2500);
-      });
-    } else {
-      showToast('Wishlist URL ready to share.', 'info');
-    }
-  };
-
-  // Move all displayed items to bag
+  // Move All to Bag Handler
   const handleMoveAllToBag = () => {
     if (displayedProducts.length === 0) return;
     displayedProducts.forEach((product) => {
-      addToCart(product, 1);
+      addToCart(product, 1, product.sizes?.[0] || 'Standard', product.colors?.[0] || 'Default');
     });
-    showToast(
-      `Moved ${displayedProducts.length} ${
-        displayedProducts.length === 1 ? 'item' : 'items'
-      } to your bag.`,
-      'success'
-    );
+    if (showToast) {
+      showToast(`Moved ${displayedProducts.length} items to your shopping bag.`, 'success');
+    }
   };
 
+  // Move Single Item to Bag
   const handleMoveSingleToBag = (product) => {
-    addToCart(product, 1);
+    addToCart(product, 1, product.sizes?.[0] || 'Standard', product.colors?.[0] || 'Default');
+    removeFromWishlist(product.id);
+  };
+
+  // Share Wishlist Link
+  const handleShareWishlist = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(window.location.href);
+      setIsCopied(true);
+      if (showToast) showToast('Wishlist link copied to clipboard!', 'info');
+      setTimeout(() => setIsCopied(false), 2400);
+    }
   };
 
   return (
-    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 overflow-x-hidden relative transition-colors duration-250 ${
+    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 overflow-x-hidden transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
-      {/* Floating 3D Decorative Orbs in background */}
-      <div className="absolute top-20 left-10 w-44 h-44 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
-      <div className="absolute top-60 right-12 w-56 h-56 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-reverse" />
-
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10 space-y-10">
-        {/* 1. Header with Scroll Parallax & Quick Actions */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-10">
+        {/* 1. Header with Breadcrumb & Share Actions */}
         <div
           ref={headerRef}
           style={{
             transform: `translate3d(0, ${offsetY}px, 0)`,
-            transition: 'transform 0.1s ease-out',
+            opacity: isHeaderVisible ? 1 : 0,
+            transition: 'opacity 0.6s ease-out, transform 0.1s ease-out',
           }}
-          className="pb-8 border-b border-black/10 dark:border-white/10 flex flex-col md:flex-row md:items-end justify-between gap-6 transition-all duration-700 ease-out"
+          className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-black/10 dark:border-white/10 gap-6"
         >
           <div>
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
-              YOUR WISHLIST
+              LAX360 SAVED ITEMS
             </span>
             <h1 className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal ${
               isDark ? 'text-white' : 'text-[#101820]'
             }`}>
-              Your Saved Favorites
+              Your Wishlist
             </h1>
-            <p className={`text-xs sm:text-sm font-light mt-2 max-w-xl leading-relaxed ${
+            <p className={`text-xs sm:text-sm font-light mt-2 ${
               isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
             }`}>
-              Keep everything you love in one place — from fashion and furniture to electronics, medicines and cosmetics.
+              {wishlistedProducts.length === 0
+                ? 'Your personal curation of marketplace favorites is currently empty.'
+                : `You have ${wishlistedProducts.length} saved ${wishlistedProducts.length === 1 ? 'item' : 'items'} across all departments.`}
             </p>
           </div>
 
-          {/* Action buttons */}
+          {/* Top Actions: Share & Move All */}
           {wishlistedProducts.length > 0 && (
             <div className="flex items-center gap-3 flex-wrap">
               <button
                 type="button"
                 onClick={handleShareWishlist}
-                className={`px-4 py-2.5 border text-xs uppercase tracking-widest font-semibold transition-all flex items-center gap-2 cursor-pointer ${
+                className={`px-4 py-2.5 border text-xs uppercase tracking-wider font-semibold transition-colors flex items-center gap-2 cursor-pointer ${
                   isDark
-                    ? 'bg-white/5 hover:bg-white/10 border-white/15 text-[#F7F3EA]'
-                    : 'bg-white hover:bg-black/5 border-black/15 text-[#101820]'
+                    ? 'bg-[#1B2630] border-white/15 text-white hover:border-[#C9A45C]'
+                    : 'bg-white border-black/15 text-[#101820] hover:border-[#B08B43]'
                 }`}
                 aria-label="Share Wishlist"
               >
@@ -220,7 +219,7 @@ export const Wishlist = () => {
         {wishlistedProducts.length > 0 ? (
           <>
             {/* 2. Category Filter Tabs & Sort Row */}
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-black/10 dark:border-white/10 pb-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 border-b border-black/10 dark:border-white/10 pb-5">
               {/* Category Filter Tabs with Dynamic Item Counts */}
               <div className="flex items-center gap-2 overflow-x-auto pb-2 lg:pb-0 scrollbar-none">
                 {CATEGORIES_LIST.map((cat) => {
@@ -233,7 +232,7 @@ export const Wishlist = () => {
                       key={cat.slug}
                       type="button"
                       onClick={() => setActiveCategory(cat.slug)}
-                      className={`px-4 py-2 text-xs uppercase tracking-wider font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
+                      className={`px-3.5 py-1.5 text-xs uppercase tracking-wider font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer ${
                         isActive
                           ? 'bg-[#C9A45C] text-[#101820] shadow-md scale-105'
                           : isDark
@@ -276,9 +275,9 @@ export const Wishlist = () => {
               </div>
             </div>
 
-            {/* 3. Multi-Category Product Grid */}
+            {/* 3. Multi-Category Compact Product Grid */}
             {displayedProducts.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
                 {displayedProducts.map((product, idx) => (
                   <WishlistCard
                     key={product.id}

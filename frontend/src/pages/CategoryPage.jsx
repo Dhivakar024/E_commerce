@@ -225,7 +225,7 @@ export const CategoryPage = () => {
             <button
               type="button"
               onClick={() => handleSubcategoryClick('')}
-              className={`px-4 py-1.5 text-xs uppercase tracking-wider font-semibold transition-colors cursor-pointer ${
+              className={`px-3.5 py-1.5 text-xs uppercase tracking-wider font-semibold transition-colors cursor-pointer ${
                 !filters.subcategory
                   ? 'bg-[#C9A45C] text-[#101820]'
                   : 'bg-white/10 text-white hover:bg-white/20 border border-white/15'
@@ -240,7 +240,7 @@ export const CategoryPage = () => {
                   key={sub}
                   type="button"
                   onClick={() => handleSubcategoryClick(sub)}
-                  className={`px-4 py-1.5 text-xs uppercase tracking-wider font-medium transition-colors cursor-pointer ${
+                  className={`px-3.5 py-1.5 text-xs uppercase tracking-wider font-medium transition-colors cursor-pointer ${
                     isSelected
                       ? 'bg-[#C9A45C] text-[#101820] font-semibold'
                       : 'bg-white/10 text-white hover:bg-white/20 border border-white/15'
@@ -279,7 +279,7 @@ export const CategoryPage = () => {
         />
 
         {/* Layout: Sidebar + Products */}
-        <div className="flex items-start gap-8 lg:gap-10">
+        <div className="flex items-start gap-6 lg:gap-8">
           {/* Category Filter Sidebar */}
           <ProductFiltersSidebar
             filters={filters}
@@ -293,7 +293,7 @@ export const CategoryPage = () => {
             {matchingProducts.length === 0 ? (
               <EmptyState onClearFilters={handleClearFilters} />
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
                 {matchingProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

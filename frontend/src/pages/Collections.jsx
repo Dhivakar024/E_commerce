@@ -176,7 +176,7 @@ export const Collections = () => {
         </div>
 
         {/* Category Filter Tabs */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap border-b border-black/10 dark:border-white/10 pb-6">
+        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap border-b border-black/10 dark:border-white/10 pb-5">
           {CATEGORY_TABS.map((tab) => {
             const isActive = activeCategory === tab.slug;
             return (
@@ -187,9 +187,9 @@ export const Collections = () => {
                   setActiveCategory(tab.slug);
                   setSelectedCollectionId('all');
                 }}
-                className={`px-5 py-2.5 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
                   isActive
-                    ? 'bg-[#C9A45C] text-[#101820] shadow-lg scale-105'
+                    ? 'bg-[#C9A45C] text-[#101820] shadow-md scale-105'
                     : isDark
                       ? 'bg-white/5 text-[#F7F3EA]/80 hover:text-white hover:bg-white/10 border border-white/10'
                       : 'bg-white text-[#101820]/80 hover:text-[#101820] hover:bg-black/5 border border-black/10'
@@ -220,7 +220,7 @@ export const Collections = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredCollections.map((col) => {
               const Icon = col.icon;
               const isSelected = selectedCollectionId === col.id;
@@ -231,46 +231,46 @@ export const Collections = () => {
                   onClick={() =>
                     setSelectedCollectionId((prev) => (prev === col.id ? 'all' : col.id))
                   }
-                  className={`p-6 border transition-all duration-300 flex flex-col justify-between space-y-4 cursor-pointer shadow-xl ${
+                  className={`p-5 border transition-all duration-300 flex flex-col justify-between space-y-3 cursor-pointer shadow-md ${
                     isSelected
-                      ? 'border-[#C9A45C] ring-1 ring-[#C9A45C] -translate-y-1 shadow-2xl'
+                      ? 'border-[#C9A45C] ring-1 ring-[#C9A45C] -translate-y-0.5 shadow-xl'
                       : isDark
-                        ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C]/70 hover:-translate-y-1'
-                        : 'bg-white border-black/10 hover:border-[#B08B43]/70 hover:-translate-y-1'
+                        ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C]/70 hover:-translate-y-0.5'
+                        : 'bg-white border-black/10 hover:border-[#B08B43]/70 hover:-translate-y-0.5'
                   }`}
                 >
                   <div className="flex items-start justify-between">
-                    <div className={`w-10 h-10 border flex items-center justify-center text-[#C9A45C] transition-transform group-hover:scale-105 ${
+                    <div className={`w-9 h-9 border flex items-center justify-center text-[#C9A45C] transition-transform group-hover:scale-105 ${
                       isDark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'
                     }`}>
-                      <Icon className="w-5 h-5" />
+                      <Icon className="w-4.5 h-4.5" />
                     </div>
-                    <span className={`text-[10px] uppercase tracking-wider px-2 py-0.5 ${
+                    <span className={`text-[9px] uppercase tracking-wider px-2 py-0.5 ${
                       isSelected
                         ? 'bg-[#C9A45C] text-[#101820] font-semibold'
                         : isDark ? 'text-[#A9B0B5] bg-black/40' : 'text-[#717D86] bg-black/5'
                     }`}>
-                      {isSelected ? 'Active Filter' : 'Click to Filter'}
+                      {isSelected ? 'Active Filter' : 'Filter Products'}
                     </span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold block mb-1">
+                    <span className="text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold block mb-1">
                       {col.subtitle}
                     </span>
-                    <h3 className={`font-serif text-xl font-medium mb-1.5 ${
+                    <h3 className={`font-serif text-lg font-medium mb-1 ${
                       isDark ? 'text-white' : 'text-[#101820]'
                     }`}>
                       {col.name}
                     </h3>
-                    <p className={`text-xs font-light leading-relaxed ${
+                    <p className={`text-[11px] sm:text-xs font-light leading-relaxed line-clamp-2 ${
                       isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
                     }`}>
                       {col.description}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-xs uppercase tracking-widest text-[#C9A45C] font-semibold">
+                  <div className="pt-2.5 border-t border-black/5 dark:border-white/5 flex items-center justify-between text-[10px] sm:text-xs uppercase tracking-widest text-[#C9A45C] font-semibold">
                     <span>{isSelected ? 'Viewing Products' : 'Explore Collection'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </div>
@@ -307,7 +307,7 @@ export const Collections = () => {
           </div>
 
           {displayedProducts.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 sm:gap-4 lg:gap-5">
               {displayedProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}

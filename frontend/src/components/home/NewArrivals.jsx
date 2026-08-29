@@ -37,11 +37,13 @@ export const NewArrivals = () => {
       if (width >= 1280) {
         setItemsVisible(4);
       } else if (width >= 1024) {
+        setItemsVisible(4);
+      } else if (width >= 768) {
         setItemsVisible(3);
-      } else if (width >= 640) {
+      } else if (width >= 480) {
         setItemsVisible(2);
       } else {
-        setItemsVisible(1);
+        setItemsVisible(2);
       }
     };
 
@@ -51,10 +53,10 @@ export const NewArrivals = () => {
   }, []);
 
   const totalProducts = newMultiProducts.length;
-  const maxIndex = Math.max(0, totalProducts - itemsVisible);
+  const maxIndex = Math.max(0, Math.ceil(totalProducts - itemsVisible));
 
   const handlePrev = useCallback(() => {
-    setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   }, [maxIndex]);
 
   const handleNext = useCallback(() => {
@@ -86,9 +88,9 @@ export const NewArrivals = () => {
 
   const handleMouseUp = () => {
     if (!isDragging) return;
-    if (dragOffset < -50) {
+    if (dragOffset < -45) {
       handleNext();
-    } else if (dragOffset > 50) {
+    } else if (dragOffset > 45) {
       handlePrev();
     }
     setIsDragging(false);
@@ -112,9 +114,9 @@ export const NewArrivals = () => {
 
   const handleTouchEnd = () => {
     if (!isDragging) return;
-    if (dragOffset < -40) {
+    if (dragOffset < -35) {
       handleNext();
-    } else if (dragOffset > 40) {
+    } else if (dragOffset > 35) {
       handlePrev();
     }
     setIsDragging(false);
@@ -127,14 +129,14 @@ export const NewArrivals = () => {
   return (
     <section
       ref={sectionRef}
-      className={`py-20 sm:py-28 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
+      className={`py-16 sm:py-24 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
         isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header with View All & Carousel Arrows */}
         <div
-          className="flex items-end justify-between mb-12 sm:mb-14 border-b border-black/10 dark:border-white/10 pb-6 transition-all duration-700 ease-out"
+          className="flex items-end justify-between mb-8 sm:mb-10 border-b border-black/10 dark:border-white/10 pb-5 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
@@ -165,14 +167,14 @@ export const NewArrivals = () => {
                   triggerTemporaryPause();
                   handlePrev();
                 }}
-                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                className={`w-9 h-9 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md active:scale-95 ${
                   isDark
                     ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
                     : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
                 }`}
                 aria-label="Previous new arrivals"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 type="button"
@@ -180,14 +182,14 @@ export const NewArrivals = () => {
                   triggerTemporaryPause();
                   handleNext();
                 }}
-                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                className={`w-9 h-9 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md active:scale-95 ${
                   isDark
                     ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
                     : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
                 }`}
                 aria-label="Next new arrivals"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
@@ -196,7 +198,7 @@ export const NewArrivals = () => {
               className="group hidden sm:inline-flex items-center gap-1.5 text-xs uppercase tracking-widest text-[#C9A45C] hover:text-[#B08B43] font-semibold transition-colors ml-2"
             >
               <span>View All</span>
-              <ArrowUpRight className="w-4 h-4 text-[#C9A45C] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              <ArrowUpRight className="w-3.5 h-3.5 text-[#C9A45C] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </Link>
           </div>
         </div>
@@ -213,7 +215,7 @@ export const NewArrivals = () => {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-3"
+          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-2 sm:-mx-2.5"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(28px)',
@@ -232,7 +234,7 @@ export const NewArrivals = () => {
               <div
                 key={product.id}
                 style={{ width: `${slideWidthPercent}%`, flexShrink: 0 }}
-                className="p-3 h-full"
+                className="p-2 sm:p-2.5 h-full"
               >
                 <ProductCard product={product} />
               </div>
@@ -242,7 +244,7 @@ export const NewArrivals = () => {
 
         {/* Pagination indicator dots */}
         {maxIndex > 0 && (
-          <div className="flex items-center justify-center gap-2 mt-8">
+          <div className="flex items-center justify-center gap-1.5 mt-6">
             {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
               <button
                 key={idx}
@@ -251,10 +253,10 @@ export const NewArrivals = () => {
                   triggerTemporaryPause();
                   setCurrentIndex(idx);
                 }}
-                className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
+                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${
                   currentIndex === idx
-                    ? 'w-7 bg-[#C9A45C]'
-                    : isDark ? 'w-2 bg-white/20 hover:bg-white/40' : 'w-2 bg-black/20 hover:bg-black/40'
+                    ? 'w-6 bg-[#C9A45C]'
+                    : isDark ? 'w-1.5 bg-white/20 hover:bg-white/40' : 'w-1.5 bg-black/20 hover:bg-black/40'
                 }`}
                 aria-label={`Go to new arrival slide ${idx + 1}`}
               />

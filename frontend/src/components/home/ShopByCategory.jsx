@@ -9,7 +9,7 @@ const MARKETPLACE_CATEGORIES = [
     id: 'fashion',
     slug: 'fashion',
     name: 'Fashion',
-    description: 'Discover everyday styles for every occasion.',
+    description: 'Everyday styles and apparel for all occasions.',
     image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=800&auto=format&fit=crop',
     icon: Shirt,
     itemCount: '10+ Items',
@@ -18,7 +18,7 @@ const MARKETPLACE_CATEGORIES = [
     id: 'furniture',
     slug: 'furniture',
     name: 'Furniture',
-    description: 'Transform your home with modern furniture.',
+    description: 'Modern furniture and living space solutions.',
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop',
     icon: Armchair,
     itemCount: '10+ Items',
@@ -27,7 +27,7 @@ const MARKETPLACE_CATEGORIES = [
     id: 'electronics',
     slug: 'electronics',
     name: 'Electronics',
-    description: 'Explore smart devices and everyday technology.',
+    description: 'Smart tech, audio and everyday devices.',
     image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=800&auto=format&fit=crop',
     icon: Smartphone,
     itemCount: '10+ Items',
@@ -36,7 +36,7 @@ const MARKETPLACE_CATEGORIES = [
     id: 'medicines',
     slug: 'medicines',
     name: 'Medicines',
-    description: 'Everyday healthcare and personal wellness essentials.',
+    description: 'Everyday healthcare and personal wellness.',
     image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?q=80&w=800&auto=format&fit=crop',
     icon: Pill,
     itemCount: '10+ Items',
@@ -45,14 +45,14 @@ const MARKETPLACE_CATEGORIES = [
     id: 'cosmetics',
     slug: 'cosmetics',
     name: 'Cosmetics',
-    description: 'Beauty, skincare and personal care essentials.',
+    description: 'Clean skincare and beauty essentials.',
     image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?q=80&w=800&auto=format&fit=crop',
     icon: Sparkles,
     itemCount: '10+ Items',
   },
 ];
 
-// Single 3D Interactive Category Card with Clamped Tilt
+// Single Compact 3D Interactive Category Card
 const CategoryCard3D = ({ cat, index, isDark }) => {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
@@ -71,10 +71,10 @@ const CategoryCard3D = ({ cat, index, isDark }) => {
     const centerX = rect.width / 2;
     const centerY = rect.height / 2;
 
-    const rotateX = ((centerY - y) / centerY) * 4.5;
-    const rotateY = ((x - centerX) / centerX) * 4.5;
+    const rotateX = ((centerY - y) / centerY) * 3.5;
+    const rotateY = ((x - centerX) / centerX) * 3.5;
 
-    setTilt({ rotateX, rotateY, scale: 1.015 });
+    setTilt({ rotateX, rotateY, scale: 1.01 });
   };
 
   const handleMouseLeave = () => {
@@ -86,7 +86,7 @@ const CategoryCard3D = ({ cat, index, isDark }) => {
       ref={cardRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      className="perspective-1000 h-full p-2.5 sm:p-3"
+      className="perspective-1000 h-full p-2 sm:p-2.5"
     >
       <Link
         to={`/category/${cat.slug}`}
@@ -95,67 +95,67 @@ const CategoryCard3D = ({ cat, index, isDark }) => {
           transition:
             tilt.scale === 1
               ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease'
-              : 'transform 0.12s ease-out, box-shadow 0.12s ease-out',
+              : 'transform 0.1s ease-out, box-shadow 0.1s ease-out',
         }}
-        className={`group relative flex flex-col h-full overflow-hidden rounded-none shadow-xl hover:shadow-2xl preserve-3d block select-none border transition-all ${
+        className={`group relative flex flex-col h-full overflow-hidden rounded-none shadow-md hover:shadow-xl preserve-3d block select-none border transition-all duration-300 ${
           isDark
             ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C] hover:shadow-black/70'
             : 'bg-white border-black/10 hover:border-[#B08B43] hover:shadow-black/15'
         }`}
       >
-        {/* Visual Image Area */}
-        <div className="relative aspect-[4/5] overflow-hidden bg-neutral-900 flex-shrink-0">
+        {/* Compact Visual Image Area (Equal Aspect Ratio) */}
+        <div className="relative aspect-[16/11] overflow-hidden bg-neutral-900 flex-shrink-0">
           <img
             src={cat.image}
             alt={cat.name}
             loading="lazy"
             draggable={false}
-            className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108 filter brightness-90 group-hover:brightness-100"
+            className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-106 filter brightness-90 group-hover:brightness-100"
           />
 
           {/* Gradient Overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-85 group-hover:opacity-70 transition-opacity duration-500" />
 
-          {/* 3D Category Icon Tag */}
-          <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105">
-            <IconComponent className="w-3.5 h-3.5 transition-transform duration-300 group-hover:rotate-6" />
+          {/* Category Index Badge */}
+          <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2 py-0.5 bg-black/60 backdrop-blur-md border border-white/15 text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold transition-transform duration-300 group-hover:scale-105">
+            <IconComponent className="w-3 h-3 text-[#C9A45C]" />
             <span>0{index + 1}</span>
           </div>
 
-          <div className="absolute top-3.5 right-3.5 px-2 py-0.5 bg-black/50 backdrop-blur-md text-[9px] uppercase tracking-wider text-white/80">
+          <div className="absolute top-2.5 right-2.5 px-1.5 py-0.5 bg-black/50 backdrop-blur-md text-[8px] uppercase tracking-wider text-white/80">
             {cat.itemCount}
           </div>
         </div>
 
-        {/* Card Content */}
-        <div className={`p-5 flex flex-col justify-between flex-grow border-t space-y-3 ${
+        {/* Card Content with Exact Uniform Height */}
+        <div className={`p-3.5 sm:p-4 flex flex-col justify-between flex-grow border-t space-y-2.5 ${
           isDark
             ? 'bg-[#1B2630] border-white/5 text-white'
             : 'bg-white border-black/5 text-[#101820]'
         }`}>
           <div>
-            <h3 className={`font-serif text-xl font-medium mb-1.5 transition-colors ${
+            <h3 className={`font-serif text-base sm:text-lg font-medium mb-1 transition-colors ${
               isDark
                 ? 'text-white group-hover:text-[#C9A45C]'
                 : 'text-[#101820] group-hover:text-[#B08B43]'
             }`}>
               {cat.name}
             </h3>
-            <p className={`text-xs leading-relaxed font-light line-clamp-2 ${
+            <p className={`text-[11px] sm:text-xs leading-relaxed font-light line-clamp-2 h-8 ${
               isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
             }`}>
               {cat.description}
             </p>
           </div>
 
-          {/* Explore Link with Slide Micro-interaction */}
-          <div className={`pt-3 border-t flex items-center justify-between text-xs tracking-widest uppercase font-semibold ${
+          {/* Explore Link */}
+          <div className={`pt-2.5 border-t flex items-center justify-between text-[10px] sm:text-xs tracking-wider uppercase font-semibold ${
             isDark
               ? 'border-white/10 text-[#C9A45C]'
               : 'border-black/5 text-[#B08B43]'
           }`}>
-            <span>Explore</span>
-            <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5 group-hover:-translate-y-1" />
+            <span>Explore Department</span>
+            <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5" />
           </div>
         </div>
       </Link>
@@ -166,7 +166,7 @@ const CategoryCard3D = ({ cat, index, isDark }) => {
 export const ShopByCategory = () => {
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.1 });
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [itemsVisible, setItemsVisible] = useState(3);
+  const [itemsVisible, setItemsVisible] = useState(4);
   const [isPaused, setIsPaused] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -178,15 +178,18 @@ export const ShopByCategory = () => {
 
   const totalItems = MARKETPLACE_CATEGORIES.length;
 
-  // Responsive items calculation
+  // Responsive items calculation for compact category carousel
   useEffect(() => {
     const updateVisibleItems = () => {
-      if (window.innerWidth >= 1024) {
+      const width = window.innerWidth;
+      if (width >= 1280) {
+        setItemsVisible(4); // Desktop Large: 4 cards
+      } else if (width >= 1024) {
         setItemsVisible(3); // Desktop: 3 cards
-      } else if (window.innerWidth >= 640) {
+      } else if (width >= 640) {
         setItemsVisible(2); // Tablet: 2 cards
       } else {
-        setItemsVisible(1); // Mobile: 1 card
+        setItemsVisible(1.2); // Mobile: 1 card + peek of next (or 1)
       }
     };
 
@@ -195,11 +198,11 @@ export const ShopByCategory = () => {
     return () => window.removeEventListener('resize', updateVisibleItems);
   }, []);
 
-  const maxIndex = Math.max(0, totalItems - itemsVisible);
+  const maxIndex = Math.max(0, Math.ceil(totalItems - itemsVisible));
 
   // Safe navigation functions with cyclic looping
   const handlePrev = useCallback(() => {
-    setCurrentIndex((prev) => (prev === 0 ? maxIndex : prev - 1));
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
   }, [maxIndex]);
 
   const handleNext = useCallback(() => {
@@ -218,14 +221,14 @@ export const ShopByCategory = () => {
   // Autoplay effect
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (prefersReducedMotion || isPaused || isDragging) return;
+    if (prefersReducedMotion || isPaused || isDragging || maxIndex === 0) return;
 
     const interval = setInterval(() => {
       handleNext();
-    }, 4000);
+    }, 4200);
 
     return () => clearInterval(interval);
-  }, [isPaused, isDragging, handleNext]);
+  }, [isPaused, isDragging, maxIndex, handleNext]);
 
   // Mouse Drag Handlers
   const handleMouseDown = (e) => {
@@ -287,18 +290,14 @@ export const ShopByCategory = () => {
     <section
       id="shop-by-category"
       ref={sectionRef}
-      className={`py-20 sm:py-28 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
+      className={`py-16 sm:py-24 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
         isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
       }`}
     >
-      {/* Floating decorative backdrop elements */}
-      <div className="absolute top-10 left-8 w-32 h-32 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
-      <div className="absolute bottom-10 right-8 w-40 h-40 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-reverse" />
-
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Section Header with Carousel Controls */}
         <div
-          className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 border-b border-black/10 dark:border-white/10 pb-6 transition-all duration-700 ease-out"
+          className="flex flex-col md:flex-row md:items-end justify-between mb-8 sm:mb-10 border-b border-black/10 dark:border-white/10 pb-5 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
@@ -321,7 +320,7 @@ export const ShopByCategory = () => {
           </div>
 
           {/* Navigation Controls */}
-          <div className="flex items-center gap-3 mt-5 md:mt-0">
+          <div className="flex items-center gap-3 mt-4 md:mt-0">
             <div className="flex items-center gap-2">
               <button
                 type="button"
@@ -329,14 +328,14 @@ export const ShopByCategory = () => {
                   triggerTemporaryPause();
                   handlePrev();
                 }}
-                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                className={`w-9 h-9 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md active:scale-95 ${
                   isDark
                     ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
                     : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
                 }`}
                 aria-label="Previous categories"
               >
-                <ChevronLeft className="w-5 h-5" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
               <button
                 type="button"
@@ -344,14 +343,14 @@ export const ShopByCategory = () => {
                   triggerTemporaryPause();
                   handleNext();
                 }}
-                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                className={`w-9 h-9 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-md active:scale-95 ${
                   isDark
                     ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
                     : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
                 }`}
                 aria-label="Next categories"
               >
-                <ChevronRight className="w-5 h-5" />
+                <ChevronRight className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -370,7 +369,7 @@ export const ShopByCategory = () => {
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-2.5 sm:-mx-3"
+          className="relative overflow-hidden cursor-grab active:cursor-grabbing -mx-2 sm:-mx-2.5"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(32px)',
@@ -396,24 +395,26 @@ export const ShopByCategory = () => {
         </div>
 
         {/* Carousel Pagination Dots */}
-        <div className="flex items-center justify-center gap-2 mt-8">
-          {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => {
-                triggerTemporaryPause();
-                setCurrentIndex(idx);
-              }}
-              className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
-                currentIndex === idx
-                  ? 'w-7 bg-[#C9A45C]'
-                  : isDark ? 'w-2 bg-white/20 hover:bg-white/40' : 'w-2 bg-black/20 hover:bg-black/40'
-              }`}
-              aria-label={`Go to category slide ${idx + 1}`}
-            />
-          ))}
-        </div>
+        {maxIndex > 0 && (
+          <div className="flex items-center justify-center gap-1.5 mt-6">
+            {Array.from({ length: maxIndex + 1 }).map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  triggerTemporaryPause();
+                  setCurrentIndex(idx);
+                }}
+                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${
+                  currentIndex === idx
+                    ? 'w-6 bg-[#C9A45C]'
+                    : isDark ? 'w-1.5 bg-white/20 hover:bg-white/40' : 'w-1.5 bg-black/20 hover:bg-black/40'
+                }`}
+                aria-label={`Go to category slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
