@@ -2,9 +2,11 @@ import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { ShieldCheck, Truck, RotateCcw, FileText, ChevronRight } from 'lucide-react';
 import { NewsletterSection } from '../components/home/NewsletterSection';
+import { useTheme } from '../context/ThemeContext';
 
 export const LegalPage = () => {
   const { pathname } = useLocation();
+  const { isDark } = useTheme();
 
   let title = 'Privacy Policy';
   let subtitle = 'Our commitment to safeguarding your personal information and account security.';
@@ -27,11 +29,15 @@ export const LegalPage = () => {
   const Icon = icon;
 
   return (
-    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24">
+    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 transition-colors duration-250 ${
+      isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+    }`}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs tracking-wider text-[#A9B0B5] mb-8">
-          <Link to="/" className="hover:text-white transition-colors">
+        <nav aria-label="Breadcrumb" className={`flex items-center gap-2 text-xs tracking-wider mb-8 ${
+          isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+        }`}>
+          <Link to="/" className="hover:text-[#C9A45C] transition-colors">
             Home
           </Link>
           <ChevronRight className="w-3.5 h-3.5 opacity-50" />
@@ -39,64 +45,85 @@ export const LegalPage = () => {
         </nav>
 
         {/* Header */}
-        <div className="pb-8 border-b border-white/10 mb-10 space-y-3">
-          <div className="w-10 h-10 rounded-none bg-white/5 border border-white/15 flex items-center justify-center text-[#C9A45C] mb-4">
+        <div className={`pb-8 border-b mb-10 space-y-3 ${isDark ? 'border-white/10' : 'border-black/10'}`}>
+          <div className={`w-10 h-10 border flex items-center justify-center text-[#C9A45C] mb-4 ${
+            isDark ? 'bg-white/5 border-white/15' : 'bg-black/5 border-black/15'
+          }`}>
             <Icon className="w-5 h-5" />
           </div>
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             LEGAL & POLICIES
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+          <h1 className={`font-serif text-3xl sm:text-4xl font-normal ${
+            isDark ? 'text-white' : 'text-[#101820]'
+          }`}>
             {title}
           </h1>
-          <p className="text-xs sm:text-sm text-[#A9B0B5] font-light leading-relaxed">
+          <p className={`text-xs sm:text-sm font-light leading-relaxed ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+          }`}>
             {subtitle}
           </p>
-          <p className="text-[11px] text-[#A9B0B5] font-mono pt-1">
+          <p className={`text-[11px] font-mono pt-1 ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+          }`}>
             Last Updated: August 2026 • Version 2.0
           </p>
         </div>
 
         {/* Policy Body */}
-        <div className="space-y-8 text-xs text-[#F7F3EA]/80 font-light leading-relaxed">
-          <section className="space-y-3">
-            <h2 className="font-serif text-lg text-white font-normal">1. General Overview</h2>
+        <div className={`space-y-8 text-xs sm:text-sm font-light leading-relaxed ${
+          isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+        }`}>
+          <section className="space-y-2">
+            <h2 className={`font-serif text-lg font-medium ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
+              1. Overview & Acceptance
+            </h2>
             <p>
-              LAX360 PVT LTD ("we", "us", "our") operates a multi-category digital marketplace offering verified products across fashion, furniture, electronics, certified healthcare medicines, cosmetics, and everyday essentials. By accessing our services, you acknowledge and agree to the operational policies set forth herein.
+              Welcome to LAX360 PVT LTD. By accessing or using our multi-category e-commerce marketplace, you acknowledge and agree to comply with our comprehensive operational terms, data safety commitments, and return protocols.
             </p>
           </section>
 
-          <section className="space-y-3">
-            <h2 className="font-serif text-lg text-white font-normal">2. Customer Confidentiality & Data Protection</h2>
+          <section className="space-y-2">
+            <h2 className={`font-serif text-lg font-medium ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
+              2. Multi-Category Regulatory Standards
+            </h2>
             <p>
-              We adhere to strict data minimization principles. Personal identification details, including your contact number, delivery addresses, and purchasing history, are encrypted and used solely for fulfilling orders, customer support, and maintaining your account. We never monetize or transfer your personal records to third-party advertisers.
+              LAX360 operates distinct compliance guidelines for every product category. Wellness and pharmaceutical orders marked "Prescription Required" undergo verified pharmacist validation before dispatch. Electronics and high-value furniture pieces include serialized authenticity tracking and insured transit protection.
             </p>
           </section>
 
-          <section className="space-y-3">
-            <h2 className="font-serif text-lg text-white font-normal">3. Order Fulfillment & Nationwide Delivery</h2>
+          <section className="space-y-2">
+            <h2 className={`font-serif text-lg font-medium ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
+              3. Data Security & Transaction Encryption
+            </h2>
             <p>
-              Each marketplace order undergoes quality inspection and secure packaging prior to dispatch. Orders are routed through accredited courier partners with live tracking and insured transit to ensure safe and timely delivery.
+              All customer interactions, payment credentials, and order history are safeguarded with bank-grade 256-bit SSL encryption. We do not store raw credit/debit card numbers on our servers and strictly adhere to industry privacy regulations.
             </p>
           </section>
 
-          <section className="space-y-3">
-            <h2 className="font-serif text-lg text-white font-normal">4. 14-Day Easy Returns & Replacements</h2>
+          <section className="space-y-2">
+            <h2 className={`font-serif text-lg font-medium ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
+              4. Contact Legal Department
+            </h2>
             <p>
-              Should an item not meet your expectations or arrive damaged, returns or replacements may be requested within fourteen (14) calendar days of recorded delivery. Returned items must remain in original condition with tags and packaging intact.
-            </p>
-          </section>
-
-          <section className="space-y-3">
-            <h2 className="font-serif text-lg text-white font-normal">5. Customer Support Contact</h2>
-            <p>
-              For policy inquiries or assistance, please contact our support team at <span className="text-[#C9A45C] underline">legal@lax360.com</span> or submit a ticket via our <Link to="/contact" className="text-white hover:text-[#C9A45C] underline">Help Center</Link>.
+              For legal inquiries, corporate governance, or data rights requests, please contact our legal counsel at <span className="text-[#C9A45C]">legal@lax360.com</span>.
             </p>
           </section>
         </div>
       </div>
 
-      <NewsletterSection />
+      <div className="mt-20">
+        <NewsletterSection />
+      </div>
     </main>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { NewsletterSection } from '../components/home/NewsletterSection';
+import { useTheme } from '../context/ThemeContext';
 
 const FAQ_DATA = [
   {
@@ -46,6 +47,7 @@ const FAQ_DATA = [
 ];
 
 export const FAQ = () => {
+  const { isDark } = useTheme();
   const [openIdx, setOpenIdx] = useState(0);
   const [activeCategory, setActiveCategory] = useState('All');
 
@@ -56,35 +58,43 @@ export const FAQ = () => {
     : FAQ_DATA.filter((item) => item.category === activeCategory);
 
   return (
-    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24">
+    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 transition-colors duration-250 ${
+      isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+    }`}>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center space-y-3 mb-12">
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             CUSTOMER HELP CENTER
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-white font-normal">
+          <h1 className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal ${
+            isDark ? 'text-white' : 'text-[#101820]'
+          }`}>
             Frequently Asked Questions
           </h1>
-          <p className="text-xs sm:text-sm text-[#A9B0B5] font-light max-w-lg mx-auto leading-relaxed">
-            Find answers to common questions about orders, multi-category shipping, returns, and account management.
+          <p className={`text-xs sm:text-sm font-light leading-relaxed max-w-lg mx-auto ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+          }`}>
+            Find answers to common questions about ordering, category guidelines, nationwide shipping, and returns.
           </p>
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center justify-center gap-2 flex-wrap mb-10">
+        <div className="flex items-center justify-center gap-2 flex-wrap mb-10 pb-6 border-b border-black/10 dark:border-white/10">
           {categories.map((cat) => (
             <button
               key={cat}
               type="button"
               onClick={() => {
                 setActiveCategory(cat);
-                setOpenIdx(null);
+                setOpenIdx(0);
               }}
-              className={`px-4 py-2 text-xs uppercase tracking-wider transition-all border cursor-pointer ${
+              className={`px-3.5 py-1.5 text-xs uppercase tracking-wider transition-all cursor-pointer ${
                 activeCategory === cat
-                  ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold shadow-md'
-                  : 'bg-white/5 text-[#A9B0B5] border-white/10 hover:text-white hover:border-white/30'
+                  ? 'bg-[#C9A45C] text-[#101820] font-semibold shadow-md'
+                  : isDark
+                    ? 'bg-white/5 text-[#F7F3EA]/70 hover:text-white border border-white/10'
+                    : 'bg-white text-[#101820]/70 hover:text-[#101820] border border-black/10'
               }`}
             >
               {cat}
@@ -93,30 +103,39 @@ export const FAQ = () => {
         </div>
 
         {/* Accordion List */}
-        <div className="divide-y divide-white/10 border-y border-white/10">
+        <div className="space-y-4">
           {filteredFAQs.map((faq, idx) => {
             const isOpen = openIdx === idx;
             return (
-              <div key={idx} className="py-5 transition-colors">
+              <div
+                key={idx}
+                className={`border transition-colors duration-200 ${
+                  isDark
+                    ? isOpen ? 'bg-[#1B2630] border-[#C9A45C]/50' : 'bg-[#1B2630]/40 border-white/10 hover:border-white/20'
+                    : isOpen ? 'bg-white border-[#B08B43]/50 shadow-md' : 'bg-white border-black/10 hover:border-black/20'
+                }`}
+              >
                 <button
                   type="button"
-                  onClick={() => setOpenIdx(isOpen ? null : idx)}
-                  className="w-full flex items-center justify-between text-left gap-4 group cursor-pointer"
+                  onClick={() => setOpenIdx(isOpen ? -1 : idx)}
+                  className="w-full p-5 text-left flex items-center justify-between gap-4 cursor-pointer"
                 >
-                  <span className={`font-serif text-base sm:text-lg font-normal transition-colors ${
-                    isOpen ? 'text-[#C9A45C]' : 'text-white group-hover:text-[#C9A45C]'
+                  <span className={`font-serif text-base sm:text-lg font-normal ${
+                    isOpen ? 'text-[#C9A45C]' : isDark ? 'text-white' : 'text-[#101820]'
                   }`}>
                     {faq.question}
                   </span>
-                  <div className={`w-6 h-6 rounded-full border border-white/15 flex items-center justify-center flex-shrink-0 transition-transform duration-300 ${
-                    isOpen ? 'rotate-180 bg-[#C9A45C] text-[#101820]' : 'text-[#A9B0B5]'
-                  }`}>
-                    <ChevronDown className="w-3.5 h-3.5" />
-                  </div>
+                  <ChevronDown
+                    className={`w-4 h-4 flex-shrink-0 transition-transform duration-300 ${
+                      isOpen ? 'rotate-180 text-[#C9A45C]' : isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+                    }`}
+                  />
                 </button>
 
                 {isOpen && (
-                  <div className="pt-3 pr-8 text-xs text-[#F7F3EA]/80 font-light leading-relaxed animate-fade-in">
+                  <div className={`px-5 pb-5 pt-1 text-xs sm:text-sm font-light leading-relaxed border-t border-black/5 dark:border-white/5 animate-fade-in ${
+                    isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+                  }`}>
                     {faq.answer}
                   </div>
                 )}
@@ -126,7 +145,9 @@ export const FAQ = () => {
         </div>
       </div>
 
-      <NewsletterSection />
+      <div className="mt-20">
+        <NewsletterSection />
+      </div>
     </main>
   );
 };

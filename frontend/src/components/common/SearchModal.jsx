@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { PRODUCTS } from '../../data/products';
+import { useTheme } from '../../context/ThemeContext';
 import { Search, X, ArrowRight, Sparkles, Clock } from 'lucide-react';
 
 const POPULAR_SEARCHES = [
@@ -16,6 +17,7 @@ const POPULAR_SEARCHES = [
 ];
 
 export const SearchModal = ({ isOpen, onClose }) => {
+  const { isDark } = useTheme();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [recentSearches, setRecentSearches] = useState(() => {
@@ -95,114 +97,155 @@ export const SearchModal = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/85 backdrop-blur-xl animate-fade-in">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-24 px-4 bg-black/80 backdrop-blur-xl animate-fade-in">
       {/* Background click dismiss */}
       <div className="fixed inset-0" onClick={onClose} aria-hidden="true" />
 
-      {/* Modal Container */}
-      <div className="relative w-full max-w-3xl bg-[#101820] text-[#F7F3EA] border border-white/15 p-6 sm:p-8 shadow-2xl space-y-6 z-10">
-        {/* Search Input Bar */}
-        <form onSubmit={handleSubmit} className="relative">
-          <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[#A9B0B5]" />
+      {/* Main Container */}
+      <div className={`relative w-full max-w-3xl border shadow-2xl p-6 sm:p-8 z-10 animate-fade-in-down rounded-none ${
+        isDark
+          ? 'bg-[#101820] border-white/15 text-white'
+          : 'bg-[#F8F6F0] border-black/15 text-[#101820]'
+      }`}>
+        {/* Search Input Header */}
+        <form onSubmit={handleSubmit} className="relative mb-6">
+          <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-[#C9A45C]" />
           <input
             ref={inputRef}
             type="text"
             value={query}
             onChange={handleQueryChange}
-            placeholder="Search across all categories (e.g. laptop, sofa, lipstick, shirt, vitamin)..."
-            className="w-full bg-white/5 border border-white/15 focus:border-[#C9A45C] text-white pl-12 pr-12 py-3.5 text-sm sm:text-base focus:outline-none placeholder:text-[#A9B0B5]/50 transition-colors"
+            placeholder="Search fashion, furniture, electronics, medicines, cosmetics..."
+            className={`w-full py-4 pl-12 pr-12 text-sm sm:text-base border transition-all focus:outline-none focus:border-[#C9A45C] ${
+              isDark
+                ? 'bg-white/5 border-white/15 text-white placeholder:text-[#A9B0B5]/50'
+                : 'bg-white border-black/15 text-[#101820] placeholder:text-[#717D86]/50'
+            }`}
           />
-          {query && (
+          {query ? (
             <button
               type="button"
               onClick={() => {
                 setQuery('');
                 setResults([]);
+                inputRef.current?.focus();
               }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A9B0B5] hover:text-white cursor-pointer"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-[#A9B0B5] hover:text-white"
             >
               <X className="w-4 h-4" />
+            </button>
+          ) : (
+            <button
+              type="button"
+              onClick={onClose}
+              className={`absolute right-4 top-1/2 -translate-y-1/2 transition-colors ${
+                isDark ? 'text-[#A9B0B5] hover:text-white' : 'text-[#717D86] hover:text-[#101820]'
+              }`}
+            >
+              <span className="text-[10px] tracking-wider uppercase border border-current px-1.5 py-0.5">
+                ESC
+              </span>
             </button>
           )}
         </form>
 
-        {/* Live Matching Results */}
-        {results.length > 0 ? (
-          <div className="space-y-4">
-            <span className="text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold block">
-              Marketplace Matches ({results.length})
-            </span>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-72 overflow-y-auto">
-              {results.map((p) => (
-                <Link
-                  key={p.id}
-                  to={`/product/${p.slug || p.id}`}
-                  onClick={onClose}
-                  className="flex items-center gap-3 p-3 bg-white/5 border border-white/5 hover:border-[#C9A45C]/50 hover:bg-white/10 transition-colors group"
+        {/* Live Search Results */}
+        {query ? (
+          <div>
+            <div className="flex items-center justify-between pb-3 mb-4 border-b border-black/10 dark:border-white/10 text-xs">
+              <span className={isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'}>
+                Found <strong className={isDark ? 'text-white' : 'text-[#101820]'}>{results.length}</strong> matching products
+              </span>
+              {results.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => handleSelectSearch(query)}
+                  className="text-[#C9A45C] hover:underline flex items-center gap-1 font-semibold uppercase tracking-wider text-[11px]"
                 >
-                  <img
-                    src={p.image}
-                    alt={p.name}
-                    className="w-14 h-16 object-cover flex-shrink-0 bg-neutral-900"
-                  />
-                  <div className="min-w-0 flex-grow">
-                    <span className="text-[9px] uppercase tracking-widest text-[#C9A45C] block font-semibold">
-                      {p.category} • {p.brand || 'LAX360'}
-                    </span>
-                    <h5 className="text-xs font-serif text-white truncate group-hover:text-[#C9A45C] transition-colors">
-                      {p.name}
-                    </h5>
-                    <span className="text-xs text-[#C9A45C] font-semibold">
-                      ₹{p.price.toLocaleString('en-IN')}
-                    </span>
-                  </div>
-                </Link>
-              ))}
+                  <span>View All Results</span>
+                  <ArrowRight className="w-3 h-3" />
+                </button>
+              )}
             </div>
 
-            <div className="pt-2 border-t border-white/10">
-              <button
-                type="button"
-                onClick={() => handleSelectSearch(query)}
-                className="text-xs uppercase tracking-widest text-[#C9A45C] hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
-              >
-                <span>View all search results for "{query}"</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        ) : query.trim() ? (
-          <div className="py-8 text-center text-xs text-[#A9B0B5]">
-            We couldn't find products matching "{query}". Press Enter to view full catalog search.
-          </div>
-        ) : (
-          /* Suggestions & Recent Searches */
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
-            {/* Recent Searches */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-[#A9B0B5] font-semibold">
-                <Clock className="w-3.5 h-3.5 text-[#C9A45C]" />
-                <span>Recent Searches</span>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {recentSearches.map((term) => (
-                  <button
-                    key={term}
-                    type="button"
-                    onClick={() => handleSelectSearch(term)}
-                    className="px-3 py-1.5 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#C9A45C] text-xs text-[#F7F3EA]/90 transition-colors cursor-pointer"
+            {results.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[50vh] overflow-y-auto pr-1">
+                {results.map((product) => (
+                  <Link
+                    key={product.id}
+                    to={`/product/${product.slug || product.id}`}
+                    onClick={onClose}
+                    className={`flex items-center gap-3.5 p-3 border transition-colors group ${
+                      isDark
+                        ? 'bg-white/5 border-white/10 hover:border-[#C9A45C] hover:bg-white/10'
+                        : 'bg-white border-black/10 hover:border-[#B08B43] hover:bg-black/5'
+                    }`}
                   >
-                    {term}
-                  </button>
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-12 h-14 object-cover flex-shrink-0 bg-neutral-900"
+                    />
+                    <div className="overflow-hidden flex-grow">
+                      <span className="text-[9px] uppercase tracking-widest text-[#C9A45C] font-semibold block truncate">
+                        {product.category}
+                      </span>
+                      <h4 className={`text-xs font-serif truncate transition-colors ${
+                        isDark ? 'text-white group-hover:text-[#C9A45C]' : 'text-[#101820] group-hover:text-[#B08B43]'
+                      }`}>
+                        {product.name}
+                      </h4>
+                      <span className={`text-xs font-semibold ${isDark ? 'text-white' : 'text-[#101820]'}`}>
+                        ₹{product.price.toLocaleString('en-IN')}
+                      </span>
+                    </div>
+                  </Link>
                 ))}
               </div>
-            </div>
+            ) : (
+              <div className={`py-12 text-center text-xs ${isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'}`}>
+                No products match "{query}". Try another search term.
+              </div>
+            )}
+          </div>
+        ) : (
+          /* Popular & Recent Suggestions */
+          <div className="space-y-6">
+            {/* Recent Searches */}
+            {recentSearches.length > 0 && (
+              <div>
+                <div className={`flex items-center gap-2 text-[11px] uppercase tracking-wider mb-3 font-semibold ${
+                  isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+                }`}>
+                  <Clock className="w-3.5 h-3.5 text-[#C9A45C]" />
+                  <span>Recent Searches</span>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {recentSearches.map((term) => (
+                    <button
+                      key={term}
+                      type="button"
+                      onClick={() => handleSelectSearch(term)}
+                      className={`px-3 py-1.5 border text-xs transition-colors cursor-pointer ${
+                        isDark
+                          ? 'bg-white/5 border-white/10 hover:border-[#C9A45C] text-[#F7F3EA]/80 hover:text-white'
+                          : 'bg-white border-black/10 hover:border-[#B08B43] text-[#101820]/80 hover:text-[#101820]'
+                      }`}
+                    >
+                      {term}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
-            {/* Popular Marketplace Queries */}
-            <div className="space-y-3">
-              <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-widest text-[#A9B0B5] font-semibold">
+            {/* Popular Searches */}
+            <div>
+              <div className={`flex items-center gap-2 text-[11px] uppercase tracking-wider mb-3 font-semibold ${
+                isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+              }`}>
                 <Sparkles className="w-3.5 h-3.5 text-[#C9A45C]" />
-                <span>Popular Searches</span>
+                <span>Trending Marketplace Searches</span>
               </div>
               <div className="flex flex-wrap gap-2">
                 {POPULAR_SEARCHES.map((term) => (
@@ -210,7 +253,11 @@ export const SearchModal = ({ isOpen, onClose }) => {
                     key={term}
                     type="button"
                     onClick={() => handleSelectSearch(term)}
-                    className="px-3 py-1.5 bg-white/5 hover:bg-[#C9A45C] hover:text-[#101820] border border-white/10 text-xs text-white transition-colors cursor-pointer"
+                    className={`px-3 py-1.5 border text-xs transition-colors cursor-pointer ${
+                      isDark
+                        ? 'bg-white/5 border-white/10 hover:border-[#C9A45C] text-[#F7F3EA]/80 hover:text-white'
+                        : 'bg-white border-black/10 hover:border-[#B08B43] text-[#101820]/80 hover:text-[#101820]'
+                    }`}
                   >
                     {term}
                   </button>

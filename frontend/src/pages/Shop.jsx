@@ -12,6 +12,7 @@ import { ProductSkeleton } from '../components/shop/ProductSkeleton';
 import { EmptyState } from '../components/shop/EmptyState';
 import { QuickViewModal } from '../components/shop/QuickViewModal';
 import { NewsletterSection } from '../components/home/NewsletterSection';
+import { useTheme } from '../context/ThemeContext';
 import { ChevronDown } from 'lucide-react';
 
 const INITIAL_PAGE_SIZE = 9;
@@ -20,6 +21,7 @@ const PAGE_INCREMENT = 6;
 export const Shop = ({ categoryName }) => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
+  const { isDark } = useTheme();
 
   // Normalize category from query param, path param, or prop
   const urlCategory = searchParams.get('category');
@@ -99,154 +101,47 @@ export const Shop = ({ categoryName }) => {
     setTimeout(() => setIsLoading(false), 150);
   };
 
-  // Calculate active filter count
-  const activeFilterCount = useMemo(() => {
-    let count = 0;
-    if (filters.category && filters.category !== 'all') count++;
-    if (filters.subcategory) count++;
-    if (filters.sizes?.length > 0) count += filters.sizes.length;
-    if (filters.colors?.length > 0) count += filters.colors.length;
-    if (filters.materials?.length > 0) count += filters.materials.length;
-    if (filters.roomTypes?.length > 0) count += filters.roomTypes.length;
-    if (filters.brands?.length > 0) count += filters.brands.length;
-    if (filters.rams?.length > 0) count += filters.rams.length;
-    if (filters.storages?.length > 0) count += filters.storages.length;
-    if (filters.forms?.length > 0) count += filters.forms.length;
-    if (filters.skinTypes?.length > 0) count += filters.skinTypes.length;
-    if (filters.finishes?.length > 0) count += filters.finishes.length;
-    if (filters.prescriptionRequired !== undefined && filters.prescriptionRequired !== 'all') count++;
-    if (filters.priceRange && filters.priceRange !== 'all') count++;
-    if (filters.availability && filters.availability !== 'all') count++;
-    if (filters.searchQuery) count++;
-    return count;
-  }, [filters]);
-
-  // Filter & Sort Engine
+  // Filter & Search Logic
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter((product) => {
-      // 1. Category Filter
+      // 1. Department Category Filter
       if (filters.category && filters.category.toLowerCase() !== 'all') {
-        const selectedCat = filters.category.toLowerCase();
-        const prodCatSlug = (product.categorySlug || product.category || '').toLowerCase();
-        if (prodCatSlug !== selectedCat && !prodCatSlug.includes(selectedCat)) {
-          return false;
-        }
+        const catSlug = (product.categorySlug || product.category || '').toLowerCase();
+        if (catSlug !== filters.category.toLowerCase()) return false;
       }
 
       // 2. Subcategory Filter
-      if (filters.subcategory && filters.subcategory.trim()) {
-        const sub = filters.subcategory.toLowerCase();
-        const prodSub = (product.subcategory || '').toLowerCase();
-        if (prodSub !== sub && !prodSub.includes(sub)) {
+      if (filters.subcategory) {
+        const productSub = (product.subcategory || '').toLowerCase();
+        if (!productSub.includes(filters.subcategory.toLowerCase())) return false;
+      }
+
+      // 3. Search Query
+      if (filters.searchQuery) {
+        const q = filters.searchQuery.toLowerCase();
+        const matchesName = product.name.toLowerCase().includes(q);
+        const matchesCat = (product.category || '').toLowerCase().includes(q);
+        const matchesSub = (product.subcategory || '').toLowerCase().includes(q);
+        const matchesBrand = (product.brand || '').toLowerCase().includes(q);
+        const matchesDesc = (product.description || '').toLowerCase().includes(q);
+        if (!matchesName && !matchesCat && !matchesSub && !matchesBrand && !matchesDesc) {
           return false;
         }
       }
 
-      // 3. Search Query Filter
-      if (filters.searchQuery && filters.searchQuery.trim()) {
-        const q = filters.searchQuery.toLowerCase().trim();
-        const inName = product.name.toLowerCase().includes(q);
-        const inBrand = product.brand?.toLowerCase().includes(q) || false;
-        const inCat = product.category.toLowerCase().includes(q);
-        const inSubcat = product.subcategory?.toLowerCase().includes(q) || false;
-        const inDesc = product.description?.toLowerCase().includes(q) || false;
-        const inTags = product.tags?.some((t) => t.toLowerCase().includes(q)) || false;
-
-        if (!inName && !inBrand && !inCat && !inSubcat && !inDesc && !inTags) {
-          return false;
-        }
-      }
-
-      // 4. Size Filter (Fashion / Furniture)
-      if (filters.sizes?.length > 0) {
-        const hasSize = product.sizes?.some((s) =>
-          filters.sizes.some((fs) => s.toLowerCase().includes(fs.toLowerCase()))
-        );
+      // 4. Sizes Filter
+      if (filters.sizes && filters.sizes.length > 0) {
+        const hasSize = product.sizes && product.sizes.some((s) => filters.sizes.includes(s));
         if (!hasSize) return false;
       }
 
-      // 5. Color Filter
-      if (filters.colors?.length > 0) {
-        const hasColor = product.colors?.some((c) =>
-          filters.colors.some((fc) => c.toLowerCase().includes(fc.toLowerCase()))
-        );
+      // 5. Colors Filter
+      if (filters.colors && filters.colors.length > 0) {
+        const hasColor = product.colors && product.colors.some((c) => filters.colors.includes(c));
         if (!hasColor) return false;
       }
 
-      // 6. Material Filter (Fashion / Furniture)
-      if (filters.materials?.length > 0) {
-        const hasMat = filters.materials.some((m) =>
-          (product.material || '').toLowerCase().includes(m.toLowerCase())
-        );
-        if (!hasMat) return false;
-      }
-
-      // 7. Room Type (Furniture)
-      if (filters.roomTypes?.length > 0) {
-        const hasRoom = filters.roomTypes.some((r) =>
-          (product.roomType || product.subcategory || '').toLowerCase().includes(r.toLowerCase())
-        );
-        if (!hasRoom) return false;
-      }
-
-      // 8. Brand Filter (Electronics / Cosmetics / Medicines)
-      if (filters.brands?.length > 0) {
-        const hasBrand = filters.brands.some((b) =>
-          (product.brand || '').toLowerCase().includes(b.toLowerCase())
-        );
-        if (!hasBrand) return false;
-      }
-
-      // 9. RAM (Electronics)
-      if (filters.rams?.length > 0) {
-        const hasRam = filters.rams.some((ram) =>
-          (product.ram || '').toLowerCase().includes(ram.toLowerCase())
-        );
-        if (!hasRam) return false;
-      }
-
-      // 10. Storage (Electronics)
-      if (filters.storages?.length > 0) {
-        const hasStorage = filters.storages.some((st) =>
-          (product.storage || '').toLowerCase().includes(st.toLowerCase()) ||
-          product.sizes?.some((s) => s.toLowerCase().includes(st.toLowerCase()))
-        );
-        if (!hasStorage) return false;
-      }
-
-      // 11. Form (Medicines)
-      if (filters.forms?.length > 0) {
-        const hasForm = filters.forms.some((f) =>
-          (product.form || '').toLowerCase().includes(f.toLowerCase())
-        );
-        if (!hasForm) return false;
-      }
-
-      // 12. Prescription Status (Medicines)
-      if (filters.prescriptionRequired !== undefined && filters.prescriptionRequired !== 'all') {
-        if (Boolean(product.prescriptionRequired) !== Boolean(filters.prescriptionRequired)) {
-          return false;
-        }
-      }
-
-      // 13. Skin Type (Cosmetics)
-      if (filters.skinTypes?.length > 0) {
-        const hasSkin = filters.skinTypes.some((st) =>
-          (product.skinType || '').toLowerCase().includes(st.toLowerCase()) ||
-          (product.skinType || '').toLowerCase().includes('all skin')
-        );
-        if (!hasSkin) return false;
-      }
-
-      // 14. Finish (Cosmetics)
-      if (filters.finishes?.length > 0) {
-        const hasFin = filters.finishes.some((fin) =>
-          (product.finish || '').toLowerCase().includes(fin.toLowerCase())
-        );
-        if (!hasFin) return false;
-      }
-
-      // 15. Price Range Filter
+      // 6. Price Range
       if (filters.priceRange && filters.priceRange !== 'all') {
         if (filters.priceRange === 'under-2000' && product.price >= 2000) return false;
         if (filters.priceRange === '2000-5000' && (product.price < 2000 || product.price > 5000)) return false;
@@ -254,31 +149,21 @@ export const Shop = ({ categoryName }) => {
         if (filters.priceRange === 'above-20000' && product.price <= 20000) return false;
       }
 
-      // 16. Availability Filter
-      if (filters.availability && filters.availability !== 'all') {
-        if (filters.availability === 'in-stock' && product.stock <= 0) return false;
-        if (filters.availability === 'out-of-stock' && product.stock > 0) return false;
+      // 7. Prescription Filter
+      if (filters.prescriptionRequired !== 'all') {
+        const req = filters.prescriptionRequired === 'yes';
+        if (Boolean(product.prescriptionRequired) !== req) return false;
       }
 
       return true;
     }).sort((a, b) => {
-      switch (filters.sortBy) {
-        case 'newest':
-          return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
-        case 'price-asc':
-          return a.price - b.price;
-        case 'price-desc':
-          return b.price - a.price;
-        case 'name-asc':
-          return a.name.localeCompare(b.name);
-        case 'name-desc':
-          return b.name.localeCompare(a.name);
-        case 'rating':
-          return (b.rating || 0) - (a.rating || 0);
-        case 'featured':
-        default:
-          return (b.isFeatured ? 1 : 0) - (a.isFeatured ? 1 : 0);
-      }
+      // Sort logic
+      if (filters.sortBy === 'newest') return (b.isNew ? 1 : 0) - (a.isNew ? 1 : 0);
+      if (filters.sortBy === 'price-asc') return a.price - b.price;
+      if (filters.sortBy === 'price-desc') return b.price - a.price;
+      if (filters.sortBy === 'name-asc') return a.name.localeCompare(b.name);
+      if (filters.sortBy === 'name-desc') return b.name.localeCompare(a.name);
+      return 0; // featured
     });
   }, [filters]);
 
@@ -286,23 +171,37 @@ export const Shop = ({ categoryName }) => {
   const hasMore = visibleCount < filteredProducts.length;
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => Math.min(prev + PAGE_INCREMENT, filteredProducts.length));
+    setVisibleCount((prev) => prev + PAGE_INCREMENT);
   };
 
-  return (
-    <main className="w-full bg-[#F7F3EA] text-[#101820] min-h-screen">
-      {/* 1. SHOP HERO & BREADCRUMB */}
-      <ShopHero categoryTitle={filters.category === 'all' ? 'All Products' : filters.category} />
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (filters.category && filters.category !== 'all') count += 1;
+    if (filters.subcategory) count += 1;
+    if (filters.sizes?.length) count += filters.sizes.length;
+    if (filters.colors?.length) count += filters.colors.length;
+    if (filters.priceRange !== 'all') count += 1;
+    if (filters.prescriptionRequired !== 'all') count += 1;
+    if (filters.searchQuery) count += 1;
+    return count;
+  }, [filters]);
 
-      {/* 2. CATEGORY NAVIGATION TABS */}
+  return (
+    <main className={`w-full min-h-screen overflow-x-hidden transition-colors duration-250 ${
+      isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+    }`}>
+      {/* 1. SHOP HERO BANNER */}
+      <ShopHero categoryTitle={filters.category} />
+
+      {/* 2. CATEGORY QUICK SWITCHER TABS */}
       <CategoryNavTabs
         activeCategory={filters.category}
         onSelectCategory={(cat) => handleFilterChange({ category: cat, subcategory: '' })}
       />
 
       {/* 3. MAIN PRODUCT DISCOVERY VIEW */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 py-10 sm:py-14">
-        {/* Search Bar & Subcategory pill if active */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-10 sm:py-14">
+        {/* Search Bar & Subcategory pill */}
         <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="max-w-md w-full">
             <SearchBar
@@ -314,13 +213,15 @@ export const Shop = ({ categoryName }) => {
 
           {filters.subcategory && (
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-[#A9B0B5]">Subcategory:</span>
-              <span className="bg-[#101820] text-[#F7F3EA] px-3 py-1 font-medium rounded-none flex items-center gap-1.5">
+              <span className={isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'}>Subcategory:</span>
+              <span className={`px-3 py-1 font-medium flex items-center gap-1.5 ${
+                isDark ? 'bg-white/10 text-white' : 'bg-[#101820] text-white'
+              }`}>
                 {filters.subcategory}
                 <button
                   type="button"
                   onClick={() => handleFilterChange({ subcategory: '' })}
-                  className="hover:text-[#C9A45C] ml-1"
+                  className="hover:text-[#C9A45C] ml-1 cursor-pointer"
                 >
                   ✕
                 </button>
@@ -352,7 +253,7 @@ export const Shop = ({ categoryName }) => {
           {/* Product Grid Viewport */}
           <div className="flex-grow">
             {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                 {Array.from({ length: 6 }).map((_, idx) => (
                   <ProductSkeleton key={idx} />
                 ))}
@@ -369,15 +270,15 @@ export const Shop = ({ categoryName }) => {
                 </div>
 
                 {/* Progressive Pagination / Load More */}
-                <div className="mt-14 pt-8 border-t border-black/10 flex flex-col items-center justify-center gap-4">
-                  {/* Progress Indicator */}
-                  <div className="text-xs text-[#A9B0B5] font-light">
-                    Showing <span className="text-[#101820] font-semibold">{visibleProducts.length}</span> of{' '}
-                    <span className="text-[#101820] font-semibold">{filteredProducts.length}</span> items
+                <div className="mt-14 pt-8 border-t border-black/10 dark:border-white/10 flex flex-col items-center justify-center gap-4">
+                  <div className={`text-xs font-light ${
+                    isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+                  }`}>
+                    Showing <span className={`font-semibold ${isDark ? 'text-white' : 'text-[#101820]'}`}>{visibleProducts.length}</span> of{' '}
+                    <span className={`font-semibold ${isDark ? 'text-white' : 'text-[#101820]'}`}>{filteredProducts.length}</span> items
                   </div>
 
-                  {/* Progress Bar */}
-                  <div className="w-48 h-1 bg-black/10 overflow-hidden">
+                  <div className="w-48 h-1 bg-black/10 dark:bg-white/10 overflow-hidden">
                     <div
                       className="h-full bg-[#C9A45C] transition-all duration-300"
                       style={{
@@ -386,11 +287,14 @@ export const Shop = ({ categoryName }) => {
                     />
                   </div>
 
-                  {/* Load More Button */}
                   {hasMore && (
                     <button
                       onClick={handleLoadMore}
-                      className="btn-shine inline-flex items-center gap-2 px-8 py-3.5 bg-[#101820] hover:bg-[#C9A45C] text-[#F7F3EA] hover:text-[#101820] text-xs uppercase tracking-widest font-semibold transition-all duration-300 mt-2 shadow-sm cursor-pointer"
+                      className={`btn-shine inline-flex items-center gap-2 px-8 py-3.5 text-xs uppercase tracking-widest font-semibold transition-all duration-300 mt-2 shadow-sm cursor-pointer ${
+                        isDark
+                          ? 'bg-[#1B2630] hover:bg-[#C9A45C] text-white hover:text-[#101820]'
+                          : 'bg-[#101820] hover:bg-[#B08B43] text-white'
+                      }`}
                     >
                       <span>Load More Products</span>
                       <ChevronDown className="w-3.5 h-3.5" />

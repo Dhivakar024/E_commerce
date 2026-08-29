@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { useTheme } from '../../context/ThemeContext';
 import { Package, Layers, Clock, ShieldCheck } from 'lucide-react';
 
 const STATS = [
@@ -34,7 +35,7 @@ const STATS = [
 ];
 
 // Single Animated Counter Item
-const StatItem = ({ item, isVisible, index }) => {
+const StatItem = ({ item, isVisible, index, isDark }) => {
   const [count, setCount] = useState(0);
   const Icon = item.icon;
 
@@ -63,7 +64,11 @@ const StatItem = ({ item, isVisible, index }) => {
 
   return (
     <div
-      className="p-6 bg-[#101820] border border-white/10 space-y-3 relative overflow-hidden group hover:border-[#C9A45C]/60 transition-all duration-300 shadow-xl"
+      className={`p-6 border space-y-3 relative overflow-hidden group transition-all duration-300 shadow-xl ${
+        isDark
+          ? 'bg-[#101820] border-white/10 hover:border-[#C9A45C]/60 text-white'
+          : 'bg-white border-black/10 hover:border-[#B08B43]/60 text-[#101820]'
+      }`}
       style={{
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? 'translateY(0)' : 'translateY(28px)',
@@ -72,23 +77,31 @@ const StatItem = ({ item, isVisible, index }) => {
       }}
     >
       <div className="flex items-center justify-between">
-        <div className="w-10 h-10 rounded-none bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C] group-hover:bg-[#C9A45C] group-hover:text-[#101820] transition-colors">
+        <div className={`w-10 h-10 rounded-none border flex items-center justify-center transition-colors ${
+          isDark
+            ? 'bg-white/5 border-white/10 text-[#C9A45C] group-hover:bg-[#C9A45C] group-hover:text-[#101820]'
+            : 'bg-black/5 border-black/10 text-[#B08B43] group-hover:bg-[#B08B43] group-hover:text-white'
+        }`}>
           <Icon className="w-5 h-5" />
         </div>
-        <span className="text-[10px] uppercase tracking-widest text-[#A9B0B5] font-semibold">
+        <span className={`text-[10px] uppercase tracking-widest font-semibold ${
+          isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+        }`}>
           0{index + 1} Metric
         </span>
       </div>
 
       <div>
-        <div className="font-serif text-3xl sm:text-4xl text-white font-bold tracking-tight mb-1">
+        <div className="font-serif text-3xl sm:text-4xl font-bold tracking-tight mb-1">
           {count}
           <span className="text-[#C9A45C]">{item.suffix}</span>
         </div>
-        <h4 className="font-serif text-sm text-white font-medium mb-1">
+        <h4 className="font-serif text-sm font-medium mb-1">
           {item.label}
         </h4>
-        <p className="text-[11px] text-[#A9B0B5] font-light leading-relaxed">
+        <p className={`text-[11px] font-light leading-relaxed ${
+          isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+        }`}>
           {item.subtext}
         </p>
       </div>
@@ -98,16 +111,21 @@ const StatItem = ({ item, isVisible, index }) => {
 
 export const MarketplaceStats = () => {
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.15 });
+  const { isDark } = useTheme();
 
   return (
     <section
       ref={sectionRef}
-      className="py-16 sm:py-24 bg-[#1B2630]/40 border-y border-white/5 relative z-10 overflow-hidden"
+      className={`py-16 sm:py-24 border-y relative z-10 overflow-hidden transition-colors duration-250 ${
+        isDark
+          ? 'bg-[#1B2630]/40 border-white/5'
+          : 'bg-[#F2EFE9]/70 border-black/5'
+      }`}
     >
       {/* Subtle floating background accent */}
       <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         <div
           className="text-center max-w-2xl mx-auto mb-12 transition-all duration-700 ease-out"
           style={{
@@ -118,7 +136,9 @@ export const MarketplaceStats = () => {
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
             MARKETPLACE AT A GLANCE
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl text-white font-normal">
+          <h2 className={`font-serif text-2xl sm:text-3xl md:text-4xl font-normal ${
+            isDark ? 'text-white' : 'text-[#101820]'
+          }`}>
             Everyday Shopping, Reimagined
           </h2>
         </div>
@@ -131,6 +151,7 @@ export const MarketplaceStats = () => {
               item={item}
               index={idx}
               isVisible={isVisible}
+              isDark={isDark}
             />
           ))}
         </div>

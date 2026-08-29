@@ -16,6 +16,7 @@ import { CATEGORIES } from '../data/categories';
 import { NewsletterSection } from '../components/home/NewsletterSection';
 import { MagneticButton } from '../components/common/MagneticButton';
 import { useScrollReveal } from '../hooks/useScrollReveal';
+import { useTheme } from '../context/ThemeContext';
 
 const CATEGORY_ICONS = {
   fashion: Shirt,
@@ -82,6 +83,7 @@ const WHY_LAX360 = [
 ];
 
 export const About = () => {
+  const { isDark } = useTheme();
   const [heroRef, isHeroVisible] = useScrollReveal({ threshold: 0.1 });
   const [missionRef, isMissionVisible] = useScrollReveal({ threshold: 0.1 });
   const [offerRef, isOfferVisible] = useScrollReveal({ threshold: 0.1 });
@@ -89,8 +91,10 @@ export const About = () => {
   const [storyRef, isStoryVisible] = useScrollReveal({ threshold: 0.1 });
 
   return (
-    <main className="w-full bg-[#101820] text-[#F7F3EA] min-h-screen pt-28 sm:pt-32 pb-24 overflow-x-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 space-y-20">
+    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 overflow-x-hidden transition-colors duration-250 ${
+      isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+    }`}>
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-20">
         {/* 1. Hero Section */}
         <div
           ref={heroRef}
@@ -103,16 +107,20 @@ export const About = () => {
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             ABOUT LAX360 PVT LTD
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-normal leading-tight">
+          <h1 className={`font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal leading-tight ${
+            isDark ? 'text-white' : 'text-[#101820]'
+          }`}>
             One Marketplace. Everything You Need.
           </h1>
-          <p className="text-sm sm:text-base text-[#A9B0B5] font-light leading-relaxed max-w-2xl mx-auto">
+          <p className={`text-sm sm:text-base font-light leading-relaxed max-w-2xl mx-auto ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+          }`}>
             LAX360 PVT LTD is a modern multi-category e-commerce platform bringing everyday products together in one convenient shopping destination.
           </p>
         </div>
 
         {/* 2. Panoramic Marketplace Banner */}
-        <div className="relative h-[340px] sm:h-[440px] overflow-hidden border border-white/10 shadow-2xl">
+        <div className="relative h-[340px] sm:h-[440px] overflow-hidden border border-black/10 dark:border-white/10 shadow-2xl">
           <img
             src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=1600&q=80"
             alt="LAX360 Multi-Category Marketplace"
@@ -132,7 +140,9 @@ export const About = () => {
         {/* 3. OUR MISSION */}
         <div
           ref={missionRef}
-          className="p-8 sm:p-12 bg-[#1B2630] border border-white/10 shadow-xl text-center max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out"
+          className={`p-8 sm:p-12 border shadow-xl text-center max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out ${
+            isDark ? 'bg-[#1B2630] border-white/10 text-white' : 'bg-white border-black/10 text-[#101820]'
+          }`}
           style={{
             opacity: isMissionVisible ? 1 : 0,
             transform: isMissionVisible ? 'translateY(0)' : 'translateY(24px)',
@@ -141,10 +151,12 @@ export const About = () => {
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             OUR MISSION
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl text-white font-normal">
+          <h2 className="font-serif text-2xl sm:text-3xl font-normal">
             "To make everyday shopping simpler by bringing multiple product categories together on one convenient digital marketplace."
           </h2>
-          <p className="text-xs sm:text-sm text-[#A9B0B5] font-light leading-relaxed max-w-2xl mx-auto">
+          <p className={`text-xs sm:text-sm font-light leading-relaxed max-w-2xl mx-auto ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+          }`}>
             We eliminate the need to switch between fragmented specialty stores. By consolidating certified electronics, architectural furniture, daily wellness essentials, clean cosmetics, and versatile fashion, LAX360 provides a frictionless unified shopping journey.
           </p>
         </div>
@@ -161,7 +173,9 @@ export const About = () => {
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               CORE CATEGORIES
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+            <h2 className={`font-serif text-3xl sm:text-4xl font-normal ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
               What We Offer
             </h2>
           </div>
@@ -173,7 +187,11 @@ export const About = () => {
                 <Link
                   key={item.category}
                   to={`/category/${item.slug}`}
-                  className="p-6 bg-[#1B2630] border border-white/10 hover:border-[#C9A45C] transition-all duration-300 flex flex-col justify-between space-y-4 group shadow-xl hover:-translate-y-1"
+                  className={`p-6 border transition-all duration-300 flex flex-col justify-between space-y-4 group shadow-xl hover:-translate-y-1 ${
+                    isDark
+                      ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C] text-white'
+                      : 'bg-white border-black/10 hover:border-[#B08B43] text-[#101820]'
+                  }`}
                   style={{
                     opacity: isOfferVisible ? 1 : 0,
                     transform: isOfferVisible ? 'translateY(0)' : 'translateY(28px)',
@@ -181,20 +199,30 @@ export const About = () => {
                     transitionDelay: `${idx * 80}ms`,
                   }}
                 >
-                  <div className="w-12 h-12 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C] group-hover:bg-[#C9A45C] group-hover:text-[#101820] transition-colors">
+                  <div className={`w-12 h-12 border flex items-center justify-center text-[#C9A45C] transition-colors ${
+                    isDark
+                      ? 'bg-white/5 border-white/10 group-hover:bg-[#C9A45C] group-hover:text-[#101820]'
+                      : 'bg-black/5 border-black/10 group-hover:bg-[#B08B43] group-hover:text-white'
+                  }`}>
                     <Icon className="w-6 h-6" />
                   </div>
 
                   <div>
-                    <h3 className="font-serif text-lg text-white font-medium mb-1.5 group-hover:text-[#C9A45C] transition-colors">
+                    <h3 className={`font-serif text-lg font-medium mb-1.5 transition-colors ${
+                      isDark ? 'text-white group-hover:text-[#C9A45C]' : 'text-[#101820] group-hover:text-[#B08B43]'
+                    }`}>
                       {item.category}
                     </h3>
-                    <p className="text-xs text-[#A9B0B5] font-light leading-relaxed">
+                    <p className={`text-xs font-light leading-relaxed ${
+                      isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+                    }`}>
                       {item.description}
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-white/5 flex items-center justify-between text-xs uppercase tracking-widest text-[#C9A45C] font-semibold">
+                  <div className={`pt-3 border-t flex items-center justify-between text-xs uppercase tracking-widest font-semibold ${
+                    isDark ? 'border-white/5 text-[#C9A45C]' : 'border-black/5 text-[#B08B43]'
+                  }`}>
                     <span>Explore</span>
                     <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -205,7 +233,7 @@ export const About = () => {
         </div>
 
         {/* 5. WHY LAX360? */}
-        <div ref={whyRef} className="space-y-8 pt-6 border-t border-white/10">
+        <div ref={whyRef} className="space-y-8 pt-6 border-t border-black/10 dark:border-white/10">
           <div
             className="text-center max-w-2xl mx-auto transition-all duration-700 ease-out"
             style={{
@@ -216,7 +244,9 @@ export const About = () => {
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               ADVANTAGES
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+            <h2 className={`font-serif text-3xl sm:text-4xl font-normal ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
               Why LAX360?
             </h2>
           </div>
@@ -227,7 +257,11 @@ export const About = () => {
               return (
                 <div
                   key={idx}
-                  className="p-6 bg-[#1B2630] border border-white/10 space-y-4 shadow-xl hover:border-[#C9A45C]/60 hover:-translate-y-1 transition-all duration-300"
+                  className={`p-6 border space-y-4 shadow-xl hover:-translate-y-1 transition-all duration-300 ${
+                    isDark
+                      ? 'bg-[#1B2630] border-white/10 text-white hover:border-[#C9A45C]/60'
+                      : 'bg-white border-black/10 text-[#101820] hover:border-[#B08B43]/60'
+                  }`}
                   style={{
                     opacity: isWhyVisible ? 1 : 0,
                     transform: isWhyVisible ? 'translateY(0)' : 'translateY(28px)',
@@ -235,11 +269,15 @@ export const About = () => {
                     transitionDelay: `${idx * 90}ms`,
                   }}
                 >
-                  <div className="w-10 h-10 bg-white/5 border border-white/10 flex items-center justify-center text-[#C9A45C]">
+                  <div className={`w-10 h-10 border flex items-center justify-center text-[#C9A45C] ${
+                    isDark ? 'bg-white/5 border-white/10' : 'bg-black/5 border-black/10'
+                  }`}>
                     <Icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-serif text-lg text-white font-medium">{prop.title}</h3>
-                  <p className="text-xs text-[#A9B0B5] font-light leading-relaxed">
+                  <h3 className="font-serif text-lg font-medium">{prop.title}</h3>
+                  <p className={`text-xs font-light leading-relaxed ${
+                    isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+                  }`}>
                     {prop.description}
                   </p>
                 </div>
@@ -251,7 +289,9 @@ export const About = () => {
         {/* 6. FORWARD-LOOKING BRAND STORY */}
         <div
           ref={storyRef}
-          className="p-8 sm:p-12 bg-[#1B2630]/60 border border-white/10 max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out"
+          className={`p-8 sm:p-12 border max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out ${
+            isDark ? 'bg-[#1B2630]/60 border-white/10 text-white' : 'bg-white border-black/10 text-[#101820]'
+          }`}
           style={{
             opacity: isStoryVisible ? 1 : 0,
             transform: isStoryVisible ? 'translateY(0)' : 'translateY(24px)',
@@ -260,10 +300,12 @@ export const About = () => {
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             OUR STORY
           </span>
-          <h2 className="font-serif text-2xl sm:text-3xl text-white font-normal">
+          <h2 className="font-serif text-2xl sm:text-3xl font-normal">
             Building The Future of Everyday Commerce
           </h2>
-          <div className="space-y-3 text-sm text-[#A9B0B5] font-light leading-relaxed">
+          <div className={`space-y-3 text-sm font-light leading-relaxed ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+          }`}>
             <p>
               LAX360 PVT LTD is built around a simple idea: shopping should be convenient, diverse and accessible from one place.
             </p>
@@ -274,12 +316,14 @@ export const About = () => {
         </div>
 
         {/* 7. EXPLORE OUR CATEGORIES GRID */}
-        <div className="space-y-8 pt-6 border-t border-white/10">
+        <div className="space-y-8 pt-6 border-t border-black/10 dark:border-white/10">
           <div className="text-center max-w-2xl mx-auto">
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               DISCOVER
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+            <h2 className={`font-serif text-3xl sm:text-4xl font-normal ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
               Explore Our Categories
             </h2>
           </div>
@@ -291,7 +335,7 @@ export const About = () => {
                 <Link
                   key={cat.id}
                   to={`/category/${cat.slug}`}
-                  className="group relative overflow-hidden bg-[#1B2630] border border-white/10 hover:border-[#C9A45C] transition-all shadow-xl"
+                  className="group relative overflow-hidden border border-black/10 dark:border-white/10 hover:border-[#C9A45C] transition-all shadow-xl"
                 >
                   <div className="relative aspect-[3/4] overflow-hidden bg-neutral-900">
                     <img
@@ -299,13 +343,13 @@ export const About = () => {
                       alt={cat.name}
                       className="w-full h-full object-cover group-hover:scale-108 transition-transform duration-700 filter brightness-85"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     <div className="absolute bottom-4 left-4 right-4">
                       <div className="flex items-center gap-1.5 text-[#C9A45C] text-xs font-semibold uppercase mb-1">
                         <Icon className="w-3.5 h-3.5" />
                         <span>{cat.name}</span>
                       </div>
-                      <span className="text-[11px] text-[#A9B0B5]">Explore Store →</span>
+                      <span className="text-[11px] text-white/80">Explore Store →</span>
                     </div>
                   </div>
                 </Link>
@@ -316,7 +360,9 @@ export const About = () => {
 
         {/* CTA to Shop */}
         <div className="text-center py-8 space-y-6">
-          <h2 className="font-serif text-3xl sm:text-4xl text-white font-normal">
+          <h2 className={`font-serif text-3xl sm:text-4xl font-normal ${
+            isDark ? 'text-white' : 'text-[#101820]'
+          }`}>
             Ready to Start Shopping?
           </h2>
           <MagneticButton

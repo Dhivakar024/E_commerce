@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, ChevronLeft, ChevronRight, Shirt, Armchair, Smartphone, Pill, Sparkles } from 'lucide-react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { useTheme } from '../../context/ThemeContext';
 
 const MARKETPLACE_CATEGORIES = [
   {
@@ -52,7 +53,7 @@ const MARKETPLACE_CATEGORIES = [
 ];
 
 // Single 3D Interactive Category Card with Clamped Tilt
-const CategoryCard3D = ({ cat, index }) => {
+const CategoryCard3D = ({ cat, index, isDark }) => {
   const cardRef = useRef(null);
   const [tilt, setTilt] = useState({ rotateX: 0, rotateY: 0, scale: 1 });
   const IconComponent = cat.icon;
@@ -96,7 +97,11 @@ const CategoryCard3D = ({ cat, index }) => {
               ? 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease'
               : 'transform 0.12s ease-out, box-shadow 0.12s ease-out',
         }}
-        className="group relative flex flex-col h-full overflow-hidden bg-[#1B2630] border border-white/10 hover:border-[#C9A45C] rounded-none shadow-xl hover:shadow-2xl hover:shadow-black/70 preserve-3d block select-none"
+        className={`group relative flex flex-col h-full overflow-hidden rounded-none shadow-xl hover:shadow-2xl preserve-3d block select-none border transition-all ${
+          isDark
+            ? 'bg-[#1B2630] border-white/10 hover:border-[#C9A45C] hover:shadow-black/70'
+            : 'bg-white border-black/10 hover:border-[#B08B43] hover:shadow-black/15'
+        }`}
       >
         {/* Visual Image Area */}
         <div className="relative aspect-[4/5] overflow-hidden bg-neutral-900 flex-shrink-0">
@@ -109,7 +114,7 @@ const CategoryCard3D = ({ cat, index }) => {
           />
 
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#101820] via-[#101820]/40 to-transparent opacity-90 group-hover:opacity-75 transition-opacity duration-500" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-85 group-hover:opacity-70 transition-opacity duration-500" />
 
           {/* 3D Category Icon Tag */}
           <div className="absolute top-3.5 left-3.5 flex items-center gap-1.5 px-2.5 py-1 bg-black/60 backdrop-blur-md border border-white/15 text-[10px] uppercase tracking-widest text-[#C9A45C] font-semibold transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:scale-105">
@@ -117,26 +122,40 @@ const CategoryCard3D = ({ cat, index }) => {
             <span>0{index + 1}</span>
           </div>
 
-          <div className="absolute top-3.5 right-3.5 px-2 py-0.5 bg-black/50 backdrop-blur-md text-[9px] uppercase tracking-wider text-[#A9B0B5]">
+          <div className="absolute top-3.5 right-3.5 px-2 py-0.5 bg-black/50 backdrop-blur-md text-[9px] uppercase tracking-wider text-white/80">
             {cat.itemCount}
           </div>
         </div>
 
         {/* Card Content */}
-        <div className="p-5 flex flex-col justify-between flex-grow bg-[#1B2630] border-t border-white/5 space-y-3">
+        <div className={`p-5 flex flex-col justify-between flex-grow border-t space-y-3 ${
+          isDark
+            ? 'bg-[#1B2630] border-white/5 text-white'
+            : 'bg-white border-black/5 text-[#101820]'
+        }`}>
           <div>
-            <h3 className="font-serif text-xl text-white font-medium mb-1.5 group-hover:text-[#C9A45C] transition-colors">
+            <h3 className={`font-serif text-xl font-medium mb-1.5 transition-colors ${
+              isDark
+                ? 'text-white group-hover:text-[#C9A45C]'
+                : 'text-[#101820] group-hover:text-[#B08B43]'
+            }`}>
               {cat.name}
             </h3>
-            <p className="text-xs text-[#A9B0B5] leading-relaxed font-light line-clamp-2">
+            <p className={`text-xs leading-relaxed font-light line-clamp-2 ${
+              isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+            }`}>
               {cat.description}
             </p>
           </div>
 
           {/* Explore Link with Slide Micro-interaction */}
-          <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs tracking-widest uppercase text-[#C9A45C] font-semibold">
+          <div className={`pt-3 border-t flex items-center justify-between text-xs tracking-widest uppercase font-semibold ${
+            isDark
+              ? 'border-white/10 text-[#C9A45C]'
+              : 'border-black/5 text-[#B08B43]'
+          }`}>
             <span>Explore</span>
-            <ArrowUpRight className="w-4 h-4 text-[#C9A45C] transition-transform duration-300 group-hover:translate-x-1.5 group-hover:-translate-y-1" />
+            <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1.5 group-hover:-translate-y-1" />
           </div>
         </div>
       </Link>
@@ -153,6 +172,7 @@ export const ShopByCategory = () => {
   const [startX, setStartX] = useState(0);
   const [dragOffset, setDragOffset] = useState(0);
 
+  const { isDark } = useTheme();
   const pauseTimeoutRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -267,16 +287,18 @@ export const ShopByCategory = () => {
     <section
       id="shop-by-category"
       ref={sectionRef}
-      className="py-20 sm:py-28 bg-[#101820] relative z-10 overflow-hidden select-none"
+      className={`py-20 sm:py-28 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
+        isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
+      }`}
     >
       {/* Floating decorative backdrop elements */}
       <div className="absolute top-10 left-8 w-32 h-32 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
       <div className="absolute bottom-10 right-8 w-40 h-40 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-reverse" />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Section Header with Carousel Controls */}
         <div
-          className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 border-b border-white/10 pb-6 transition-all duration-700 ease-out"
+          className="flex flex-col md:flex-row md:items-end justify-between mb-10 sm:mb-12 border-b border-black/10 dark:border-white/10 pb-6 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
@@ -286,10 +308,14 @@ export const ShopByCategory = () => {
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               SHOP BY CATEGORY
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-[#F7F3EA] mb-2">
+            <h2 className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal mb-2 ${
+              isDark ? 'text-[#F7F3EA]' : 'text-[#101820]'
+            }`}>
               Explore All Categories
             </h2>
-            <p className="text-xs sm:text-sm text-[#A9B0B5] font-light leading-relaxed">
+            <p className={`text-xs sm:text-sm font-light leading-relaxed ${
+              isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+            }`}>
               Browse across fashion, furniture, electronics, medicines and cosmetics from LAX360 PVT LTD.
             </p>
           </div>
@@ -303,7 +329,11 @@ export const ShopByCategory = () => {
                   triggerTemporaryPause();
                   handlePrev();
                 }}
-                className="w-10 h-10 rounded-none border border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95"
+                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                  isDark
+                    ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
+                    : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
+                }`}
                 aria-label="Previous categories"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -314,7 +344,11 @@ export const ShopByCategory = () => {
                   triggerTemporaryPause();
                   handleNext();
                 }}
-                className="w-10 h-10 rounded-none border border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95"
+                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                  isDark
+                    ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
+                    : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
+                }`}
                 aria-label="Next categories"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -355,7 +389,7 @@ export const ShopByCategory = () => {
                 key={cat.id}
                 style={{ width: `${slideWidthPercent}%`, flexShrink: 0 }}
               >
-                <CategoryCard3D cat={cat} index={index} />
+                <CategoryCard3D cat={cat} index={index} isDark={isDark} />
               </div>
             ))}
           </div>
@@ -374,7 +408,7 @@ export const ShopByCategory = () => {
               className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
                 currentIndex === idx
                   ? 'w-7 bg-[#C9A45C]'
-                  : 'w-2 bg-white/20 hover:bg-white/40'
+                  : isDark ? 'w-2 bg-white/20 hover:bg-white/40' : 'w-2 bg-black/20 hover:bg-black/40'
               }`}
               aria-label={`Go to category slide ${idx + 1}`}
             />

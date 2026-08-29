@@ -4,6 +4,7 @@ import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { PRODUCTS } from '../../data/products';
 import { ProductCard } from '../common/ProductCard';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { useTheme } from '../../context/ThemeContext';
 
 const QUICK_FILTER_TABS = [
   { label: 'ALL', slug: 'all' },
@@ -24,6 +25,7 @@ export const TrendingNow = () => {
   const [dragOffset, setDragOffset] = useState(0);
 
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.1 });
+  const { isDark } = useTheme();
   const pauseTimeoutRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -59,7 +61,7 @@ export const TrendingNow = () => {
       } else if (width >= 640) {
         setItemsVisible(2); // Tablet: 2 cards
       } else {
-        setItemsVisible(1); // Mobile: 1 card with peek
+        setItemsVisible(1); // Mobile: 1 card
       }
     };
 
@@ -165,12 +167,14 @@ export const TrendingNow = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-20 sm:py-28 bg-[#101820] relative z-10 overflow-hidden select-none"
+      className={`py-20 sm:py-28 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
+        isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
+      }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header with Carousel Controls */}
         <div
-          className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-white/10 pb-6 transition-all duration-700 ease-out"
+          className="flex flex-col md:flex-row md:items-end justify-between mb-8 border-b border-black/10 dark:border-white/10 pb-6 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
@@ -180,10 +184,14 @@ export const TrendingNow = () => {
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
               MARKETPLACE HIGHLIGHTS
             </span>
-            <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white mb-2">
+            <h2 className={`font-serif text-3xl sm:text-4xl md:text-5xl font-normal mb-2 ${
+              isDark ? 'text-white' : 'text-[#101820]'
+            }`}>
               Trending Now
             </h2>
-            <p className="text-xs sm:text-sm text-[#A9B0B5] font-light">
+            <p className={`text-xs sm:text-sm font-light ${
+              isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+            }`}>
               Top-rated selections across electronics, home furniture, fashion, health and cosmetics.
             </p>
           </div>
@@ -197,7 +205,11 @@ export const TrendingNow = () => {
                   triggerTemporaryPause();
                   handlePrev();
                 }}
-                className="w-10 h-10 rounded-none border border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95"
+                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                  isDark
+                    ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
+                    : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
+                }`}
                 aria-label="Previous trending products"
               >
                 <ChevronLeft className="w-5 h-5" />
@@ -208,7 +220,11 @@ export const TrendingNow = () => {
                   triggerTemporaryPause();
                   handleNext();
                 }}
-                className="w-10 h-10 rounded-none border border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA] flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95"
+                className={`w-10 h-10 rounded-none border flex items-center justify-center transition-all duration-200 cursor-pointer shadow-lg active:scale-95 ${
+                  isDark
+                    ? 'border-white/15 bg-[#1B2630] hover:bg-[#C9A45C] hover:text-[#101820] hover:border-[#C9A45C] text-[#F7F3EA]'
+                    : 'border-black/10 bg-white hover:bg-[#B08B43] hover:text-white hover:border-[#B08B43] text-[#101820]'
+                }`}
                 aria-label="Next trending products"
               >
                 <ChevronRight className="w-5 h-5" />
@@ -217,7 +233,7 @@ export const TrendingNow = () => {
 
             <Link
               to="/shop"
-              className="group hidden sm:inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#C9A45C] hover:text-white font-semibold transition-colors ml-2"
+              className="group hidden sm:inline-flex items-center gap-2 text-xs uppercase tracking-widest text-[#C9A45C] hover:text-[#B08B43] font-semibold transition-colors ml-2"
             >
               <span>View All</span>
               <ArrowUpRight className="w-4 h-4 text-[#C9A45C] transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
@@ -247,7 +263,9 @@ export const TrendingNow = () => {
                 className={`px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all whitespace-nowrap cursor-pointer ${
                   isActive
                     ? 'bg-[#C9A45C] text-[#101820] shadow-lg scale-105'
-                    : 'bg-white/5 text-[#A9B0B5] hover:text-white hover:bg-white/10 border border-white/10'
+                    : isDark
+                      ? 'bg-white/5 text-[#A9B0B5] hover:text-white hover:bg-white/10 border border-white/10'
+                      : 'bg-white text-[#4A5560] hover:text-[#101820] hover:bg-black/5 border border-black/10 shadow-xs'
                 }`}
               >
                 {tab.label}
@@ -310,7 +328,7 @@ export const TrendingNow = () => {
                 className={`h-2 transition-all duration-300 rounded-full cursor-pointer ${
                   currentIndex === idx
                     ? 'w-7 bg-[#C9A45C]'
-                    : 'w-2 bg-white/20 hover:bg-white/40'
+                    : isDark ? 'w-2 bg-white/20 hover:bg-white/40' : 'w-2 bg-black/20 hover:bg-black/40'
                 }`}
                 aria-label={`Go to product slide ${idx + 1}`}
               />

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useShop } from '../context/ShopContext';
+import { useTheme } from '../context/ThemeContext';
 import { PRODUCTS } from '../data/products';
 import { ProductCard } from '../components/common/ProductCard';
 import { NewsletterSection } from '../components/home/NewsletterSection';
@@ -29,6 +30,7 @@ export const Cart = () => {
     clearCart,
     cartCount,
   } = useShop();
+  const { isDark } = useTheme();
 
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [isClearModalOpen, setIsClearModalOpen] = useState(false);
@@ -48,8 +50,10 @@ export const Cart = () => {
   ).slice(0, 4);
 
   return (
-    <main className="w-full bg-[#F7F3EA] text-[#101820] min-h-screen pt-28 sm:pt-32 pb-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
+    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-20 transition-colors duration-250 ${
+      isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+    }`}>
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* 1. Header & Breadcrumbs */}
         <CartHeader itemCount={cartCount} />
 
@@ -65,7 +69,11 @@ export const Cart = () => {
               <ShippingInfoBanner subtotal={subtotal} />
 
               {/* Cart Items List */}
-              <div className="bg-white border border-black/10 p-4 sm:p-6 divide-y divide-black/10 shadow-sm">
+              <div className={`border p-4 sm:p-6 divide-y shadow-sm ${
+                isDark
+                  ? 'bg-[#1B2630] border-white/10 divide-white/10 text-white'
+                  : 'bg-white border-black/10 divide-black/10 text-[#101820]'
+              }`}>
                 {cart.map((item, idx) => {
                   const prodId = item.product?.id || item.id;
                   return (
@@ -99,90 +107,97 @@ export const Cart = () => {
                 })}
               </div>
 
-              {/* Cart Toolbar: Continue Shopping & Clear Cart */}
+              {/* Cart Actions Toolbar: Clear Cart & Continue Shopping */}
               <div className="flex items-center justify-between pt-2">
-                <Link
-                  to="/shop"
-                  className="text-xs uppercase tracking-widest text-[#101820] hover:text-[#C9A45C] font-semibold transition-colors flex items-center gap-1.5"
-                >
-                  <span>← Continue Shopping</span>
-                </Link>
-
                 <button
                   type="button"
                   onClick={() => setIsClearModalOpen(true)}
-                  className="text-xs uppercase tracking-wider text-[#A9B0B5] hover:text-rose-600 transition-colors cursor-pointer font-medium"
+                  className="text-xs uppercase tracking-wider text-rose-500 hover:text-rose-700 underline transition-colors cursor-pointer"
                 >
-                  Clear Cart
+                  Clear Bag
                 </button>
+                <Link
+                  to="/shop"
+                  className={`text-xs uppercase tracking-wider underline transition-colors font-medium ${
+                    isDark ? 'text-[#F7F3EA] hover:text-[#C9A45C]' : 'text-[#101820] hover:text-[#B08B43]'
+                  }`}
+                >
+                  ← Continue Shopping
+                </Link>
               </div>
 
-              {/* Coupon Box on Mobile/Tablet or Left Column */}
-              <div className="pt-4">
-                <CouponBox
-                  appliedCoupon={appliedCoupon}
-                  onApplyCoupon={(coupon) => setAppliedCoupon(coupon)}
-                  onRemoveCoupon={() => setAppliedCoupon(null)}
-                />
-              </div>
+              {/* Coupon Code Section */}
+              <CouponBox
+                subtotal={subtotal}
+                appliedCoupon={appliedCoupon}
+                onApplyCoupon={(c) => setAppliedCoupon(c)}
+                onRemoveCoupon={() => setAppliedCoupon(null)}
+              />
             </div>
 
-            {/* Right Column: Sticky Order Summary (4-5 Cols) */}
+            {/* Right Column: Sticky Order Summary & Trust Badges (4-5 Cols) */}
             <div className="lg:col-span-5 xl:col-span-4">
               <OrderSummaryCard
-                items={cart}
                 subtotal={subtotal}
                 discount={discount}
                 shipping={shipping}
                 tax={tax}
                 grandTotal={grandTotal}
                 appliedCoupon={appliedCoupon}
+                itemCount={cartCount}
               />
             </div>
           </div>
         )}
 
-        {/* 4. Recommended Products ("You May Also Like") */}
+        {/* 4. Cross-Sell / Recommended Marketplace Products */}
         {recommendedProducts.length > 0 && (
-          <section className="pt-16 border-t border-black/10 mb-20 animate-fade-in">
+          <div className="mt-20 pt-12 border-t border-black/10 dark:border-white/10">
             <div className="flex items-end justify-between mb-8">
               <div>
-                <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
-                  CURATED FOR YOU
+                <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-1 font-semibold">
+                  RECOMMENDED FOR YOU
                 </span>
-                <h3 className="font-serif text-2xl sm:text-3xl text-[#101820] font-normal">
+                <h2 className={`font-serif text-2xl sm:text-3xl font-normal ${
+                  isDark ? 'text-white' : 'text-[#101820]'
+                }`}>
                   You May Also Like
-                </h3>
+                </h2>
               </div>
               <Link
                 to="/shop"
-                className="text-xs uppercase tracking-widest text-[#C9A45C] hover:text-[#101820] transition-colors font-semibold"
+                className="text-xs uppercase tracking-widest text-[#C9A45C] hover:text-[#B08B43] font-semibold transition-colors hidden sm:block"
               >
-                View All
+                View Catalog →
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {recommendedProducts.map((p) => (
                 <ProductCard key={p.id} product={p} />
               ))}
             </div>
-          </section>
+          </div>
         )}
       </div>
 
-      {/* Mobile Sticky Checkout Bar */}
-      <MobileCheckoutBar grandTotal={grandTotal} items={cart} />
-
-      {/* Clear Cart Confirmation Modal */}
+      {/* Confirmation Modal to Clear Cart */}
       <ClearCartModal
         isOpen={isClearModalOpen}
         onClose={() => setIsClearModalOpen(false)}
-        onConfirm={clearCart}
+        onConfirm={() => {
+          clearCart();
+          setIsClearModalOpen(false);
+        }}
       />
 
-      {/* VIP Newsletter */}
-      <NewsletterSection />
+      {/* Mobile Sticky Checkout Bar */}
+      {cart.length > 0 && <MobileCheckoutBar grandTotal={grandTotal} />}
+
+      {/* Reusable VIP Newsletter */}
+      <div className="mt-16">
+        <NewsletterSection />
+      </div>
     </main>
   );
 };

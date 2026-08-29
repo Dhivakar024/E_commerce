@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Mail, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useScrollReveal } from '../../hooks/useScrollReveal';
+import { useTheme } from '../../context/ThemeContext';
 
 export const NewsletterSection = () => {
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [sectionRef, isVisible] = useScrollReveal({ threshold: 0.15 });
+  const { isDark } = useTheme();
 
   const validateEmail = (val) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -36,74 +38,97 @@ export const NewsletterSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="py-24 sm:py-32 bg-[#101820] relative z-10 overflow-hidden"
+      className={`py-16 sm:py-20 relative z-10 overflow-hidden transition-colors duration-250 ${
+        isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
+      }`}
     >
       {/* Floating decorative elements */}
-      <div className="absolute top-10 right-1/4 w-36 h-36 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
+      <div className="absolute top-8 right-1/4 w-32 h-32 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
+      <div className="absolute bottom-6 left-1/4 w-32 h-32 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-reverse" />
 
-      <div
-        className="max-w-3xl mx-auto px-6 sm:px-8 text-center transition-all duration-700 ease-out"
-        style={{
-          opacity: isVisible ? 1 : 0,
-          transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
-        }}
-      >
-        <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-3 font-semibold">
-          MARKETPLACE DISPATCH
-        </span>
-        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl font-normal text-white mb-4">
-          Stay in the Loop
-        </h2>
-        <p className="text-xs sm:text-sm text-[#A9B0B5] font-light max-w-md mx-auto mb-10 leading-relaxed">
-          Get updates on new products, exclusive offers and marketplace deals.
-        </p>
+      {/* Compact Editorial-Style Centered Card Container */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex justify-center">
+        <div
+          className={`w-full max-w-xl sm:max-w-2xl px-6 py-10 sm:px-10 sm:py-12 text-center rounded-none border shadow-2xl transition-all duration-700 ease-out relative ${
+            isDark
+              ? 'bg-[#1B2630] border-white/10 text-white'
+              : 'bg-white border-black/10 text-[#101820]'
+          }`}
+          style={{
+            opacity: isVisible ? 1 : 0,
+            transform: isVisible ? 'translateY(0)' : 'translateY(24px)',
+          }}
+        >
+          {/* Top Label */}
+          <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2.5 font-semibold">
+            MARKETPLACE DISPATCH
+          </span>
 
-        {status === 'success' ? (
-          <div className="inline-flex items-center gap-3 px-6 py-4 bg-white/5 border border-[#C9A45C]/40 text-[#F7F3EA] text-xs sm:text-sm tracking-wide animate-fade-in">
-            <CheckCircle2 className="w-5 h-5 text-[#C9A45C] flex-shrink-0" />
-            <span>Thank you for subscribing! You will receive our latest marketplace deals.</span>
-          </div>
-        ) : (
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto" noValidate>
-            <div className="flex flex-col sm:flex-row items-stretch gap-3">
-              <div className="relative flex-grow">
-                <Mail className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[#A9B0B5]" />
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (status === 'error') setStatus('idle');
-                  }}
-                  placeholder="Enter your email"
-                  className={`w-full bg-[#1B2630] border text-xs sm:text-sm text-white placeholder:text-[#A9B0B5]/60 pl-11 pr-4 py-3.5 focus:outline-none transition-colors ${
-                    status === 'error'
-                      ? 'border-rose-500 focus:border-rose-400'
-                      : 'border-white/15 focus:border-[#C9A45C]'
-                  }`}
-                  aria-label="Email address for newsletter"
-                />
-              </div>
-              <button
-                type="submit"
-                className="btn-shine px-8 py-3.5 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] font-semibold text-xs uppercase tracking-widest transition-colors flex items-center justify-center cursor-pointer flex-shrink-0"
-              >
-                SUBSCRIBE
-              </button>
+          {/* Heading */}
+          <h2 className="font-serif text-2xl sm:text-3xl md:text-4xl font-normal mb-3 leading-tight">
+            Stay in the Loop
+          </h2>
+
+          {/* Subtitle */}
+          <p className={`text-xs sm:text-sm font-light max-w-md mx-auto mb-8 leading-relaxed ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
+          }`}>
+            Get updates on new products, exclusive offers and marketplace deals.
+          </p>
+
+          {status === 'success' ? (
+            <div className="inline-flex items-center gap-3 px-5 py-3.5 bg-[#C9A45C]/10 border border-[#C9A45C]/40 text-xs sm:text-sm tracking-wide animate-fade-in">
+              <CheckCircle2 className="w-5 h-5 text-[#C9A45C] flex-shrink-0" />
+              <span>Thank you for subscribing! You will receive our latest marketplace deals.</span>
             </div>
-
-            {status === 'error' && (
-              <div className="flex items-center justify-center gap-1.5 mt-3 text-xs text-rose-400 text-left sm:text-center animate-fade-in">
-                <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
-                <span>{errorMessage}</span>
+          ) : (
+            <form onSubmit={handleSubmit} className="max-w-md mx-auto" noValidate>
+              <div className="flex flex-col sm:flex-row items-stretch gap-2.5">
+                <div className="relative flex-grow">
+                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A9B0B5]" />
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => {
+                      setEmail(e.target.value);
+                      if (status === 'error') setStatus('idle');
+                    }}
+                    placeholder="Enter your email"
+                    className={`w-full border text-xs sm:text-sm pl-10 pr-4 py-3 focus:outline-none transition-colors ${
+                      status === 'error'
+                        ? 'border-rose-500 focus:border-rose-400'
+                        : 'border-white/15 focus:border-[#C9A45C]'
+                    } ${
+                      isDark
+                        ? 'bg-[#101820] text-white placeholder:text-[#A9B0B5]/60'
+                        : 'bg-[#F8F6F0] text-[#101820] placeholder:text-[#4A5560]/60'
+                    }`}
+                    aria-label="Email address for newsletter"
+                  />
+                </div>
+                <button
+                  type="submit"
+                  className="btn-shine px-7 py-3 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] font-semibold text-xs uppercase tracking-widest transition-all flex items-center justify-center cursor-pointer flex-shrink-0 active:scale-95"
+                >
+                  SUBSCRIBE
+                </button>
               </div>
-            )}
-          </form>
-        )}
 
-        <p className="text-[10px] text-[#A9B0B5] mt-4 tracking-wider">
-          We respect your inbox. Unsubscribe anytime with one click.
-        </p>
+              {status === 'error' && (
+                <div className="flex items-center justify-center gap-1.5 mt-2.5 text-xs text-rose-400 animate-fade-in">
+                  <AlertCircle className="w-3.5 h-3.5 flex-shrink-0" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+            </form>
+          )}
+
+          <p className={`text-[10px] mt-4 tracking-wider ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+          }`}>
+            We respect your inbox. Unsubscribe anytime with one click.
+          </p>
+        </div>
       </div>
     </section>
   );

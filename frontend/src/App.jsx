@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ShopProvider } from './context/ShopContext';
+import { ThemeProvider } from './context/ThemeContext';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
@@ -61,16 +62,16 @@ const AppContent = () => {
   const isAdminRoute = pathname.startsWith('/admin');
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#101820] text-[#F7F3EA] selection:bg-[#C9A45C]/30 selection:text-white overflow-x-hidden">
+    <div className="flex flex-col min-h-screen bg-[var(--bg-page)] text-[var(--text-primary)] selection:bg-[#C9A45C]/30 selection:text-[var(--text-primary)] overflow-x-hidden transition-colors duration-200">
       <ScrollToTop />
 
       {/* Global Floating Toast Notifications */}
       <ToastNotification />
 
-      {/* Sticky Glassmorphic Navbar with Full-Width Mega Menu & Progress Indicator */}
+      {/* Sticky Glassmorphic Navbar with Progress Indicator & Theme Toggle */}
       {!isCheckoutPage && !isAdminRoute && <Navbar />}
 
-      {/* Main Content Viewport with subtle page fade */}
+      {/* Main Content Viewport */}
       <div key={pathname} className="flex-grow animate-fade-in">
         <Routes>
           {/* Customer Storefront Routes */}
@@ -132,7 +133,7 @@ const AppContent = () => {
         </Routes>
       </div>
 
-      {/* 4-Column Footer */}
+      {/* Footer */}
       {!isCheckoutPage && !isAdminRoute && <Footer />}
     </div>
   );
@@ -141,11 +142,13 @@ const AppContent = () => {
 export const App = () => {
   return (
     <ErrorBoundary>
-      <AuthProvider>
-        <ShopProvider>
-          <AppContent />
-        </ShopProvider>
-      </AuthProvider>
+      <ThemeProvider>
+        <AuthProvider>
+          <ShopProvider>
+            <AppContent />
+          </ShopProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </ErrorBoundary>
   );
 };

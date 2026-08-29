@@ -3,6 +3,7 @@ import { HeroVideo } from '../components/hero/HeroVideo';
 import { HeroContent } from '../components/hero/HeroContent';
 import { ScrollIndicator } from '../components/hero/ScrollIndicator';
 import { MarketplaceStats } from '../components/home/MarketplaceStats';
+import { useTheme } from '../context/ThemeContext';
 
 const ShopByCategory = lazy(() =>
   import('../components/home/ShopByCategory').then((m) => ({ default: m.ShopByCategory }))
@@ -27,13 +28,15 @@ const NewsletterSection = lazy(() =>
 );
 
 export const Home = () => {
+  const { isDark } = useTheme();
+
   return (
-    <main className="w-full bg-[#101820] text-[#F7F3EA] overflow-x-hidden">
+    <main className="w-full bg-[var(--bg-page)] text-[var(--text-primary)] overflow-x-hidden transition-colors duration-250">
       {/* 1. Cinematic Hero Section with Subtle Parallax */}
       <section className="relative flex h-[100svh] min-h-[100svh] w-full items-center overflow-hidden">
         <HeroVideo videoSrc="/videos/hero-fashion.mp4" />
 
-        <div className="relative z-10 mx-auto flex w-full max-w-7xl items-center px-5 sm:px-8 lg:px-12">
+        <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-4 sm:px-8 lg:px-12">
           <HeroContent />
         </div>
 
@@ -41,8 +44,8 @@ export const Home = () => {
       </section>
 
       {/* 2. Interactive Marketplace Sections */}
-      <Suspense fallback={<div className="min-h-[40vh] bg-[#101820]" aria-hidden="true" />}>
-        {/* Shop by Category (Interactive 3D Cards) */}
+      <Suspense fallback={<div className="min-h-[40vh] bg-[var(--bg-page)]" aria-hidden="true" />}>
+        {/* Shop by Category (Interactive 3D Carousel) */}
         <ShopByCategory />
 
         {/* Curated Category Hubs */}
@@ -51,7 +54,7 @@ export const Home = () => {
         {/* Animated Marketplace Stats Counter */}
         <MarketplaceStats />
 
-        {/* Trending Now (Interactive Carousel & Category Filter Tabs) */}
+        {/* Trending Now (Interactive Auto-Scrolling Carousel & Category Filter Tabs) */}
         <TrendingNow />
 
         {/* Why Shop with LAX360 Benefits */}
@@ -63,7 +66,7 @@ export const Home = () => {
         {/* New Arrivals Horizontal Carousel */}
         <NewArrivals />
 
-        {/* Marketplace Newsletter */}
+        {/* Marketplace Newsletter (Compact Editorial Dispatch) */}
         <NewsletterSection />
       </Suspense>
     </main>

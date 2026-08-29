@@ -1,5 +1,6 @@
 import React from 'react';
 import { SlidersHorizontal, ArrowDownUp, X } from 'lucide-react';
+import { useTheme } from '../../context/ThemeContext';
 
 const SORT_OPTIONS = [
   { id: 'featured', label: 'Featured' },
@@ -18,12 +19,13 @@ export const FilterToolbar = ({
   onOpenMobileDrawer,
   activeFilterCount = 0,
 }) => {
+  const { isDark } = useTheme();
   const chips = [];
 
-  if (filters.category && filters.category !== 'All') {
+  if (filters.category && filters.category !== 'all' && filters.category !== 'All') {
     chips.push({
       label: `Category: ${filters.category}`,
-      onRemove: () => onFilterChange({ category: 'All' }),
+      onRemove: () => onFilterChange({ category: 'all' }),
     });
   }
 
@@ -73,17 +75,25 @@ export const FilterToolbar = ({
   return (
     <div className="space-y-4 mb-8">
       {/* Top Bar: Count, Mobile Trigger, Sort Dropdown */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3 border-y border-black/10">
+      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-3 border-y ${
+        isDark ? 'border-white/10' : 'border-black/10'
+      }`}>
         {/* Left: Count & Mobile Trigger */}
         <div className="flex items-center justify-between sm:justify-start gap-4">
-          <span className="text-xs uppercase tracking-widest text-[#101820] font-medium">
+          <span className={`text-xs uppercase tracking-widest font-medium ${
+            isDark ? 'text-white' : 'text-[#101820]'
+          }`}>
             {totalCount} {totalCount === 1 ? 'Product' : 'Products'}
           </span>
 
           {/* Mobile Filter & Sort Button */}
           <button
             onClick={onOpenMobileDrawer}
-            className="lg:hidden inline-flex items-center gap-2 px-3 py-2 bg-white border border-black/15 hover:border-[#C9A45C] text-[#101820] text-xs uppercase tracking-wider rounded-none transition-colors shadow-sm"
+            className={`lg:hidden inline-flex items-center gap-2 px-3 py-2 border text-xs uppercase tracking-wider rounded-none transition-colors shadow-sm ${
+              isDark
+                ? 'bg-[#1B2630] border-white/15 text-white hover:border-[#C9A45C]'
+                : 'bg-white border-black/15 text-[#101820] hover:border-[#B08B43]'
+            }`}
           >
             <SlidersHorizontal className="w-3.5 h-3.5 text-[#C9A45C]" />
             <span>Filter & Sort</span>
@@ -97,7 +107,9 @@ export const FilterToolbar = ({
 
         {/* Right: Sort Dropdown */}
         <div className="flex items-center justify-end gap-2 text-xs">
-          <label htmlFor="sort-select" className="text-[#A9B0B5] flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-medium">
+          <label htmlFor="sort-select" className={`flex items-center gap-1.5 uppercase tracking-wider text-[11px] font-medium ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+          }`}>
             <ArrowDownUp className="w-3.5 h-3.5" />
             <span>Sort By:</span>
           </label>
@@ -106,10 +118,14 @@ export const FilterToolbar = ({
               id="sort-select"
               value={filters.sortBy}
               onChange={(e) => onFilterChange({ sortBy: e.target.value })}
-              className="bg-white border border-black/15 hover:border-black/30 text-xs text-[#101820] uppercase tracking-wider py-1.5 px-3 pr-8 focus:outline-none focus:border-[#C9A45C] cursor-pointer transition-colors shadow-sm"
+              className={`border text-xs uppercase tracking-wider py-1.5 px-3 pr-8 focus:outline-none focus:border-[#C9A45C] cursor-pointer transition-colors shadow-sm ${
+                isDark
+                  ? 'bg-[#1B2630] border-white/15 text-white'
+                  : 'bg-white border-black/15 text-[#101820]'
+              }`}
             >
               {SORT_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id} className="bg-white text-[#101820]">
+                <option key={opt.id} value={opt.id} className={isDark ? 'bg-[#1B2630] text-white' : 'bg-white text-[#101820]'}>
                   {opt.label}
                 </option>
               ))}
@@ -121,13 +137,19 @@ export const FilterToolbar = ({
       {/* Removable Active Filter Chips */}
       {chips.length > 0 && (
         <div className="flex flex-wrap items-center gap-2 pt-1 animate-fade-in">
-          <span className="text-[11px] uppercase tracking-widest text-[#A9B0B5] mr-1">
+          <span className={`text-[11px] uppercase tracking-widest mr-1 ${
+            isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+          }`}>
             Active Filters:
           </span>
           {chips.map((chip, idx) => (
             <span
               key={idx}
-              className="inline-flex items-center gap-1.5 px-2.5 py-1 bg-[#101820] text-[#F7F3EA] text-xs tracking-wide rounded-none shadow-sm"
+              className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs tracking-wide rounded-none shadow-sm ${
+                isDark
+                  ? 'bg-white/10 text-white'
+                  : 'bg-[#101820] text-white'
+              }`}
             >
               <span>{chip.label}</span>
               <button
@@ -142,7 +164,7 @@ export const FilterToolbar = ({
 
           <button
             onClick={onClearFilters}
-            className="text-[11px] uppercase tracking-wider text-[#C9A45C] hover:text-[#101820] underline underline-offset-4 ml-2 transition-colors cursor-pointer font-medium"
+            className="text-[11px] uppercase tracking-wider text-[#C9A45C] hover:text-[#B08B43] underline underline-offset-4 ml-2 transition-colors cursor-pointer font-medium"
           >
             Clear All
           </button>

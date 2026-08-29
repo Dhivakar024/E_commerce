@@ -1,6 +1,7 @@
 import React from 'react';
 import { RotateCcw } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
+import { useTheme } from '../../context/ThemeContext';
 
 const PRICE_OPTIONS = [
   { id: 'all', label: 'All Prices' },
@@ -16,6 +17,7 @@ export const ProductFiltersSidebar = ({
   onClearFilters,
   activeFilterCount = 0,
 }) => {
+  const { isDark } = useTheme();
   const currentCategory = (filters.category || 'all').toLowerCase();
 
   const toggleArrayItem = (key, value) => {
@@ -26,12 +28,18 @@ export const ProductFiltersSidebar = ({
     onFilterChange({ [key]: next });
   };
 
+  const textHeaderClass = isDark ? 'text-white' : 'text-[#101820]';
+  const textBodyClass = isDark ? 'text-[#F7F3EA]/80 hover:text-white' : 'text-[#101820]/80 hover:text-[#101820]';
+  const borderClass = isDark ? 'border-white/10' : 'border-black/10';
+
   return (
-    <aside className="w-64 flex-shrink-0 space-y-7 pr-6 border-r border-black/10 hidden lg:block select-none text-[#101820]">
+    <aside className={`w-64 flex-shrink-0 space-y-7 pr-6 border-r hidden lg:block select-none transition-colors duration-250 ${borderClass} ${
+      isDark ? 'text-[#F7F3EA]' : 'text-[#101820]'
+    }`}>
       {/* Header */}
-      <div className="flex items-center justify-between pb-4 border-b border-black/10">
+      <div className={`flex items-center justify-between pb-4 border-b ${borderClass}`}>
         <div className="flex items-center gap-2">
-          <span className="font-serif text-sm uppercase tracking-widest text-[#101820] font-semibold">
+          <span className={`font-serif text-sm uppercase tracking-widest font-semibold ${textHeaderClass}`}>
             Filters
           </span>
           {activeFilterCount > 0 && (
@@ -43,7 +51,9 @@ export const ProductFiltersSidebar = ({
         {activeFilterCount > 0 && (
           <button
             onClick={onClearFilters}
-            className="flex items-center gap-1 text-[11px] uppercase tracking-wider text-[#A9B0B5] hover:text-[#101820] transition-colors cursor-pointer"
+            className={`flex items-center gap-1 text-[11px] uppercase tracking-wider transition-colors cursor-pointer ${
+              isDark ? 'text-[#A9B0B5] hover:text-white' : 'text-[#717D86] hover:text-[#101820]'
+            }`}
           >
             <RotateCcw className="w-3 h-3" />
             <span>Reset</span>
@@ -53,11 +63,11 @@ export const ProductFiltersSidebar = ({
 
       {/* 1. Category Switcher */}
       <div>
-        <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
+        <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
           Category
         </h4>
         <div className="space-y-2">
-          <label className="flex items-center gap-2.5 text-xs text-[#101820]/80 hover:text-[#101820] cursor-pointer font-medium">
+          <label className={`flex items-center gap-2.5 text-xs cursor-pointer font-medium ${textBodyClass}`}>
             <input
               type="radio"
               name="sidebar_category"
@@ -70,7 +80,7 @@ export const ProductFiltersSidebar = ({
           {CATEGORIES.map((cat) => (
             <label
               key={cat.id}
-              className="flex items-center gap-2.5 text-xs text-[#101820]/80 hover:text-[#101820] cursor-pointer"
+              className={`flex items-center gap-2.5 text-xs cursor-pointer ${textBodyClass}`}
             >
               <input
                 type="radio"
@@ -79,7 +89,7 @@ export const ProductFiltersSidebar = ({
                 onChange={() => onFilterChange({ category: cat.slug, subcategories: [] })}
                 className="accent-[#C9A45C] cursor-pointer"
               />
-              <span className={currentCategory === cat.slug ? 'font-semibold text-[#101820]' : ''}>
+              <span className={currentCategory === cat.slug ? `font-semibold ${textHeaderClass}` : ''}>
                 {cat.name}
               </span>
             </label>
@@ -87,16 +97,14 @@ export const ProductFiltersSidebar = ({
         </div>
       </div>
 
-      {/* ========================================================= */}
       {/* 2. DYNAMIC CATEGORY-SPECIFIC FILTERS */}
-      {/* ========================================================= */}
 
       {/* A. FASHION FILTERS */}
       {(currentCategory === 'fashion' || currentCategory === 'all') && (
         <>
           {/* Sizes */}
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
               Size
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -109,8 +117,10 @@ export const ProductFiltersSidebar = ({
                     onClick={() => toggleArrayItem('sizes', size)}
                     className={`min-w-[36px] h-8 px-2 text-xs font-medium uppercase tracking-wider transition-colors border cursor-pointer ${
                       isSelected
-                        ? 'bg-[#101820] text-[#F7F3EA] border-[#101820]'
-                        : 'bg-white text-[#101820] border-black/15 hover:border-[#C9A45C]'
+                        ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                        : isDark
+                          ? 'bg-[#1B2630] text-white border-white/15 hover:border-[#C9A45C]'
+                          : 'bg-white text-[#101820] border-black/15 hover:border-[#B08B43]'
                     }`}
                   >
                     {size}
@@ -122,14 +132,14 @@ export const ProductFiltersSidebar = ({
 
           {/* Color */}
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
               Color
             </h4>
             <div className="space-y-1.5">
               {['White', 'Beige', 'Midnight Black', 'Navy Blue', 'Champagne Gold'].map((color) => {
                 const isSelected = filters.colors?.includes(color);
                 return (
-                  <label key={color} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
+                  <label key={color} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -142,45 +152,21 @@ export const ProductFiltersSidebar = ({
               })}
             </div>
           </div>
-
-          {/* Material */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              Material
-            </h4>
-            <div className="space-y-1.5">
-              {['100% French Linen', 'Virgin Wool Blend', 'Mulberry Silk', 'Pure Cashmere', 'Organic Cotton'].map((mat) => {
-                const isSelected = filters.materials?.includes(mat);
-                return (
-                  <label key={mat} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('materials', mat)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{mat}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
         </>
       )}
 
       {/* B. FURNITURE FILTERS */}
       {currentCategory === 'furniture' && (
         <>
-          {/* Room Type */}
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
               Room Type
             </h4>
             <div className="space-y-1.5">
               {['Living Room', 'Bedroom', 'Dining', 'Office', 'Outdoor'].map((room) => {
                 const isSelected = filters.roomTypes?.includes(room);
                 return (
-                  <label key={room} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
+                  <label key={room} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -193,45 +179,21 @@ export const ProductFiltersSidebar = ({
               })}
             </div>
           </div>
-
-          {/* Material */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              Furniture Material
-            </h4>
-            <div className="space-y-1.5">
-              {['Solid Teak', 'Solid Oak', 'Calacatta Marble', 'Sheesham Wood', 'Velvet Upholstery'].map((mat) => {
-                const isSelected = filters.materials?.includes(mat);
-                return (
-                  <label key={mat} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('materials', mat)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{mat}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
         </>
       )}
 
       {/* C. ELECTRONICS FILTERS */}
       {currentCategory === 'electronics' && (
         <>
-          {/* Electronics Brand */}
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
               Brand
             </h4>
             <div className="space-y-1.5">
               {['AetherTech', 'Zenith Systems', 'Quantum Audio', 'Visionary Display', 'Lumina Optics', 'Pulse Technologies'].map((b) => {
                 const isSelected = filters.brands?.includes(b);
                 return (
-                  <label key={b} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
+                  <label key={b} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -244,120 +206,28 @@ export const ProductFiltersSidebar = ({
               })}
             </div>
           </div>
-
-          {/* RAM */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              RAM Memory
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {['8 GB', '16 GB', '32 GB'].map((ram) => {
-                const isSelected = filters.rams?.includes(ram);
-                return (
-                  <button
-                    key={ram}
-                    type="button"
-                    onClick={() => toggleArrayItem('rams', ram)}
-                    className={`px-2.5 py-1 text-xs font-medium border cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#101820] text-[#F7F3EA] border-[#101820]'
-                        : 'bg-white text-[#101820] border-black/15 hover:border-[#C9A45C]'
-                    }`}
-                  >
-                    {ram}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Storage */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              Storage Capacity
-            </h4>
-            <div className="flex flex-wrap gap-2">
-              {['256 GB', '512 GB', '1 TB'].map((storage) => {
-                const isSelected = filters.storages?.includes(storage);
-                return (
-                  <button
-                    key={storage}
-                    type="button"
-                    onClick={() => toggleArrayItem('storages', storage)}
-                    className={`px-2.5 py-1 text-xs font-medium border cursor-pointer ${
-                      isSelected
-                        ? 'bg-[#101820] text-[#F7F3EA] border-[#101820]'
-                        : 'bg-white text-[#101820] border-black/15 hover:border-[#C9A45C]'
-                    }`}
-                  >
-                    {storage}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
         </>
       )}
 
-      {/* D. MEDICINES FILTERS */}
+      {/* D. MEDICINES & WELLNESS */}
       {currentCategory === 'medicines' && (
         <>
-          {/* Prescription Status */}
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              Prescription Requirement
-            </h4>
-            <div className="space-y-2">
-              <label className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
-                <input
-                  type="radio"
-                  name="rx_filter"
-                  checked={filters.prescriptionRequired === undefined || filters.prescriptionRequired === 'all'}
-                  onChange={() => onFilterChange({ prescriptionRequired: 'all' })}
-                  className="accent-[#C9A45C]"
-                />
-                <span>All Medicines</span>
-              </label>
-              <label className="flex items-center gap-2 text-xs text-emerald-800 font-medium cursor-pointer">
-                <input
-                  type="radio"
-                  name="rx_filter"
-                  checked={filters.prescriptionRequired === false}
-                  onChange={() => onFilterChange({ prescriptionRequired: false })}
-                  className="accent-[#C9A45C]"
-                />
-                <span>Over-the-Counter (No Rx)</span>
-              </label>
-              <label className="flex items-center gap-2 text-xs text-amber-800 font-medium cursor-pointer">
-                <input
-                  type="radio"
-                  name="rx_filter"
-                  checked={filters.prescriptionRequired === true}
-                  onChange={() => onFilterChange({ prescriptionRequired: true })}
-                  className="accent-[#C9A45C]"
-                />
-                <span>Prescription Required</span>
-              </label>
-            </div>
-          </div>
-
-          {/* Form */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              Form
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
+              Product Form
             </h4>
             <div className="space-y-1.5">
-              {['Capsules', 'Softgels', 'Medical Kit', 'Sachets', 'Topical Gel', 'Syrup'].map((form) => {
-                const isSelected = filters.forms?.includes(form);
+              {['Capsules', 'Tablets', 'Liquid', 'Drops', 'Device', 'Kit'].map((f) => {
+                const isSelected = filters.forms?.includes(f);
                 return (
-                  <label key={form} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
+                  <label key={f} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
                     <input
                       type="checkbox"
                       checked={isSelected}
-                      onChange={() => toggleArrayItem('forms', form)}
+                      onChange={() => toggleArrayItem('forms', f)}
                       className="accent-[#C9A45C]"
                     />
-                    <span>{form}</span>
+                    <span>{f}</span>
                   </label>
                 );
               })}
@@ -366,42 +236,18 @@ export const ProductFiltersSidebar = ({
         </>
       )}
 
-      {/* E. COSMETICS FILTERS */}
+      {/* E. COSMETICS */}
       {currentCategory === 'cosmetics' && (
         <>
-          {/* Cosmetics Brand */}
           <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              Brand
-            </h4>
-            <div className="space-y-1.5">
-              {['LuxeBotanics', 'LAX360 Beauté', 'LuxeBotanics Labs', 'LAX360 Haute Parfumerie'].map((b) => {
-                const isSelected = filters.brands?.includes(b);
-                return (
-                  <label key={b} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('brands', b)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{b}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Skin Type */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
               Skin Type
             </h4>
             <div className="space-y-1.5">
-              {['All Skin Types', 'Mature / Normal', 'Sensitive', 'Dry / Damaged'].map((st) => {
+              {['All Skin Types', 'Dry', 'Oily', 'Sensitive', 'Combination'].map((st) => {
                 const isSelected = filters.skinTypes?.includes(st);
                 return (
-                  <label key={st} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
+                  <label key={st} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
                     <input
                       type="checkbox"
                       checked={isSelected}
@@ -414,51 +260,25 @@ export const ProductFiltersSidebar = ({
               })}
             </div>
           </div>
-
-          {/* Finish */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-              Finish
-            </h4>
-            <div className="space-y-1.5">
-              {['Luminous Dewy', 'Velvet Matte', 'Glass Skin', 'Extrait Parfum'].map((fin) => {
-                const isSelected = filters.finishes?.includes(fin);
-                return (
-                  <label key={fin} className="flex items-center gap-2 text-xs text-[#101820]/80 cursor-pointer">
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('finishes', fin)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{fin}</span>
-                  </label>
-                );
-              })}
-            </div>
-          </div>
         </>
       )}
 
-      {/* 3. Global Price Range */}
-      <div>
-        <h4 className="text-xs uppercase tracking-widest text-[#101820] font-semibold mb-3">
-          Price
+      {/* 3. Price Filter */}
+      <div className={`pt-4 border-t ${borderClass}`}>
+        <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
+          Price Range
         </h4>
         <div className="space-y-2">
-          {PRICE_OPTIONS.map((price) => (
-            <label
-              key={price.id}
-              className="flex items-center gap-2.5 text-xs text-[#101820]/80 hover:text-[#101820] cursor-pointer"
-            >
+          {PRICE_OPTIONS.map((opt) => (
+            <label key={opt.id} className={`flex items-center gap-2.5 text-xs cursor-pointer ${textBodyClass}`}>
               <input
                 type="radio"
                 name="sidebar_price"
-                checked={(filters.priceRange || 'all') === price.id}
-                onChange={() => onFilterChange({ priceRange: price.id })}
+                checked={filters.priceRange === opt.id}
+                onChange={() => onFilterChange({ priceRange: opt.id })}
                 className="accent-[#C9A45C] cursor-pointer"
               />
-              <span>{price.label}</span>
+              <span>{opt.label}</span>
             </label>
           ))}
         </div>
