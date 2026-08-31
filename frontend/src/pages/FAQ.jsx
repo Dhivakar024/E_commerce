@@ -58,12 +58,12 @@ export const FAQ = () => {
     : FAQ_DATA.filter((item) => item.category === activeCategory);
 
   return (
-    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 transition-colors duration-250 ${
+    <main className={`w-full min-h-screen pt-22 sm:pt-24 pb-12 transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="text-center space-y-3 mb-12">
+        <div className="text-center space-y-2 mb-6 sm:mb-8">
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
             CUSTOMER HELP CENTER
           </span>
@@ -80,7 +80,7 @@ export const FAQ = () => {
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center justify-center gap-2 flex-wrap mb-10 pb-6 border-b border-black/10 dark:border-white/10">
+        <div className="flex items-center justify-center gap-2 flex-wrap mb-6 pb-4 border-b border-black/10 dark:border-white/10">
           {categories.map((cat) => (
             <button
               key={cat}

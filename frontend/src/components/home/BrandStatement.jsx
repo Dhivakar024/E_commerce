@@ -38,7 +38,7 @@ export const BrandStatement = () => {
   return (
     <section
       ref={sectionRef}
-      className={`py-24 sm:py-28 border-y relative z-10 overflow-hidden transition-colors duration-250 ${
+      className={`py-10 sm:py-14 border-y relative z-10 overflow-hidden transition-colors duration-250 ${
         isDark
           ? 'bg-[#151F28] border-white/[0.08]'
           : 'bg-[#EDE9DF] border-black/[0.08]'
@@ -51,7 +51,7 @@ export const BrandStatement = () => {
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
         {/* Section Header */}
         <div
-          className="text-center max-w-3xl mx-auto mb-16 transition-all duration-700 ease-out"
+          className="text-center max-w-3xl mx-auto mb-7 sm:mb-8 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(24px)',

@@ -9,7 +9,7 @@ export const PromotionalBanner = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full py-28 sm:py-36 md:py-40 bg-[#101820] overflow-hidden flex items-center justify-center"
+      className="relative w-full py-12 sm:py-16 md:py-20 bg-[#101820] overflow-hidden flex items-center justify-center"
     >
       {/* Background Image with modern multi-category ambiance */}
       <div className="absolute inset-0 z-0">
@@ -37,7 +37,7 @@ export const PromotionalBanner = () => {
         }}
       >
         {/* Label */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-none bg-white/10 backdrop-blur-md border border-white/15 mb-5 sm:mb-6">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-none bg-white/10 backdrop-blur-md border border-white/15 mb-4 sm:mb-5">
           <Sparkles className="w-3.5 h-3.5 text-[#C9A45C]" />
           <span className="text-xs uppercase tracking-ultra font-semibold text-[#C9A45C]">
             ONE PLATFORM • INFINITE POSSIBILITIES
@@ -45,12 +45,12 @@ export const PromotionalBanner = () => {
         </div>
 
         {/* Heading */}
-        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white mb-4 sm:mb-5 leading-tight tracking-tight">
+        <h2 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-white mb-3 sm:mb-4 leading-tight tracking-tight">
           SHOP EVERYTHING YOU NEED
         </h2>
 
         {/* Description */}
-        <p className="text-sm sm:text-base md:text-lg text-[#F7F3EA]/90 font-light max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed">
+        <p className="text-sm sm:text-base md:text-lg text-[#F7F3EA]/90 font-light max-w-2xl mx-auto mb-6 sm:mb-8 leading-relaxed">
           From your wardrobe to your home, your technology and everyday essentials — discover it all at LAX360 PVT LTD.
         </p>
 

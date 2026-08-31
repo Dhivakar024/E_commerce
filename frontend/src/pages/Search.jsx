@@ -17,13 +17,13 @@ export const SearchPage = () => {
 
   return (
     <main
-      className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 transition-colors duration-250 ${
+      className={`w-full min-h-screen pt-22 sm:pt-24 pb-12 transition-colors duration-250 ${
         isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
-        <div className="pb-8 border-b border-black/10 dark:border-white/10 mb-10">
+        <div className="pb-4 border-b border-black/10 dark:border-white/10 mb-6 sm:mb-7">
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">
             SEARCH RESULTS
           </span>

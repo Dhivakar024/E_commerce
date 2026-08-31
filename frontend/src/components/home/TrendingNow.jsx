@@ -169,14 +169,14 @@ export const TrendingNow = () => {
   return (
     <section
       ref={sectionRef}
-      className={`py-16 sm:py-24 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
+      className={`py-10 sm:py-14 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
         isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Section Header with Carousel Controls */}
         <div
-          className="flex flex-col md:flex-row md:items-end justify-between mb-6 sm:mb-8 border-b border-black/10 dark:border-white/10 pb-5 transition-all duration-700 ease-out"
+          className="flex flex-col md:flex-row md:items-end justify-between mb-5 sm:mb-6 border-b border-black/10 dark:border-white/10 pb-4 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(24px)',

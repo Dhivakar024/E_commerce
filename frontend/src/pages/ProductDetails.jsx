@@ -113,12 +113,12 @@ export const ProductDetails = () => {
   const images = product.images && product.images.length > 0 ? product.images : [product.image];
 
   return (
-    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-16 transition-colors duration-250 ${
+    <main className={`w-full min-h-screen pt-22 sm:pt-24 pb-12 transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* 1. BREADCRUMB */}
-        <nav aria-label="Breadcrumb" className={`flex items-center gap-2 text-xs tracking-wider mb-8 overflow-x-auto pb-2 ${
+        <nav aria-label="Breadcrumb" className={`flex items-center gap-2 text-xs tracking-wider mb-4 overflow-x-auto pb-2 ${
           isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
         }`}>
           <Link to="/" className="hover:text-[#C9A45C] transition-colors flex-shrink-0">
@@ -142,7 +142,7 @@ export const ProductDetails = () => {
         </nav>
 
         {/* 2. PRODUCT MAIN SHOWCASE */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
           {/* Left: Product Image Gallery (7 Cols) */}
           <div className="lg:col-span-7">
             <ProductImageGallery

@@ -154,10 +154,10 @@ export const Wishlist = () => {
   };
 
   return (
-    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 overflow-x-hidden transition-colors duration-250 ${
+    <main className={`w-full min-h-screen pt-22 sm:pt-24 pb-12 overflow-x-hidden transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-10">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-6 sm:space-y-8">
         {/* 1. Header with Breadcrumb & Share Actions */}
         <div
           ref={headerRef}
@@ -166,7 +166,7 @@ export const Wishlist = () => {
             opacity: isHeaderVisible ? 1 : 0,
             transition: 'opacity 0.6s ease-out, transform 0.1s ease-out',
           }}
-          className="flex flex-col md:flex-row md:items-end justify-between pb-8 border-b border-black/10 dark:border-white/10 gap-6"
+          className="flex flex-col md:flex-row md:items-end justify-between pb-5 border-b border-black/10 dark:border-white/10 gap-4"
         >
           <div>
             <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block mb-2 font-semibold">

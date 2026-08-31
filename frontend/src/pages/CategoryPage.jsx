@@ -180,7 +180,7 @@ export const CategoryPage = () => {
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
       {/* 1. Category Hero Banner */}
-      <section className="relative pt-32 pb-16 sm:pt-36 sm:pb-20 overflow-hidden bg-neutral-900 border-b border-black/10 dark:border-white/10">
+      <section className="relative pt-22 pb-10 sm:pt-24 sm:pb-12 overflow-hidden bg-neutral-900 border-b border-black/10 dark:border-white/10">
         <img
           src={categoryData.image}
           alt={categoryData.name}
@@ -190,7 +190,7 @@ export const CategoryPage = () => {
 
         <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">
           {/* Breadcrumb */}
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs tracking-wider text-white/70 mb-6">
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs tracking-wider text-white/70 mb-4">
             <Link to="/" className="hover:text-white transition-colors">
               Home
             </Link>
@@ -203,12 +203,12 @@ export const CategoryPage = () => {
           </nav>
 
           <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/60 backdrop-blur-md border border-[#C9A45C]/40 text-[#C9A45C] text-xs uppercase tracking-widest font-semibold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 bg-black/60 backdrop-blur-md border border-[#C9A45C]/40 text-[#C9A45C] text-xs uppercase tracking-widest font-semibold mb-3">
               <IconComponent className="w-3.5 h-3.5" />
               <span>Department</span>
             </div>
 
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-normal mb-3 leading-tight">
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl text-white font-normal mb-2.5 leading-tight">
               {categoryData.name}
             </h1>
 
@@ -218,7 +218,7 @@ export const CategoryPage = () => {
           </div>
 
           {/* Subcategories Horizontal Filter Bar */}
-          <div className="mt-8 pt-6 border-t border-white/10 flex items-center gap-2 sm:gap-3 flex-wrap">
+          <div className="mt-5 pt-4 border-t border-white/10 flex items-center gap-2 sm:gap-3 flex-wrap">
             <span className="text-xs uppercase tracking-widest text-[#A9B0B5] mr-2 font-medium">
               Subcategories:
             </span>
@@ -255,7 +255,7 @@ export const CategoryPage = () => {
       </section>
 
       {/* 2. Main Product Discovery Area */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-10 sm:py-14">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 py-6 sm:py-8">
         {/* Back Link & Toolbar */}
         <div className="flex items-center justify-between mb-6">
           <Link

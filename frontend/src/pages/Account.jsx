@@ -174,10 +174,10 @@ export const Account = () => {
   if (!user) return null;
 
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pt-28 sm:pt-32 pb-24">
+    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pt-22 sm:pt-24 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-12">
         {/* Welcome Header */}
-        <div className="pb-8 border-b border-white/10 mb-8 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div className="pb-4 border-b border-white/10 mb-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div>
             <span className="text-[10px] uppercase tracking-ultra text-luxury-gold block mb-1 font-medium">
               CLIENT SUITE

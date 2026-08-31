@@ -50,7 +50,7 @@ export const Cart = () => {
   ).slice(0, 4);
 
   return (
-    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-20 transition-colors duration-250 ${
+    <main className={`w-full min-h-screen pt-22 sm:pt-24 pb-12 transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
@@ -62,7 +62,7 @@ export const Cart = () => {
           <CartEmptyState />
         ) : (
           /* 3. Active Cart Layout: 2-Column Desktop Grid / Vertical Mobile */
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 mb-20">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-10 sm:mb-12">
             {/* Left Column: Items, Shipping Banner, Coupon & Toolbar (7-8 Cols) */}
             <div className="lg:col-span-7 xl:col-span-8 space-y-6">
               {/* Dynamic Free Shipping Threshold Banner */}

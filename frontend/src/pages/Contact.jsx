@@ -39,10 +39,10 @@ export const Contact = () => {
   };
 
   return (
-    <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 transition-colors duration-250 ${
+    <main className={`w-full min-h-screen pt-22 sm:pt-24 pb-12 transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-16">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-8 sm:space-y-10">
         {/* Header */}
         <div className="text-center max-w-2xl mx-auto space-y-3">
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">

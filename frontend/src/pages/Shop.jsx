@@ -278,14 +278,14 @@ export const Shop = ({ categoryName }) => {
 
   return (
     <main
-      className={`w-full min-h-screen pt-16 sm:pt-20 pb-20 sm:pb-24 transition-colors duration-250 ${
+      className={`w-full min-h-screen pt-14 sm:pt-16 pb-12 sm:pb-14 transition-colors duration-250 ${
         isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
       }`}
     >
       {/* 1. Header & Dynamic Category Description */}
       <ShopHero categoryTitle={filters.category} />
 
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-5 sm:pt-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 pt-3 sm:pt-4">
         {/* 2. Primary Category Navigation Tabs */}
         <CategoryNavTabs
           activeCategory={filters.category}
@@ -293,7 +293,7 @@ export const Shop = ({ categoryName }) => {
         />
 
         {/* 3. Search Bar Input */}
-        <div className="mb-6 sm:mb-8">
+        <div className="mb-4 sm:mb-5">
           <SearchBar
             value={filters.searchQuery}
             onChange={(val) => handleFilterChange({ searchQuery: val })}
@@ -313,7 +313,7 @@ export const Shop = ({ categoryName }) => {
         />
 
         {/* 5. Marketplace Layout: Fixed/Stable Left Sidebar + Dedicated Right-Side Product Scroll Panel */}
-        <div className="flex items-start gap-6 lg:gap-8 mb-8">
+        <div className="flex items-start gap-6 lg:gap-8 mb-5 sm:mb-6">
           {/* Left: Stable Desktop Filter Sidebar */}
           <div className="hidden lg:block lg:w-64 flex-shrink-0 lg:sticky lg:top-24 max-h-[calc(100vh-140px)] overflow-y-auto pr-2 scrollbar-thin">
             <ProductFiltersSidebar

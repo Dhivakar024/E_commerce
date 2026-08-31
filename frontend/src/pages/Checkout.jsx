@@ -318,7 +318,7 @@ export const Checkout = () => {
   if (cart.length === 0) return null;
 
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pb-24">
+    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pb-12">
       {/* 1. Distraction-Free Minimal Checkout Header */}
       <CheckoutHeader />
 

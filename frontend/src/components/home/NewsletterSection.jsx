@@ -38,7 +38,7 @@ export const NewsletterSection = () => {
   return (
     <section
       ref={sectionRef}
-      className={`py-10 sm:py-14 relative z-10 overflow-hidden transition-colors duration-250 border-t ${
+      className={`py-8 sm:py-12 relative z-10 overflow-hidden transition-colors duration-250 border-t ${
         isDark ? 'bg-[#151F28] border-white/[0.08]' : 'bg-[#EDE9DF] border-black/[0.08]'
       }`}
     >

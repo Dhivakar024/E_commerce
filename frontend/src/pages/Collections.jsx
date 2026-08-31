@@ -274,11 +274,11 @@ export const Collections = () => {
 
   return (
     <main
-      className={`w-full min-h-screen pt-28 sm:pt-32 pb-16 overflow-x-hidden transition-colors duration-250 ${
+      className={`w-full min-h-screen pt-22 sm:pt-24 pb-12 overflow-x-hidden transition-colors duration-250 ${
         isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
       }`}
     >
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-10 sm:space-y-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-8 sm:space-y-10">
         {/* 1. COLLECTION HERO SECTION */}
         <section
           ref={headerRef}
@@ -361,12 +361,12 @@ export const Collections = () => {
       </div>
 
       {/* Full Viewport Width Marketplace Marquee Ticker (Matching Home Page) */}
-      <div className="w-full my-10 sm:my-14">
+      <div className="w-full my-7 sm:my-8">
         <MarketplaceMarquee />
       </div>
 
       {/* Container 2: Stats Strip & Final CTA */}
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-10 sm:space-y-12">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-8 sm:space-y-10">
         {/* 3. COMPACT PREMIUM MARKETPLACE STATS STRIP */}
         <section
           ref={statsRef}

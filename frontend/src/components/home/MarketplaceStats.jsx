@@ -122,7 +122,7 @@ export const MarketplaceStats = () => {
   return (
     <section
       ref={sectionRef}
-      className={`py-14 sm:py-20 border-y relative z-10 overflow-hidden w-full max-w-none transition-colors duration-250 ${
+      className={`py-10 sm:py-14 border-y relative z-10 overflow-hidden w-full max-w-none transition-colors duration-250 ${
         isDark
           ? 'bg-[#151F28] border-white/[0.08]'
           : 'bg-[#EDE9DF] border-black/[0.08]'
@@ -135,7 +135,7 @@ export const MarketplaceStats = () => {
       <div className="home-section-container relative z-10">
         {/* Section Header */}
         <div
-          className="text-center max-w-2xl mx-auto mb-10 sm:mb-12 transition-all duration-700 ease-out"
+          className="text-center max-w-2xl mx-auto mb-6 sm:mb-8 transition-all duration-700 ease-out"
           style={{
             opacity: isVisible ? 1 : 0,
             transform: isVisible ? 'translateY(0)' : 'translateY(20px)',

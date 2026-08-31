@@ -33,7 +33,7 @@ export const Home = () => {
   return (
     <main className="w-full bg-[var(--bg-page)] text-[var(--text-primary)] overflow-x-hidden transition-colors duration-250">
       {/* 1. Compact Hero Section with Clean Architectural Background */}
-      <section className="relative flex min-h-[62vh] md:min-h-[68vh] lg:min-h-[72vh] w-full items-center overflow-hidden pt-24 sm:pt-28 pb-8 sm:pb-10">
+      <section className="relative flex min-h-[52vh] md:min-h-[58vh] lg:min-h-[64vh] w-full items-center overflow-hidden pt-20 sm:pt-24 pb-6 sm:pb-8">
         <HeroBackground />
 
         <div className="relative z-10 mx-auto flex w-full max-w-[1440px] items-center px-4 sm:px-8 lg:px-12">
