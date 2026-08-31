@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Search,
@@ -8,6 +8,8 @@ import {
   Menu,
   Shield,
   X,
+  ArrowRight,
+  Sparkles,
 } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
 import { ThemeToggle } from './ThemeToggle';
@@ -15,12 +17,16 @@ import { useShop } from '../../context/ShopContext';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { useScrollProgress } from '../../hooks/useScrollProgress';
+import { PRODUCTS } from '../../data/products';
+import { CATEGORIES } from '../../data/categories';
+import { searchProducts, searchCategories } from '../../utils/search';
 
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [cartBouncing, setCartBouncing] = useState(false);
   const [wishlistBouncing, setWishlistBouncing] = useState(false);
 
@@ -69,21 +75,34 @@ export const Navbar = () => {
     }
   }, [wishlistCount]);
 
-  // Close mobile menu and search on route change
+  // Close mobile menu and suggestions on route change
   useEffect(() => {
     setMobileMenuOpen(false);
-    setSearchOpen(false);
+    setShowSuggestions(false);
   }, [location.pathname]);
 
-  // Auto-focus search input when expanded
+  // Auto-focus and select search input when opened
   useEffect(() => {
     if (searchOpen) {
       const timer = setTimeout(() => {
         searchInputRef.current?.focus();
+        if (searchQuery) {
+          searchInputRef.current?.select();
+        }
       }, 50);
       return () => clearTimeout(timer);
     }
   }, [searchOpen]);
+
+  // Live matching products & categories for autocomplete dropdown
+  const { matchingProducts, matchingCategories } = useMemo(() => {
+    if (!searchQuery.trim()) {
+      return { matchingProducts: [], matchingCategories: [] };
+    }
+    const prods = searchProducts(PRODUCTS, searchQuery).slice(0, 5);
+    const cats = searchCategories(searchQuery, CATEGORIES);
+    return { matchingProducts: prods, matchingCategories: cats };
+  }, [searchQuery]);
 
   // Close on outside click
   useEffect(() => {
@@ -93,31 +112,58 @@ export const Navbar = () => {
         !searchContainerRef.current.contains(e.target)
       ) {
         setSearchOpen(false);
+        setShowSuggestions(false);
       }
     };
 
-    if (searchOpen) {
+    if (searchOpen || showSuggestions) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [searchOpen]);
+  }, [searchOpen, showSuggestions]);
 
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && searchOpen) {
+      if (e.key === 'Escape' && (searchOpen || showSuggestions)) {
         setSearchOpen(false);
+        setShowSuggestions(false);
       }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [searchOpen]);
+  }, [searchOpen, showSuggestions]);
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      setShowSuggestions(false);
       setSearchOpen(false);
+    }
+  };
+
+  const handleSelectProduct = (product) => {
+    navigate(`/product/${product.slug}`);
+    setShowSuggestions(false);
+    setSearchOpen(false);
+  };
+
+  const handleSelectCategory = (category) => {
+    navigate(`/category/${category.slug}`);
+    setShowSuggestions(false);
+    setSearchOpen(false);
+  };
+
+  const handleSearchIconClick = () => {
+    if (!searchOpen) {
+      setSearchOpen(true);
+      setShowSuggestions(Boolean(searchQuery.trim()));
+    } else if (searchQuery.trim()) {
+      handleSearchSubmit();
+    } else {
+      setSearchOpen(false);
+      setShowSuggestions(false);
     }
   };
 
@@ -216,29 +262,21 @@ export const Navbar = () => {
 
           {/* RIGHT: Action Icons + Inline Expandable Search + Dark/Light Theme Toggle */}
           <div className="flex items-center space-x-1 sm:space-x-2">
-            {/* Inline Expandable Search Input (No Fullscreen Modal) */}
+            {/* Inline Expandable Search Input & Autocomplete Dropdown */}
             <div ref={searchContainerRef} className="relative flex items-center">
               <form
                 onSubmit={handleSearchSubmit}
                 className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out border rounded-full ${
                   searchOpen
                     ? isDark
-                      ? 'w-44 sm:w-60 md:w-68 bg-[#1B2630] border-[#C9A45C]/50 shadow-md shadow-black/40'
-                      : 'w-44 sm:w-60 md:w-68 bg-white border-[#B08B43]/50 shadow-md shadow-black/10'
+                      ? 'w-48 sm:w-64 md:w-72 bg-[#1B2630] border-[#C9A45C]/50 shadow-md shadow-black/40'
+                      : 'w-48 sm:w-64 md:w-72 bg-white border-[#B08B43]/50 shadow-md shadow-black/10'
                     : 'w-9 h-9 sm:w-10 sm:h-10 bg-transparent border-transparent'
                 }`}
               >
                 <button
                   type={searchOpen && searchQuery.trim() ? 'submit' : 'button'}
-                  onClick={() => {
-                    if (!searchOpen) {
-                      setSearchOpen(true);
-                    } else if (searchQuery.trim()) {
-                      handleSearchSubmit();
-                    } else {
-                      setSearchOpen(false);
-                    }
-                  }}
+                  onClick={handleSearchIconClick}
                   className={`p-2 transition-all duration-300 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer ${
                     isDark
                       ? 'text-[#F7F3EA]/85 hover:text-[#C9A45C] hover:bg-[#C9A45C]/15 focus:ring-1 focus:ring-[#C9A45C]/50'
@@ -254,7 +292,13 @@ export const Navbar = () => {
                   ref={searchInputRef}
                   type="text"
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    setShowSuggestions(true);
+                  }}
+                  onFocus={() => {
+                    if (searchQuery.trim()) setShowSuggestions(true);
+                  }}
                   placeholder="Search products..."
                   className={`bg-transparent text-xs py-1.5 pr-2 focus:outline-none flex-grow transition-opacity duration-200 ${
                     searchOpen ? 'opacity-100' : 'opacity-0 w-0 pointer-events-none'
@@ -272,9 +316,11 @@ export const Navbar = () => {
                     onClick={() => {
                       if (searchQuery) {
                         setSearchQuery('');
+                        setShowSuggestions(false);
                         searchInputRef.current?.focus();
                       } else {
                         setSearchOpen(false);
+                        setShowSuggestions(false);
                       }
                     }}
                     className={`p-1.5 mr-1 rounded-full transition-colors flex-shrink-0 cursor-pointer ${
@@ -288,6 +334,134 @@ export const Navbar = () => {
                   </button>
                 )}
               </form>
+
+              {/* Live Search Suggestions Dropdown */}
+              {searchOpen && showSuggestions && searchQuery.trim().length >= 1 && (
+                <div
+                  className={`absolute top-full right-0 mt-2.5 w-72 sm:w-80 md:w-96 max-h-[75vh] overflow-y-auto border shadow-2xl z-50 transition-all duration-200 animate-fade-in ${
+                    isDark
+                      ? 'bg-[#1B2630] border-[#C9A45C]/35 text-[#F7F3EA] shadow-black/80'
+                      : 'bg-white border-[#B08B43]/35 text-[#101820] shadow-black/15'
+                  }`}
+                >
+                  {/* Products Matches */}
+                  {matchingProducts.length > 0 && (
+                    <div>
+                      <div
+                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest text-[#C9A45C] border-b flex items-center justify-between ${
+                          isDark
+                            ? 'bg-white/5 border-white/10'
+                            : 'bg-black/5 border-black/10'
+                        }`}
+                      >
+                        <span>PRODUCTS</span>
+                        <span className="text-[9px] text-[#A9B0B5] font-normal">
+                          {matchingProducts.length} suggestions
+                        </span>
+                      </div>
+                      <div className="divide-y divide-black/5 dark:divide-white/5">
+                        {matchingProducts.map((prod) => (
+                          <div
+                            key={prod.id}
+                            onClick={() => handleSelectProduct(prod)}
+                            className={`p-2.5 flex items-center gap-3 cursor-pointer group transition-colors ${
+                              isDark
+                                ? 'hover:bg-white/5'
+                                : 'hover:bg-black/5'
+                            }`}
+                          >
+                            <img
+                              src={prod.image}
+                              alt={prod.name}
+                              className="w-10 h-10 object-cover border border-black/10 dark:border-white/10 flex-shrink-0"
+                            />
+                            <div className="flex-grow min-w-0">
+                              <p className="text-xs font-medium truncate group-hover:text-[#C9A45C] transition-colors">
+                                {prod.name}
+                              </p>
+                              <div className="flex items-center gap-2 mt-0.5 text-[11px]">
+                                <span className="text-[#C9A45C] font-semibold">
+                                  ₹{prod.price.toLocaleString()}
+                                </span>
+                                <span className="text-[#A9B0B5] text-[10px] uppercase tracking-wider">
+                                  {prod.category}
+                                </span>
+                              </div>
+                            </div>
+                            <ArrowRight className="w-3.5 h-3.5 text-[#A9B0B5] opacity-0 group-hover:opacity-100 group-hover:text-[#C9A45C] transition-all -translate-x-1 group-hover:translate-x-0" />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Categories Matches */}
+                  {matchingCategories.length > 0 && (
+                    <div>
+                      <div
+                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest text-[#C9A45C] border-b border-t ${
+                          isDark
+                            ? 'bg-white/5 border-white/10'
+                            : 'bg-black/5 border-black/10'
+                        }`}
+                      >
+                        <span>CATEGORIES</span>
+                      </div>
+                      <div className="divide-y divide-black/5 dark:divide-white/5">
+                        {matchingCategories.map((cat) => (
+                          <div
+                            key={cat.id}
+                            onClick={() => handleSelectCategory(cat)}
+                            className={`px-3.5 py-2.5 flex items-center justify-between cursor-pointer group transition-colors text-xs ${
+                              isDark
+                                ? 'hover:bg-white/5'
+                                : 'hover:bg-black/5'
+                            }`}
+                          >
+                            <span className="font-medium group-hover:text-[#C9A45C] transition-colors">
+                              {cat.name}
+                            </span>
+                            <span className="text-[10px] uppercase tracking-widest text-[#C9A45C] flex items-center gap-1 font-semibold">
+                              <span>Department</span>
+                              <ArrowRight className="w-3 h-3" />
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* No live suggestions */}
+                  {matchingProducts.length === 0 && matchingCategories.length === 0 && (
+                    <div className="p-4 text-center text-xs">
+                      <p
+                        className={
+                          isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+                        }
+                      >
+                        No instant matches for "{searchQuery}"
+                      </p>
+                      <p className="text-[10px] text-[#C9A45C] mt-1">
+                        Press Enter to search catalog
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Submit All Results Button */}
+                  <button
+                    type="button"
+                    onClick={handleSearchSubmit}
+                    className={`w-full text-center py-2.5 px-3 text-xs font-semibold text-[#C9A45C] hover:underline border-t flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
+                      isDark
+                        ? 'bg-black/20 border-white/10 hover:bg-black/40'
+                        : 'bg-black/5 border-black/10 hover:bg-black/10'
+                    }`}
+                  >
+                    <span>View all matching results for "{searchQuery}"</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
             </div>
 
             {/* Wishlist Icon */}

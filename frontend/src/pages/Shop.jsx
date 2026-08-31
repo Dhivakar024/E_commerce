@@ -152,7 +152,19 @@ export const Shop = ({ categoryName }) => {
         const matchesCat = (product.category || '').toLowerCase().includes(q);
         const matchesSubcat = (product.subcategory || '').toLowerCase().includes(q);
         const matchesDesc = (product.description || '').toLowerCase().includes(q);
-        if (!matchesName && !matchesBrand && !matchesCat && !matchesSubcat && !matchesDesc) {
+        const matchesTags = Array.isArray(product.tags) && product.tags.some((t) => t.toLowerCase().includes(q));
+        const matchesMaterial = (product.material || '').toLowerCase().includes(q);
+        const matchesColors = Array.isArray(product.colors) && product.colors.some((c) => c.toLowerCase().includes(q));
+        if (
+          !matchesName &&
+          !matchesBrand &&
+          !matchesCat &&
+          !matchesSubcat &&
+          !matchesDesc &&
+          !matchesTags &&
+          !matchesMaterial &&
+          !matchesColors
+        ) {
           return false;
         }
       }
