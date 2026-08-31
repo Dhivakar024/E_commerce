@@ -131,8 +131,8 @@ export const MarketplaceStats = () => {
       {/* Subtle floating background accent */}
       <div className="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-[#C9A45C]/5 rounded-full blur-3xl pointer-events-none animate-float-slow" />
 
-      {/* Full-width container spanning 100% available viewport */}
-      <div className="w-full max-w-none px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-16 relative z-10">
+      {/* Standard Home Page Section Container System */}
+      <div className="home-section-container relative z-10">
         {/* Section Header */}
         <div
           className="text-center max-w-2xl mx-auto mb-10 sm:mb-12 transition-all duration-700 ease-out"
@@ -153,8 +153,8 @@ export const MarketplaceStats = () => {
           </h2>
         </div>
 
-        {/* 4 Cards evenly distributed across 100% full screen width: 4-cols desktop, 2-cols tablet, 1-col mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-6 xl:gap-8 w-full">
+        {/* 4 Cards distributed across the Home page grid: 4-cols desktop, 2-cols tablet, 1-col mobile */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 w-full">
           {STATS.map((item, idx) => (
             <StatItem
               key={item.label}

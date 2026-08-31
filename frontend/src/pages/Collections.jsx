@@ -360,14 +360,14 @@ export const Collections = () => {
         </section>
 
         {/* Marquee Banner */}
-        <div className="max-w-5xl mx-auto">
+        <div className="w-full">
           <MarketplaceMarquee />
         </div>
 
         {/* 3. COMPACT PREMIUM MARKETPLACE STATS STRIP */}
         <section
           ref={statsRef}
-          className="max-w-5xl mx-auto border-y border-black/10 dark:border-white/10 py-8 transition-all duration-700 ease-out"
+          className="w-full border-y border-black/10 dark:border-white/10 py-8 transition-all duration-700 ease-out"
           style={{
             opacity: isStatsVisible ? 1 : 0,
             transform: isStatsVisible ? 'translateY(0)' : 'translateY(24px)',
