@@ -313,8 +313,8 @@ export const Collections = () => {
           </p>
         </section>
 
-        {/* 2. COMPACT COLLECTION SHOWCASE (Centered 2-Column Responsive Grid, Max-W-5XL) */}
-        <section ref={gridRef} className="max-w-5xl mx-auto space-y-5">
+        {/* 2. COLLECTION SHOWCASE (Full-Width Responsive Grid Matching Home Page) */}
+        <section ref={gridRef} className="w-full space-y-6">
           <div className="flex items-center justify-between border-b border-black/10 dark:border-white/10 pb-3">
             <div>
               <span className="text-[10px] sm:text-[11px] uppercase tracking-ultra text-[#C9A45C] font-semibold block">
@@ -337,14 +337,14 @@ export const Collections = () => {
             </span>
           </div>
 
-          {/* Clean Compact 2-Column Grid on Desktop, 2 on Tablet, 1 on Mobile */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 gap-4 sm:gap-5 lg:gap-6 items-stretch">
+          {/* Full-Width 2-Column Responsive Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 lg:gap-8 items-stretch w-full">
             {MARKETPLACE_COLLECTIONS.map((col, idx) => (
               <div
                 key={col.id}
                 className={
                   idx === MARKETPLACE_COLLECTIONS.length - 1
-                    ? 'sm:col-span-2 max-w-md sm:max-w-lg mx-auto w-full'
+                    ? 'sm:col-span-2 max-w-3xl mx-auto w-full'
                     : 'w-full'
                 }
               >

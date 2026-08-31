@@ -140,7 +140,7 @@ export const About = () => {
         {/* 3. OUR MISSION */}
         <div
           ref={missionRef}
-          className={`p-8 sm:p-12 border shadow-xl text-center max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out ${
+          className={`p-8 sm:p-12 border shadow-xl text-center w-full space-y-4 transition-all duration-700 ease-out ${
             isDark ? 'bg-[#1B2630] border-white/10 text-white' : 'bg-white border-black/10 text-[#101820]'
           }`}
           style={{
@@ -289,7 +289,7 @@ export const About = () => {
         {/* 6. FORWARD-LOOKING BRAND STORY */}
         <div
           ref={storyRef}
-          className={`p-8 sm:p-12 border max-w-4xl mx-auto space-y-4 transition-all duration-700 ease-out ${
+          className={`p-8 sm:p-12 border w-full space-y-4 transition-all duration-700 ease-out ${
             isDark ? 'bg-[#1B2630]/60 border-white/10 text-white' : 'bg-white border-black/10 text-[#101820]'
           }`}
           style={{

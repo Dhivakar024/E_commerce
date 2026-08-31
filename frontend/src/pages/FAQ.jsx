@@ -61,7 +61,7 @@ export const FAQ = () => {
     <main className={`w-full min-h-screen pt-28 sm:pt-32 pb-24 transition-colors duration-250 ${
       isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
     }`}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12">
         {/* Header */}
         <div className="text-center space-y-3 mb-12">
           <span className="text-xs uppercase tracking-ultra text-[#C9A45C] block font-semibold">
