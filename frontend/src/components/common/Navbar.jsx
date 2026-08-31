@@ -9,7 +9,6 @@ import {
   Shield,
   X,
   ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
 import { ThemeToggle } from './ThemeToggle';
@@ -179,16 +178,16 @@ export const Navbar = () => {
     <>
       {/* 1. Scroll Progress Indicator Bar */}
       <div
-        className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-[#C9A45C] via-[#D8B872] to-[#C9A45C] z-50 origin-left transition-all duration-100 ease-out shadow-sm shadow-[#C9A45C]/30 pointer-events-none"
+        className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-[#C9A45C] via-[#E6D09A] to-[#C9A45C] z-50 origin-left transition-all duration-100 ease-out pointer-events-none"
         style={{ transform: `scaleX(${scrollProgress / 100})` }}
         aria-hidden="true"
       />
 
       <header
         ref={headerRef}
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-400 ease-in-out ${
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ease-in-out ${
           isScrolled
-            ? 'glass-nav py-2.5 sm:py-3 shadow-xl'
+            ? 'glass-nav py-2.5 sm:py-3 shadow-md'
             : 'glass-nav-transparent py-4 sm:py-5'
         }`}
       >
@@ -201,19 +200,19 @@ export const Navbar = () => {
           >
             <div className="flex flex-col">
               <span
-                className={`font-cinzel text-xl sm:text-2xl tracking-[0.28em] font-semibold transition-colors duration-400 ${
+                className={`font-cinzel text-xl sm:text-2xl tracking-[0.28em] font-semibold transition-colors duration-300 ${
                   isDark
-                    ? 'text-white group-hover:text-[#C9A45C]'
-                    : 'text-[#101820] group-hover:text-[#B08B43]'
+                    ? 'text-[#F7F3EA] group-hover:text-white'
+                    : 'text-[#101820] group-hover:text-black'
                 }`}
               >
                 LAX360
               </span>
               <span
-                className={`text-[8px] sm:text-[9px] uppercase tracking-ultra -mt-1 font-bold transition-colors duration-400 ${
+                className={`text-[8px] sm:text-[9px] uppercase tracking-ultra -mt-1 font-bold transition-colors duration-300 ${
                   isDark
-                    ? 'text-[#C9A45C]'
-                    : 'text-[#B08B43]'
+                    ? 'text-[#E6D09A]'
+                    : 'text-[#785A1E]'
                 }`}
               >
                 PVT LTD
@@ -234,11 +233,11 @@ export const Navbar = () => {
                   `relative py-1 px-2 text-xs uppercase tracking-widest transition-all duration-300 font-medium hover:-translate-y-0.5 rounded ${
                     isActive
                       ? isDark
-                        ? 'text-[#C9A45C] font-semibold'
+                        ? 'text-white font-bold'
                         : 'text-[#101820] font-bold'
                       : isDark
-                        ? 'text-[#F7F3EA]/85 hover:text-[#C9A45C] hover:bg-white/5'
-                        : 'text-[#101820]/80 font-medium hover:text-[#B08B43] hover:bg-black/5'
+                        ? 'text-[#F7F3EA]/90 hover:text-white hover:bg-black/15'
+                        : 'text-[#101820]/80 hover:text-black hover:bg-black/10'
                   }`
                 }
               >
@@ -249,8 +248,8 @@ export const Navbar = () => {
                       <span
                         className={`absolute -bottom-1 left-1 right-1 h-[2px] transform origin-left transition-transform duration-300 ${
                           isDark
-                            ? 'bg-[#C9A45C] shadow-xs shadow-[#C9A45C]'
-                            : 'bg-[#B08B43]'
+                            ? 'bg-[#F7F3EA]'
+                            : 'bg-[#101820]'
                         }`}
                       />
                     )}
@@ -269,8 +268,8 @@ export const Navbar = () => {
                 className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out border rounded-full ${
                   searchOpen
                     ? isDark
-                      ? 'w-48 sm:w-64 md:w-72 bg-[#1B2630] border-[#C9A45C]/50 shadow-md shadow-black/40'
-                      : 'w-48 sm:w-64 md:w-72 bg-white border-[#B08B43]/50 shadow-md shadow-black/10'
+                      ? 'w-48 sm:w-64 md:w-72 bg-[#5A4724] border-[#E6D09A]/40 shadow-md shadow-black/40'
+                      : 'w-48 sm:w-64 md:w-72 bg-white/90 border-[#785A1E]/30 shadow-md shadow-black/10'
                     : 'w-9 h-9 sm:w-10 sm:h-10 bg-transparent border-transparent'
                 }`}
               >
@@ -279,8 +278,8 @@ export const Navbar = () => {
                   onClick={handleSearchIconClick}
                   className={`p-2 transition-all duration-300 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer ${
                     isDark
-                      ? 'text-[#F7F3EA]/85 hover:text-[#C9A45C] hover:bg-[#C9A45C]/15 focus:ring-1 focus:ring-[#C9A45C]/50'
-                      : 'text-[#101820] hover:text-[#B08B43] hover:bg-black/5 focus:ring-1 focus:ring-[#B08B43]/50'
+                      ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
+                      : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
                   }`}
                   aria-label="Search catalog"
                   title={searchOpen ? 'Search' : 'Open search'}
@@ -304,8 +303,8 @@ export const Navbar = () => {
                     searchOpen ? 'opacity-100' : 'opacity-0 w-0 pointer-events-none'
                   } ${
                     isDark
-                      ? 'text-white placeholder:text-[#A9B0B5]/60'
-                      : 'text-[#101820] placeholder:text-[#717D86]/60'
+                      ? 'text-white placeholder:text-[#F7F3EA]/60'
+                      : 'text-[#101820] placeholder:text-[#717D86]/80'
                   }`}
                   tabIndex={searchOpen ? 0 : -1}
                 />
@@ -325,7 +324,7 @@ export const Navbar = () => {
                     }}
                     className={`p-1.5 mr-1 rounded-full transition-colors flex-shrink-0 cursor-pointer ${
                       isDark
-                        ? 'text-[#A9B0B5] hover:text-white'
+                        ? 'text-[#F7F3EA]/70 hover:text-white'
                         : 'text-[#717D86] hover:text-[#101820]'
                     }`}
                     aria-label="Close or clear search"
@@ -340,18 +339,18 @@ export const Navbar = () => {
                 <div
                   className={`absolute top-full right-0 mt-2.5 w-72 sm:w-80 md:w-96 max-h-[75vh] overflow-y-auto border shadow-2xl z-50 transition-all duration-200 animate-fade-in ${
                     isDark
-                      ? 'bg-[#1B2630] border-[#C9A45C]/35 text-[#F7F3EA] shadow-black/80'
-                      : 'bg-white border-[#B08B43]/35 text-[#101820] shadow-black/15'
+                      ? 'bg-[#5A4724] border-[#E6D09A]/30 text-[#F7F3EA] shadow-black/80'
+                      : 'bg-white border-[#785A1E]/20 text-[#101820] shadow-black/15'
                   }`}
                 >
                   {/* Products Matches */}
                   {matchingProducts.length > 0 && (
                     <div>
                       <div
-                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest text-[#C9A45C] border-b flex items-center justify-between ${
+                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b flex items-center justify-between ${
                           isDark
-                            ? 'bg-white/5 border-white/10'
-                            : 'bg-black/5 border-black/10'
+                            ? 'bg-black/20 border-white/10 text-[#E6D09A]'
+                            : 'bg-black/5 border-black/10 text-[#785A1E]'
                         }`}
                       >
                         <span>PRODUCTS</span>
@@ -366,7 +365,7 @@ export const Navbar = () => {
                             onClick={() => handleSelectProduct(prod)}
                             className={`p-2.5 flex items-center gap-3 cursor-pointer group transition-colors ${
                               isDark
-                                ? 'hover:bg-white/5'
+                                ? 'hover:bg-white/10'
                                 : 'hover:bg-black/5'
                             }`}
                           >
@@ -376,11 +375,11 @@ export const Navbar = () => {
                               className="w-10 h-10 object-cover border border-black/10 dark:border-white/10 flex-shrink-0"
                             />
                             <div className="flex-grow min-w-0">
-                              <p className="text-xs font-medium truncate group-hover:text-[#C9A45C] transition-colors">
+                              <p className="text-xs font-medium truncate group-hover:text-[#E6D09A] transition-colors">
                                 {prod.name}
                               </p>
                               <div className="flex items-center gap-2 mt-0.5 text-[11px]">
-                                <span className="text-[#C9A45C] font-semibold">
+                                <span className="font-semibold text-[#E6D09A]">
                                   ₹{prod.price.toLocaleString()}
                                 </span>
                                 <span className="text-[#A9B0B5] text-[10px] uppercase tracking-wider">
@@ -388,7 +387,7 @@ export const Navbar = () => {
                                 </span>
                               </div>
                             </div>
-                            <ArrowRight className="w-3.5 h-3.5 text-[#A9B0B5] opacity-0 group-hover:opacity-100 group-hover:text-[#C9A45C] transition-all -translate-x-1 group-hover:translate-x-0" />
+                            <ArrowRight className="w-3.5 h-3.5 text-[#A9B0B5] opacity-0 group-hover:opacity-100 group-hover:text-[#E6D09A] transition-all -translate-x-1 group-hover:translate-x-0" />
                           </div>
                         ))}
                       </div>
@@ -399,10 +398,10 @@ export const Navbar = () => {
                   {matchingCategories.length > 0 && (
                     <div>
                       <div
-                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest text-[#C9A45C] border-b border-t ${
+                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-t ${
                           isDark
-                            ? 'bg-white/5 border-white/10'
-                            : 'bg-black/5 border-black/10'
+                            ? 'bg-black/20 border-white/10 text-[#E6D09A]'
+                            : 'bg-black/5 border-black/10 text-[#785A1E]'
                         }`}
                       >
                         <span>CATEGORIES</span>
@@ -414,14 +413,14 @@ export const Navbar = () => {
                             onClick={() => handleSelectCategory(cat)}
                             className={`px-3.5 py-2.5 flex items-center justify-between cursor-pointer group transition-colors text-xs ${
                               isDark
-                                ? 'hover:bg-white/5'
+                                ? 'hover:bg-white/10'
                                 : 'hover:bg-black/5'
                             }`}
                           >
-                            <span className="font-medium group-hover:text-[#C9A45C] transition-colors">
+                            <span className="font-medium group-hover:text-[#E6D09A] transition-colors">
                               {cat.name}
                             </span>
-                            <span className="text-[10px] uppercase tracking-widest text-[#C9A45C] flex items-center gap-1 font-semibold">
+                            <span className="text-[10px] uppercase tracking-widest text-[#E6D09A] flex items-center gap-1 font-semibold">
                               <span>Department</span>
                               <ArrowRight className="w-3 h-3" />
                             </span>
@@ -436,12 +435,12 @@ export const Navbar = () => {
                     <div className="p-4 text-center text-xs">
                       <p
                         className={
-                          isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
+                          isDark ? 'text-[#F7F3EA]/70' : 'text-[#717D86]'
                         }
                       >
                         No instant matches for "{searchQuery}"
                       </p>
-                      <p className="text-[10px] text-[#C9A45C] mt-1">
+                      <p className="text-[10px] text-[#E6D09A] mt-1">
                         Press Enter to search catalog
                       </p>
                     </div>
@@ -451,10 +450,10 @@ export const Navbar = () => {
                   <button
                     type="button"
                     onClick={handleSearchSubmit}
-                    className={`w-full text-center py-2.5 px-3 text-xs font-semibold text-[#C9A45C] hover:underline border-t flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
+                    className={`w-full text-center py-2.5 px-3 text-xs font-semibold hover:underline border-t flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
                       isDark
-                        ? 'bg-black/20 border-white/10 hover:bg-black/40'
-                        : 'bg-black/5 border-black/10 hover:bg-black/10'
+                        ? 'bg-black/30 border-white/10 text-[#E6D09A] hover:bg-black/40'
+                        : 'bg-black/5 border-black/10 text-[#101820] hover:bg-black/10'
                     }`}
                   >
                     <span>View all matching results for "{searchQuery}"</span>
@@ -469,8 +468,8 @@ export const Navbar = () => {
               to="/wishlist"
               className={`relative hidden sm:inline-flex p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 group ${
                 isDark
-                  ? 'text-[#F7F3EA]/85 hover:text-[#C9A45C] hover:bg-[#C9A45C]/15 focus:ring-1 focus:ring-[#C9A45C]/50'
-                  : 'text-[#101820] hover:text-[#B08B43] hover:bg-black/5 focus:ring-1 focus:ring-[#B08B43]/50'
+                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
+                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
               }`}
               aria-label={`Wishlist (${wishlistCount} items)`}
             >
@@ -479,8 +478,8 @@ export const Navbar = () => {
                   wishlistBouncing
                     ? 'animate-heart-pop text-[#C9A45C]'
                     : isDark
-                      ? 'group-hover:text-[#C9A45C]'
-                      : 'group-hover:text-[#B08B43]'
+                      ? 'group-hover:text-white'
+                      : 'group-hover:text-black'
                 }`}
               />
               {wishlistCount > 0 && (
@@ -489,8 +488,8 @@ export const Navbar = () => {
                     wishlistBouncing ? 'animate-badge-bump' : ''
                   } ${
                     isDark
-                      ? 'bg-[#C9A45C] text-[#101820]'
-                      : 'bg-[#B08B43] text-white'
+                      ? 'bg-[#F7F3EA] text-[#5A4724]'
+                      : 'bg-[#101820] text-white'
                   }`}
                 >
                   {wishlistCount}
@@ -503,8 +502,8 @@ export const Navbar = () => {
               to="/cart"
               className={`relative p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 group ${
                 isDark
-                  ? 'text-[#F7F3EA]/85 hover:text-[#C9A45C] hover:bg-[#C9A45C]/15 focus:ring-1 focus:ring-[#C9A45C]/50'
-                  : 'text-[#101820] hover:text-[#B08B43] hover:bg-black/5 focus:ring-1 focus:ring-[#B08B43]/50'
+                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
+                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
               }`}
               aria-label={`Shopping Cart (${cartCount} items)`}
             >
@@ -513,8 +512,8 @@ export const Navbar = () => {
                   cartBouncing
                     ? 'animate-cart-bounce text-[#C9A45C]'
                     : isDark
-                      ? 'group-hover:text-[#C9A45C]'
-                      : 'group-hover:text-[#B08B43]'
+                      ? 'group-hover:text-white'
+                      : 'group-hover:text-black'
                 }`}
               />
               {cartCount > 0 && (
@@ -523,8 +522,8 @@ export const Navbar = () => {
                     cartBouncing ? 'animate-badge-bump' : ''
                   } ${
                     isDark
-                      ? 'bg-[#C9A45C] text-[#101820]'
-                      : 'bg-[#B08B43] text-white'
+                      ? 'bg-[#F7F3EA] text-[#5A4724]'
+                      : 'bg-[#101820] text-white'
                   }`}
                 >
                   {cartCount}
@@ -538,8 +537,8 @@ export const Navbar = () => {
                 to="/admin"
                 className={`hidden lg:inline-flex items-center gap-1 px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold transition-colors ${
                   isDark
-                    ? 'text-[#C9A45C] bg-[#C9A45C]/15 border border-[#C9A45C]/40 hover:bg-[#C9A45C]/25'
-                    : 'text-[#101820] bg-[#EDE9DF] border border-[#B08B43]/30 hover:bg-[#E4DFD5]'
+                    ? 'text-[#F7F3EA] bg-black/20 border border-white/20 hover:bg-black/30'
+                    : 'text-[#101820] bg-black/10 border border-black/15 hover:bg-black/20'
                 }`}
               >
                 <Shield className="w-3 h-3" />
@@ -552,8 +551,8 @@ export const Navbar = () => {
               to={isAuthenticated ? '/account' : '/login'}
               className={`hidden sm:inline-flex p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 ${
                 isDark
-                  ? 'text-[#F7F3EA]/85 hover:text-[#C9A45C] hover:bg-[#C9A45C]/15 focus:ring-1 focus:ring-[#C9A45C]/50'
-                  : 'text-[#101820] hover:text-[#B08B43] hover:bg-black/5 focus:ring-1 focus:ring-[#B08B43]/50'
+                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
+                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
               }`}
               aria-label={
                 isAuthenticated
@@ -573,8 +572,8 @@ export const Navbar = () => {
               onClick={() => setMobileMenuOpen(true)}
               className={`md:hidden p-2 transition-all duration-300 rounded-full focus:outline-none ${
                 isDark
-                  ? 'text-[#F7F3EA] hover:text-[#C9A45C] hover:bg-white/10 focus:ring-1 focus:ring-[#C9A45C]/50'
-                  : 'text-[#101820] hover:text-[#B08B43] hover:bg-black/5 focus:ring-1 focus:ring-[#B08B43]/50'
+                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
+                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
               }`}
               aria-label="Open navigation menu"
               aria-expanded={mobileMenuOpen}

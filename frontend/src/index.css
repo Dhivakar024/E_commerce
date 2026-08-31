@@ -11,19 +11,20 @@
     --deep-navy: #0B1117;
     --ivory: #F7F3EA;
 
-    /* Dark Mode Unified Theme Variables (Deep Navy #101820 family) */
-    --bg-navbar: rgba(16, 24, 32, 0.94);
+    /* Dark Mode Header & Footer: Visible Muted Bronze Gold Header & Warm Dark Gold Footer */
+    --bg-navbar: rgba(111, 90, 46, 0.95);
+    --bg-footer: #5A4724;
+    --nav-border: rgba(201, 164, 92, 0.25);
+    --footer-border: rgba(201, 164, 92, 0.25);
+    --nav-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(111, 90, 46, 0.18);
+    --footer-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35);
+
+    /* Page Content remains deep luxury midnight navy */
     --bg-page: #101820;
     --bg-section: #151F28;
     --bg-card: #1B2630;
     --bg-surface: #1B2630;
     --bg-surface-secondary: #151F28;
-    --bg-footer: #101820;
-
-    --nav-border: rgba(201, 164, 92, 0.28);
-    --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-    --footer-border: rgba(201, 164, 92, 0.28);
-    --footer-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
 
     --text-primary: #F7F3EA;
     --text-secondary: #A9B0B5;
@@ -45,19 +46,20 @@
     --deep-navy: #0B1117;
     --ivory: #F7F3EA;
 
-    /* Light Mode Unified Theme Variables (Warm Ivory/Off-White #F8F6F0 family) */
-    --bg-navbar: rgba(240, 236, 225, 0.96);
+    /* Light Mode Header & Footer: Soft Elegant Champagne Gold Header & Muted Champagne Gold Footer */
+    --bg-navbar: rgba(230, 208, 154, 0.96);
+    --bg-footer: #D8BC72;
+    --nav-border: rgba(120, 90, 30, 0.18);
+    --footer-border: rgba(120, 90, 30, 0.18);
+    --nav-shadow: 0 4px 20px rgba(120, 90, 30, 0.12);
+    --footer-shadow: 0 -4px 20px rgba(120, 90, 30, 0.10);
+
+    /* Page Content remains warm off-white / ivory */
     --bg-page: #F8F6F0;
     --bg-section: #EDE9DF;
     --bg-card: #FFFFFF;
     --bg-surface: #FFFFFF;
     --bg-surface-secondary: #EDE9DF;
-    --bg-footer: #EDE9DF;
-
-    --nav-border: rgba(176, 139, 67, 0.3);
-    --nav-shadow: 0 4px 16px rgba(16, 24, 32, 0.06);
-    --footer-border: rgba(176, 139, 67, 0.3);
-    --footer-shadow: 0 -4px 16px rgba(16, 24, 32, 0.04);
 
     --text-primary: #101820;
     --text-secondary: #4A5560;
@@ -78,7 +80,7 @@
   html {
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     scroll-behavior: smooth;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    transition: background-color 300ms ease, color 300ms ease;
   }
 
   body {
@@ -88,7 +90,7 @@
     font-size: 15px;
     line-height: 1.6;
     overflow-x: hidden;
-    transition: background-color 0.4s ease, color 0.4s ease;
+    transition: background-color 300ms ease, color 300ms ease;
   }
 
   /* Clear 5-Level Typography Hierarchy */
@@ -107,14 +109,14 @@
   }
 }
 
-/* Custom Glassmorphism - Adaptive for Dark (#101820 Deep Navy + Gold) and Light (#F0ECE1 Warm Ivory + Gold) */
+/* Custom Glassmorphism - Adaptive for Dark (#6F5A2E Bronze Gold) and Light (#E6D09A Soft Champagne Gold) */
 .glass-nav {
   background: var(--bg-navbar);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--nav-border);
   box-shadow: var(--nav-shadow);
-  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease, padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, background 300ms ease, box-shadow 300ms ease, padding 300ms ease;
 }
 
 .glass-nav-transparent {
@@ -123,7 +125,7 @@
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--nav-border);
   box-shadow: var(--nav-shadow);
-  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease, box-shadow 0.4s ease, padding 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, background 300ms ease, box-shadow 300ms ease, padding 300ms ease;
 }
 
 .glass-card {
@@ -131,7 +133,7 @@
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--border-subtle);
-  transition: background-color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  transition: background-color 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
 }
 
 .glass-card:hover {
