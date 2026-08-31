@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { PRODUCTS } from '../data/products';
 import { ShopHero } from '../components/shop/ShopHero';
@@ -13,7 +13,7 @@ import { EmptyState } from '../components/shop/EmptyState';
 import { QuickViewModal } from '../components/shop/QuickViewModal';
 import { NewsletterSection } from '../components/home/NewsletterSection';
 import { useTheme } from '../context/ThemeContext';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Sparkles } from 'lucide-react';
 
 const INITIAL_PAGE_SIZE = 12;
 const PAGE_INCREMENT = 8;
@@ -22,6 +22,7 @@ export const Shop = ({ categoryName }) => {
   const params = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const { isDark } = useTheme();
+  const productScrollRef = useRef(null);
 
   // Normalize category from query param, path param, or prop
   const urlCategory = searchParams.get('category');
@@ -66,6 +67,11 @@ export const Shop = ({ categoryName }) => {
       searchQuery: activeSearch,
     }));
     setVisibleCount(INITIAL_PAGE_SIZE);
+
+    // Scroll product panel to top on category change
+    if (productScrollRef.current) {
+      productScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }, [categoryName, params.category, searchParams]);
 
   // Update URL query parameters cleanly
@@ -87,6 +93,10 @@ export const Shop = ({ categoryName }) => {
       return updated;
     });
     setVisibleCount(INITIAL_PAGE_SIZE);
+
+    if (productScrollRef.current) {
+      productScrollRef.current.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 
     setTimeout(() => {
       setIsLoading(false);
@@ -119,32 +129,30 @@ export const Shop = ({ categoryName }) => {
     });
   };
 
-  // Complex multi-category product filtering engine
+  // Comprehensive Multi-Facet Filtering Engine
   const filteredProducts = useMemo(() => {
     return PRODUCTS.filter((product) => {
       // 1. Category Filter
       if (filters.category && filters.category !== 'all') {
-        const prodCat = (product.categorySlug || product.category || '').toLowerCase();
-        if (prodCat !== filters.category.toLowerCase()) return false;
+        const pCat = (product.categorySlug || product.category || '').toLowerCase();
+        if (pCat !== filters.category.toLowerCase()) return false;
       }
 
       // 2. Subcategory Filter
       if (filters.subcategory) {
-        const prodSub = (product.subcategory || '').toLowerCase();
-        if (!prodSub.includes(filters.subcategory.toLowerCase())) return false;
+        const pSub = (product.subcategory || '').toLowerCase();
+        if (!pSub.includes(filters.subcategory.toLowerCase())) return false;
       }
 
       // 3. Search Query Filter
       if (filters.searchQuery) {
-        const q = filters.searchQuery.toLowerCase();
+        const q = filters.searchQuery.toLowerCase().trim();
         const matchesName = product.name.toLowerCase().includes(q);
         const matchesBrand = (product.brand || '').toLowerCase().includes(q);
-        const matchesCat = product.category.toLowerCase().includes(q);
-        const matchesSub = (product.subcategory || '').toLowerCase().includes(q);
+        const matchesCat = (product.category || '').toLowerCase().includes(q);
+        const matchesSubcat = (product.subcategory || '').toLowerCase().includes(q);
         const matchesDesc = (product.description || '').toLowerCase().includes(q);
-        const matchesTags = product.tags && product.tags.some((t) => t.toLowerCase().includes(q));
-
-        if (!matchesName && !matchesBrand && !matchesCat && !matchesSub && !matchesDesc && !matchesTags) {
+        if (!matchesName && !matchesBrand && !matchesCat && !matchesSubcat && !matchesDesc) {
           return false;
         }
       }
@@ -257,9 +265,11 @@ export const Shop = ({ categoryName }) => {
   }, [filters]);
 
   return (
-    <main className={`w-full min-h-screen pt-16 sm:pt-20 pb-20 sm:pb-24 transition-colors duration-250 ${
-      isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
-    }`}>
+    <main
+      className={`w-full min-h-screen pt-16 sm:pt-20 pb-20 sm:pb-24 transition-colors duration-250 ${
+        isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+      }`}
+    >
       {/* 1. Header & Dynamic Category Description */}
       <ShopHero categoryTitle={filters.category} />
 
@@ -271,7 +281,7 @@ export const Shop = ({ categoryName }) => {
         />
 
         {/* 3. Search Bar Input */}
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <SearchBar
             value={filters.searchQuery}
             onChange={(val) => handleFilterChange({ searchQuery: val })}
@@ -280,7 +290,7 @@ export const Shop = ({ categoryName }) => {
           />
         </div>
 
-        {/* 4. Filter Toolbar */}
+        {/* 4. Filter Toolbar (Count, Mobile Filter Trigger, Sort by) */}
         <FilterToolbar
           totalCount={filteredProducts.length}
           filters={filters}
@@ -290,69 +300,117 @@ export const Shop = ({ categoryName }) => {
           activeFilterCount={activeFilterCount}
         />
 
-        {/* Layout: Desktop Sidebar + Product Grid */}
-        <div className="flex items-start gap-6 lg:gap-8">
-          {/* Desktop Filter Sidebar */}
-          <ProductFiltersSidebar
-            filters={filters}
-            onFilterChange={handleFilterChange}
-            onClearFilters={handleClearFilters}
-            activeFilterCount={activeFilterCount}
-          />
+        {/* 5. Marketplace Layout: Fixed/Stable Left Sidebar + Dedicated Right-Side Product Scroll Panel */}
+        <div className="flex items-start gap-6 lg:gap-8 mb-8">
+          {/* Left: Stable Desktop Filter Sidebar */}
+          <div className="hidden lg:block lg:w-64 flex-shrink-0 lg:sticky lg:top-24 max-h-[calc(100vh-140px)] overflow-y-auto pr-2 scrollbar-thin">
+            <ProductFiltersSidebar
+              filters={filters}
+              onFilterChange={handleFilterChange}
+              onClearFilters={handleClearFilters}
+              activeFilterCount={activeFilterCount}
+            />
+          </div>
 
-          {/* Product Grid Viewport */}
-          <div className="flex-grow">
-            {isLoading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
-                {Array.from({ length: 8 }).map((_, idx) => (
-                  <ProductSkeleton key={idx} />
-                ))}
+          {/* Right: Dedicated Fixed-Height Scrollable Product Marketplace Panel */}
+          <div
+            className={`flex-grow w-full border rounded-none shadow-sm transition-all duration-300 relative flex flex-col ${
+              isDark
+                ? 'bg-[#141E28]/50 border-white/10'
+                : 'bg-white border-black/10'
+            }`}
+          >
+            {/* Panel Top Status Header with Category Label & Count */}
+            <div
+              className={`px-4 sm:px-6 py-3 border-b flex items-center justify-between text-xs tracking-wider z-10 backdrop-blur-md select-none ${
+                isDark
+                  ? 'bg-[#101820]/90 border-white/10 text-[#F7F3EA]'
+                  : 'bg-[#F8F6F0]/90 border-black/10 text-[#101820]'
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#C9A45C] animate-pulse" />
+                <span className="font-serif font-medium uppercase tracking-widest text-[#C9A45C]">
+                  {filters.category === 'all' ? 'All Products' : filters.category}
+                </span>
+                <span className="text-[#A9B0B5]">•</span>
+                <span className={isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'}>
+                  {filteredProducts.length} {filteredProducts.length === 1 ? 'Item' : 'Items'} Available
+                </span>
               </div>
-            ) : filteredProducts.length === 0 ? (
-              <EmptyState onClearFilters={handleClearFilters} />
-            ) : (
-              <>
-                {/* Responsive Compact Product Grid (2 cols mobile, 3-4 cols desktop) */}
+              <span className="text-[10px] uppercase tracking-widest text-[#A9B0B5] hidden sm:inline-flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-[#C9A45C]" />
+                <span>Internal Scroll Container</span>
+              </span>
+            </div>
+
+            {/* Scrollable Products Viewport (Only products scroll vertically inside this container) */}
+            <div
+              ref={productScrollRef}
+              className="product-scroll-panel overflow-y-auto overflow-x-hidden p-4 sm:p-5 lg:p-6 h-[720px] max-h-[calc(100vh-210px)] min-h-[500px] scroll-smooth"
+            >
+              {isLoading ? (
                 <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5">
-                  {visibleProducts.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                  {Array.from({ length: 8 }).map((_, idx) => (
+                    <ProductSkeleton key={idx} />
                   ))}
                 </div>
-
-                {/* Progressive Pagination / Load More */}
-                <div className="mt-12 pt-8 border-t border-black/10 dark:border-white/10 flex flex-col items-center justify-center gap-4">
-                  <div className={`text-xs font-light ${
-                    isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
-                  }`}>
-                    Showing <span className={`font-semibold ${isDark ? 'text-white' : 'text-[#101820]'}`}>{visibleProducts.length}</span> of{' '}
-                    <span className={`font-semibold ${isDark ? 'text-white' : 'text-[#101820]'}`}>{filteredProducts.length}</span> items
+              ) : filteredProducts.length === 0 ? (
+                <EmptyState onClearFilters={handleClearFilters} />
+              ) : (
+                <>
+                  {/* Responsive Product Grid Completely Contained Inside Scroll Box */}
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-5 pb-6">
+                    {visibleProducts.map((product) => (
+                      <ProductCard key={product.id} product={product} />
+                    ))}
                   </div>
 
-                  <div className="w-48 h-1 bg-black/10 dark:bg-white/10 overflow-hidden">
+                  {/* Progressive Pagination / Load More Controls */}
+                  <div className="mt-8 pt-6 border-t border-black/10 dark:border-white/10 flex flex-col items-center justify-center gap-3 pb-4">
                     <div
-                      className="h-full bg-[#C9A45C] transition-all duration-300"
-                      style={{
-                        width: `${(visibleProducts.length / filteredProducts.length) * 100}%`,
-                      }}
-                    />
-                  </div>
-
-                  {hasMore && (
-                    <button
-                      onClick={handleLoadMore}
-                      className={`btn-shine inline-flex items-center gap-2 px-8 py-3 text-xs uppercase tracking-widest font-semibold transition-all duration-300 mt-2 shadow-sm cursor-pointer ${
-                        isDark
-                          ? 'bg-[#1B2630] hover:bg-[#C9A45C] text-white hover:text-[#101820]'
-                          : 'bg-[#101820] hover:bg-[#B08B43] text-white'
+                      className={`text-xs font-light ${
+                        isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'
                       }`}
                     >
-                      <span>Load More Products</span>
-                      <ChevronDown className="w-3.5 h-3.5" />
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
+                      Showing{' '}
+                      <span className={`font-semibold ${isDark ? 'text-white' : 'text-[#101820]'}`}>
+                        {visibleProducts.length}
+                      </span>{' '}
+                      of{' '}
+                      <span className={`font-semibold ${isDark ? 'text-white' : 'text-[#101820]'}`}>
+                        {filteredProducts.length}
+                      </span>{' '}
+                      items
+                    </div>
+
+                    {/* Progress Fill Bar */}
+                    <div className="w-44 h-1 bg-black/10 dark:bg-white/10 overflow-hidden">
+                      <div
+                        className="h-full bg-[#C9A45C] transition-all duration-300"
+                        style={{
+                          width: `${(visibleProducts.length / filteredProducts.length) * 100}%`,
+                        }}
+                      />
+                    </div>
+
+                    {hasMore && (
+                      <button
+                        onClick={handleLoadMore}
+                        className={`btn-shine inline-flex items-center gap-2 px-7 py-2.5 text-xs uppercase tracking-widest font-semibold transition-all duration-300 mt-1 shadow-sm cursor-pointer ${
+                          isDark
+                            ? 'bg-[#1B2630] hover:bg-[#C9A45C] text-white hover:text-[#101820]'
+                            : 'bg-[#101820] hover:bg-[#B08B43] text-white'
+                        }`}
+                      >
+                        <span>Load More Products</span>
+                        <ChevronDown className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>

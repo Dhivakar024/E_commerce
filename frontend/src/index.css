@@ -287,6 +287,30 @@ html.light .glass-nav-transparent {
   opacity: 1;
 }
 
+/* Custom Dedicated Product Scroll Container Scrollbar */
+.product-scroll-panel {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201, 164, 92, 0.4) transparent;
+}
+
+.product-scroll-panel::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.product-scroll-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.product-scroll-panel::-webkit-scrollbar-thumb {
+  background-color: rgba(201, 164, 92, 0.35);
+  border-radius: 4px;
+}
+
+.product-scroll-panel::-webkit-scrollbar-thumb:hover {
+  background-color: var(--accent-gold);
+}
+
 /* Subtle Scrollbar — Adaptive */
 ::-webkit-scrollbar {
   width: 6px;

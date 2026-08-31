@@ -16,6 +16,7 @@ export const ProductFiltersSidebar = ({
   onFilterChange,
   onClearFilters,
   activeFilterCount = 0,
+  className = '',
 }) => {
   const { isDark } = useTheme();
   const currentCategory = (filters.category || 'all').toLowerCase();
@@ -33,9 +34,9 @@ export const ProductFiltersSidebar = ({
   const borderClass = isDark ? 'border-white/10' : 'border-black/10';
 
   return (
-    <aside className={`w-64 flex-shrink-0 space-y-7 pr-6 border-r hidden lg:block select-none transition-colors duration-250 ${borderClass} ${
+    <aside className={`w-64 flex-shrink-0 space-y-6 pr-5 border-r select-none transition-colors duration-250 ${borderClass} ${
       isDark ? 'text-[#F7F3EA]' : 'text-[#101820]'
-    }`}>
+    } ${className}`}>
       {/* Header */}
       <div className={`flex items-center justify-between pb-4 border-b ${borderClass}`}>
         <div className="flex items-center gap-2">
@@ -99,28 +100,27 @@ export const ProductFiltersSidebar = ({
 
       {/* 2. DYNAMIC CATEGORY-SPECIFIC FILTERS */}
 
-      {/* A. FASHION FILTERS */}
-      {(currentCategory === 'fashion' || currentCategory === 'all') && (
+      {/* Fashion: Sizes, Colors, Materials */}
+      {currentCategory === 'fashion' && (
         <>
-          {/* Sizes */}
           <div>
             <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
-              Size
+              Sizes
             </h4>
-            <div className="flex flex-wrap gap-2">
-              {['XS', 'S', 'M', 'L', 'XL', 'One Size'].map((size) => {
-                const isSelected = filters.sizes?.includes(size);
+            <div className="flex flex-wrap gap-1.5">
+              {['XS', 'S', 'M', 'L', 'XL', 'XXL', '38', '40', '42', '44', 'UK 7', 'UK 8', 'UK 9', 'UK 10'].map((size) => {
+                const isSelected = (filters.sizes || []).includes(size);
                 return (
                   <button
                     key={size}
                     type="button"
                     onClick={() => toggleArrayItem('sizes', size)}
-                    className={`min-w-[36px] h-8 px-2 text-xs font-medium uppercase tracking-wider transition-colors border cursor-pointer ${
+                    className={`px-2.5 py-1 text-xs border uppercase tracking-wider transition-all cursor-pointer ${
                       isSelected
                         ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
                         : isDark
-                          ? 'bg-[#1B2630] text-white border-white/15 hover:border-[#C9A45C]'
-                          : 'bg-white text-[#101820] border-black/15 hover:border-[#B08B43]'
+                          ? 'bg-white/5 border-white/10 hover:border-white/30 text-white/80'
+                          : 'bg-black/5 border-black/10 hover:border-black/30 text-[#101820]/80'
                     }`}
                   >
                     {size}
@@ -130,32 +130,28 @@ export const ProductFiltersSidebar = ({
             </div>
           </div>
 
-          {/* Color */}
           <div>
             <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
-              Color
+              Materials
             </h4>
             <div className="space-y-1.5">
-              {['White', 'Beige', 'Midnight Black', 'Navy Blue', 'Champagne Gold'].map((color) => {
-                const isSelected = filters.colors?.includes(color);
-                return (
-                  <label key={color} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('colors', color)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{color}</span>
-                  </label>
-                );
-              })}
+              {['100% French Linen', 'Virgin Wool', 'Mulberry Silk', 'Organic Cotton', 'Full Grain Leather', 'Italian Cashmere'].map((mat) => (
+                <label key={mat} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
+                  <input
+                    type="checkbox"
+                    checked={(filters.materials || []).includes(mat)}
+                    onChange={() => toggleArrayItem('materials', mat)}
+                    className="accent-[#C9A45C] cursor-pointer"
+                  />
+                  <span>{mat}</span>
+                </label>
+              ))}
             </div>
           </div>
         </>
       )}
 
-      {/* B. FURNITURE FILTERS */}
+      {/* Furniture: Room Types, Materials */}
       {currentCategory === 'furniture' && (
         <>
           <div>
@@ -163,45 +159,93 @@ export const ProductFiltersSidebar = ({
               Room Type
             </h4>
             <div className="space-y-1.5">
-              {['Living Room', 'Bedroom', 'Dining', 'Office', 'Outdoor'].map((room) => {
-                const isSelected = filters.roomTypes?.includes(room);
-                return (
-                  <label key={room} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('roomTypes', room)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{room}</span>
-                  </label>
-                );
-              })}
+              {['Living Room', 'Dining Room', 'Bedroom', 'Home Office', 'Entryway'].map((room) => (
+                <label key={room} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
+                  <input
+                    type="checkbox"
+                    checked={(filters.roomTypes || []).includes(room)}
+                    onChange={() => toggleArrayItem('roomTypes', room)}
+                    className="accent-[#C9A45C] cursor-pointer"
+                  />
+                  <span>{room}</span>
+                </label>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
+              Material
+            </h4>
+            <div className="space-y-1.5">
+              {['Solid Teak Wood', 'Solid White Oak', 'Boucle Fabric', 'Full-Grain Italian Leather', 'Tempered Glass & Steel', 'Velvet & Walnut'].map((mat) => (
+                <label key={mat} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
+                  <input
+                    type="checkbox"
+                    checked={(filters.materials || []).includes(mat)}
+                    onChange={() => toggleArrayItem('materials', mat)}
+                    className="accent-[#C9A45C] cursor-pointer"
+                  />
+                  <span>{mat}</span>
+                </label>
+              ))}
             </div>
           </div>
         </>
       )}
 
-      {/* C. ELECTRONICS FILTERS */}
+      {/* Electronics: RAM, Storage, Brands */}
       {currentCategory === 'electronics' && (
         <>
           <div>
             <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
-              Brand
+              RAM & Memory
             </h4>
-            <div className="space-y-1.5">
-              {['AetherTech', 'Zenith Systems', 'Quantum Audio', 'Visionary Display', 'Lumina Optics', 'Pulse Technologies'].map((b) => {
-                const isSelected = filters.brands?.includes(b);
+            <div className="flex flex-wrap gap-1.5">
+              {['8GB', '12GB', '16GB', '32GB'].map((ram) => {
+                const isSelected = (filters.rams || []).includes(ram);
                 return (
-                  <label key={b} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('brands', b)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{b}</span>
-                  </label>
+                  <button
+                    key={ram}
+                    type="button"
+                    onClick={() => toggleArrayItem('rams', ram)}
+                    className={`px-2.5 py-1 text-xs border uppercase tracking-wider transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                        : isDark
+                          ? 'bg-white/5 border-white/10 hover:border-white/30 text-white/80'
+                          : 'bg-black/5 border-black/10 hover:border-black/30 text-[#101820]/80'
+                    }`}
+                  >
+                    {ram}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
+              Storage
+            </h4>
+            <div className="flex flex-wrap gap-1.5">
+              {['128GB', '256GB', '512GB', '1TB'].map((storage) => {
+                const isSelected = (filters.storages || []).includes(storage);
+                return (
+                  <button
+                    key={storage}
+                    type="button"
+                    onClick={() => toggleArrayItem('storages', storage)}
+                    className={`px-2.5 py-1 text-xs border uppercase tracking-wider transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                        : isDark
+                          ? 'bg-white/5 border-white/10 hover:border-white/30 text-white/80'
+                          : 'bg-black/5 border-black/10 hover:border-black/30 text-[#101820]/80'
+                    }`}
+                  >
+                    {storage}
+                  </button>
                 );
               })}
             </div>
@@ -209,62 +253,78 @@ export const ProductFiltersSidebar = ({
         </>
       )}
 
-      {/* D. MEDICINES & WELLNESS */}
+      {/* Medicines: Form & Prescription */}
       {currentCategory === 'medicines' && (
         <>
           <div>
             <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
-              Product Form
+              Form
             </h4>
             <div className="space-y-1.5">
-              {['Capsules', 'Tablets', 'Liquid', 'Drops', 'Device', 'Kit'].map((f) => {
-                const isSelected = filters.forms?.includes(f);
-                return (
-                  <label key={f} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('forms', f)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{f}</span>
-                  </label>
-                );
-              })}
+              {['Capsules', 'Tablets', 'Syrup / Liquid', 'Diagnostic Kit', 'Cream / Ointment'].map((form) => (
+                <label key={form} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
+                  <input
+                    type="checkbox"
+                    checked={(filters.forms || []).includes(form)}
+                    onChange={() => toggleArrayItem('forms', form)}
+                    className="accent-[#C9A45C] cursor-pointer"
+                  />
+                  <span>{form}</span>
+                </label>
+              ))}
             </div>
           </div>
-        </>
-      )}
 
-      {/* E. COSMETICS */}
-      {currentCategory === 'cosmetics' && (
-        <>
           <div>
             <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
-              Skin Type
+              Prescription Requirement
             </h4>
-            <div className="space-y-1.5">
-              {['All Skin Types', 'Dry', 'Oily', 'Sensitive', 'Combination'].map((st) => {
-                const isSelected = filters.skinTypes?.includes(st);
-                return (
-                  <label key={st} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
-                    <input
-                      type="checkbox"
-                      checked={isSelected}
-                      onChange={() => toggleArrayItem('skinTypes', st)}
-                      className="accent-[#C9A45C]"
-                    />
-                    <span>{st}</span>
-                  </label>
-                );
-              })}
+            <div className="space-y-2">
+              {[
+                { id: 'all', label: 'All Medicines' },
+                { id: 'no', label: 'OTC (No Rx Needed)' },
+                { id: 'yes', label: 'Prescription Required' },
+              ].map((opt) => (
+                <label key={opt.id} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
+                  <input
+                    type="radio"
+                    name="prescriptionRequired"
+                    checked={filters.prescriptionRequired === opt.id}
+                    onChange={() => onFilterChange({ prescriptionRequired: opt.id })}
+                    className="accent-[#C9A45C] cursor-pointer"
+                  />
+                  <span>{opt.label}</span>
+                </label>
+              ))}
             </div>
           </div>
         </>
       )}
 
-      {/* 3. Price Filter */}
-      <div className={`pt-4 border-t ${borderClass}`}>
+      {/* Cosmetics: Skin Types */}
+      {currentCategory === 'cosmetics' && (
+        <div>
+          <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
+            Skin Type
+          </h4>
+          <div className="space-y-1.5">
+            {['All Skin Types', 'Dry Skin', 'Oily & Combination', 'Sensitive Skin'].map((type) => (
+              <label key={type} className={`flex items-center gap-2 text-xs cursor-pointer ${textBodyClass}`}>
+                <input
+                  type="checkbox"
+                  checked={(filters.skinTypes || []).includes(type)}
+                  onChange={() => toggleArrayItem('skinTypes', type)}
+                  className="accent-[#C9A45C] cursor-pointer"
+                />
+                <span>{type}</span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 3. Global Price Range Filter */}
+      <div>
         <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
           Price Range
         </h4>
@@ -273,9 +333,34 @@ export const ProductFiltersSidebar = ({
             <label key={opt.id} className={`flex items-center gap-2.5 text-xs cursor-pointer ${textBodyClass}`}>
               <input
                 type="radio"
-                name="sidebar_price"
+                name="priceRange"
                 checked={filters.priceRange === opt.id}
                 onChange={() => onFilterChange({ priceRange: opt.id })}
+                className="accent-[#C9A45C] cursor-pointer"
+              />
+              <span>{opt.label}</span>
+            </label>
+          ))}
+        </div>
+      </div>
+
+      {/* 4. Availability Filter */}
+      <div>
+        <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
+          Availability
+        </h4>
+        <div className="space-y-2">
+          {[
+            { id: 'all', label: 'All Items' },
+            { id: 'in-stock', label: 'In Stock Only' },
+            { id: 'pre-order', label: 'Pre-Order Items' },
+          ].map((opt) => (
+            <label key={opt.id} className={`flex items-center gap-2.5 text-xs cursor-pointer ${textBodyClass}`}>
+              <input
+                type="radio"
+                name="availability"
+                checked={filters.availability === opt.id}
+                onChange={() => onFilterChange({ availability: opt.id })}
                 className="accent-[#C9A45C] cursor-pointer"
               />
               <span>{opt.label}</span>
