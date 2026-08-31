@@ -162,8 +162,8 @@ export const Footer = () => {
       onMouseLeave={handleFooterMouseLeave}
       className={`relative z-20 pt-14 sm:pt-20 pb-12 overflow-hidden border-t select-none transition-colors duration-300 ${
         isDark
-          ? 'bg-[#0D141B] text-[#F7F3EA] border-white/10'
-          : 'bg-[#F2EFE9] text-[#101820] border-black/10'
+          ? 'bg-[#080D12] text-[#F7F3EA] border-white/[0.08]'
+          : 'bg-[#E4DFD5] text-[#101820] border-black/[0.08]'
       }`}
     >
       {/* 1. Animated Travelling Gold Light on Top Divider */}

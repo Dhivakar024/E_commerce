@@ -12,8 +12,8 @@ export const ShopHero = ({ categoryTitle, activeCategory }) => {
   return (
     <section className={`relative pt-2 pb-6 sm:pt-3 sm:pb-8 border-b overflow-hidden transition-colors duration-250 ${
       isDark
-        ? 'bg-gradient-to-b from-[#1B2630]/70 via-[#101820] to-[#101820] border-white/10 text-white'
-        : 'bg-gradient-to-b from-[#EFECE6]/80 via-[#F8F6F0] to-[#F8F6F0] border-black/10 text-[#101820]'
+        ? 'bg-gradient-to-b from-[#151F28] via-[#101820] to-[#101820] border-white/[0.08] text-white'
+        : 'bg-gradient-to-b from-[#EDE9DF] via-[#F8F6F0] to-[#F8F6F0] border-black/[0.08] text-[#101820]'
     }`}>
       {/* Subtle Ambient Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-36 bg-[#C9A45C]/5 blur-[90px] pointer-events-none" />

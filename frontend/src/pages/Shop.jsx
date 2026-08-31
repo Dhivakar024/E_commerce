@@ -316,16 +316,16 @@ export const Shop = ({ categoryName }) => {
           <div
             className={`flex-grow w-full border rounded-none shadow-sm transition-all duration-300 relative flex flex-col ${
               isDark
-                ? 'bg-[#141E28]/50 border-white/10'
-                : 'bg-white border-black/10'
+                ? 'bg-[#151F28] border-white/[0.08]'
+                : 'bg-[#EDE9DF] border-black/[0.08]'
             }`}
           >
             {/* Panel Top Status Header with Category Label & Count */}
             <div
               className={`px-4 sm:px-6 py-3 border-b flex items-center justify-between text-xs tracking-wider z-10 backdrop-blur-md select-none ${
                 isDark
-                  ? 'bg-[#101820]/90 border-white/10 text-[#F7F3EA]'
-                  : 'bg-[#F8F6F0]/90 border-black/10 text-[#101820]'
+                  ? 'bg-[#101820] border-white/[0.08] text-[#F7F3EA]'
+                  : 'bg-[#F8F6F0] border-black/[0.08] text-[#101820]'
               }`}
             >
               <div className="flex items-center gap-2">

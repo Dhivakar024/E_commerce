@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { authService } from '../services/authService';
+import { useTheme } from '../context/ThemeContext';
 import { Mail, ArrowRight, ArrowLeft, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
 
 export const ForgotPassword = () => {
+  const { isDark } = useTheme();
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSent, setIsSent] = useState(false);
@@ -31,17 +33,23 @@ export const ForgotPassword = () => {
   };
 
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pt-28 sm:pt-36 pb-24 flex items-center justify-center">
+    <main className={`w-full min-h-screen pt-28 sm:pt-36 pb-24 flex items-center justify-center transition-colors duration-250 ${
+      isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+    }`}>
       <div className="w-full max-w-md mx-auto px-4 sm:px-6">
-        <div className="bg-luxury-charcoal/40 border border-white/10 p-8 sm:p-10 shadow-2xl space-y-8 animate-fade-in backdrop-blur-md">
+        <div className={`p-8 sm:p-10 shadow-2xl space-y-8 animate-fade-in border ${
+          isDark
+            ? 'bg-[#1B2630] border-white/[0.08] text-white'
+            : 'bg-white border-black/[0.08] text-[#101820]'
+        }`}>
           <div className="text-center space-y-2">
-            <span className="text-[10px] uppercase tracking-ultra text-luxury-gold block font-medium">
+            <span className="text-[10px] uppercase tracking-ultra text-[#C9A45C] block font-medium">
               ACCOUNT RECOVERY
             </span>
-            <h1 className="font-serif text-2xl sm:text-3xl text-white font-normal">
+            <h1 className="font-serif text-2xl sm:text-3xl font-normal">
               Reset Your Password
             </h1>
-            <p className="text-xs text-luxury-muted font-light">
+            <p className={`text-xs font-light ${isDark ? 'text-[#A9B0B5]' : 'text-[#717D86]'}`}>
               Enter your registered email to receive password reset instructions.
             </p>
           </div>
@@ -51,28 +59,28 @@ export const ForgotPassword = () => {
               <div className="w-12 h-12 rounded-full bg-emerald-950/80 border border-emerald-500/40 text-emerald-400 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6" />
               </div>
-              <p className="text-xs text-luxury-cream leading-relaxed">
-                Instructions have been dispatched to <strong className="text-white font-medium">{email}</strong>. Please check your inbox and follow the secure link.
+              <p className="text-xs leading-relaxed">
+                Instructions have been dispatched to <strong className="font-medium text-[#C9A45C]">{email}</strong>. Please check your inbox and follow the secure link.
               </p>
               <Link
                 to="/login"
-                className="btn-shine inline-flex items-center gap-2 px-6 py-2.5 bg-white text-luxury-black hover:bg-luxury-champagne text-xs uppercase tracking-wider font-medium transition-all"
+                className="btn-shine inline-flex items-center gap-2 px-6 py-2.5 bg-[#C9A45C] text-[#101820] hover:bg-[#D8B872] text-xs uppercase tracking-wider font-semibold transition-all mt-2"
               >
-                <ArrowLeft className="w-3.5 h-3.5" />
                 <span>Return to Sign In</span>
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5 text-xs">
               {error && (
-                <div className="p-3 bg-rose-950/70 border border-rose-500/40 text-rose-200 text-xs flex items-center gap-2">
+                <div className="p-3.5 bg-rose-950/70 border border-rose-500/40 text-rose-200 text-xs flex items-center gap-2 animate-fade-in">
                   <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
                   <span>{error}</span>
                 </div>
               )}
 
               <div className="space-y-1.5">
-                <label className="block text-luxury-cream uppercase tracking-widest font-medium text-[11px]">
+                <label className="block uppercase tracking-widest font-medium text-[11px]">
                   Email Address
                 </label>
                 <div className="relative">
@@ -81,39 +89,39 @@ export const ForgotPassword = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="e.g. client@lax360.com"
-                    className="w-full bg-white/5 border border-white/15 focus:border-luxury-gold text-white pl-10 pr-4 py-3 text-xs focus:outline-none placeholder:text-luxury-muted/40 transition-colors"
+                    className={`w-full border pl-10 pr-4 py-3 text-xs focus:outline-none transition-colors ${
+                      isDark
+                        ? 'bg-white/5 border-white/15 focus:border-[#C9A45C] text-white placeholder:text-[#A9B0B5]/40'
+                        : 'bg-black/5 border-black/15 focus:border-[#B08B43] text-[#101820] placeholder:text-[#717D86]/40'
+                    }`}
                     required
                   />
-                  <Mail className="w-4 h-4 text-luxury-muted absolute left-3.5 top-3.5" />
+                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A9B0B5]" />
                 </div>
               </div>
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className={`btn-shine w-full py-3.5 font-medium text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2 ${
-                  isSubmitting
-                    ? 'bg-neutral-800 text-neutral-400 cursor-wait'
-                    : 'bg-white text-luxury-black hover:bg-luxury-champagne'
-                }`}
+                className="btn-shine w-full py-3.5 bg-[#C9A45C] text-[#101820] hover:bg-[#D8B872] uppercase tracking-widest font-semibold flex items-center justify-center gap-2 transition-all shadow-lg cursor-pointer"
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Sending Instructions...</span>
+                    <span>Dispatching Instructions...</span>
                   </>
                 ) : (
                   <>
-                    <span>Send Reset Link</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>Send Reset Instructions</span>
+                    <ArrowRight className="w-4 h-4" />
                   </>
                 )}
               </button>
 
-              <div className="text-center pt-2">
+              <div className="text-center pt-3">
                 <Link
                   to="/login"
-                  className="text-xs text-luxury-muted hover:text-white uppercase tracking-wider inline-flex items-center gap-1.5 transition-colors"
+                  className="inline-flex items-center gap-1.5 text-xs text-[#C9A45C] hover:underline"
                 >
                   <ArrowLeft className="w-3.5 h-3.5" />
                   <span>Back to Sign In</span>

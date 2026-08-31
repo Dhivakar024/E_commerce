@@ -38,8 +38,8 @@ export const NewsletterSection = () => {
   return (
     <section
       ref={sectionRef}
-      className={`py-16 sm:py-20 relative z-10 overflow-hidden transition-colors duration-250 ${
-        isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
+      className={`py-16 sm:py-20 relative z-10 overflow-hidden transition-colors duration-250 border-y ${
+        isDark ? 'bg-[#151F28] border-white/[0.08]' : 'bg-[#EDE9DF] border-black/[0.08]'
       }`}
     >
       {/* Floating decorative elements */}
@@ -51,8 +51,8 @@ export const NewsletterSection = () => {
         <div
           className={`w-full max-w-xl sm:max-w-2xl px-6 py-10 sm:px-10 sm:py-12 text-center rounded-none border shadow-2xl transition-all duration-700 ease-out relative ${
             isDark
-              ? 'bg-[#1B2630] border-white/10 text-white'
-              : 'bg-white border-black/10 text-[#101820]'
+              ? 'bg-[#1B2630] border-white/[0.08] text-white'
+              : 'bg-white border-black/[0.08] text-[#101820]'
           }`}
           style={{
             opacity: isVisible ? 1 : 0,

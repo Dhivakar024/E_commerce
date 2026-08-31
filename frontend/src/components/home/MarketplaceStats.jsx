@@ -66,8 +66,8 @@ const StatItem = ({ item, isVisible, index, isDark }) => {
     <div
       className={`p-6 border space-y-3 relative overflow-hidden group transition-all duration-300 shadow-xl ${
         isDark
-          ? 'bg-[#101820] border-white/10 hover:border-[#C9A45C]/60 text-white'
-          : 'bg-white border-black/10 hover:border-[#B08B43]/60 text-[#101820]'
+          ? 'bg-[#1B2630] border-white/[0.08] hover:border-[#C9A45C]/60 text-white'
+          : 'bg-white border-black/[0.08] hover:border-[#B08B43]/60 text-[#101820]'
       }`}
       style={{
         opacity: isVisible ? 1 : 0,
@@ -118,8 +118,8 @@ export const MarketplaceStats = () => {
       ref={sectionRef}
       className={`py-16 sm:py-24 border-y relative z-10 overflow-hidden transition-colors duration-250 ${
         isDark
-          ? 'bg-[#1B2630]/40 border-white/5'
-          : 'bg-[#F2EFE9]/70 border-black/5'
+          ? 'bg-[#151F28] border-white/[0.08]'
+          : 'bg-[#EDE9DF] border-black/[0.08]'
       }`}
     >
       {/* Subtle floating background accent */}

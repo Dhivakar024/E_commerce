@@ -305,8 +305,8 @@ export const ShopByCategory = () => {
     <section
       id="shop-by-category"
       ref={sectionRef}
-      className={`py-14 sm:py-20 relative z-10 overflow-hidden select-none transition-colors duration-250 ${
-        isDark ? 'bg-[#101820]' : 'bg-[#F8F6F0]'
+      className={`py-14 sm:py-20 relative z-10 overflow-hidden select-none transition-colors duration-250 border-y ${
+        isDark ? 'bg-[#151F28] border-white/[0.08]' : 'bg-[#EDE9DF] border-black/[0.08]'
       }`}
     >
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 relative z-10">

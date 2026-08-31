@@ -9,12 +9,15 @@ export default {
     extend: {
       colors: {
         brand: {
-          primary: '#101820',          // Midnight Navy
+          navbar: '#0B1117',           // Deep Midnight Navy Navbar
+          primary: '#101820',          // Midnight Navy Page Background
+          section: '#151F28',          // Section Background
+          surface: '#1B2630',          // Card / Surface
+          footer: '#080D12',           // Deepest Navy Footer
           secondary: '#F7F3EA',        // Ivory
           accent: '#C9A45C',           // Champagne Gold
           'accent-hover': '#D8B872',   // Lighter Gold
           'accent-dark': '#B08B43',    // Darker Gold
-          surface: '#1B2630',          // Deep Navy Surface
           'surface-light': '#22303D',  // Subtle Elevated Surface
           text: '#F7F3EA',             // Ivory Text
           'text-dark': '#101820',      // Midnight Navy Text
@@ -29,8 +32,8 @@ export default {
           charcoal: '#1B2630',         // Deep Navy Surface
           dark: '#141E28',             // Deep Background
           card: '#1B2630',             // Deep Card Surface
-          border: 'rgba(247, 243, 234, 0.10)',
-          'border-light': 'rgba(247, 243, 234, 0.18)',
+          border: 'rgba(247, 243, 234, 0.08)',
+          'border-light': 'rgba(247, 243, 234, 0.14)',
           gold: '#C9A45C',             // Champagne Gold
           'gold-light': '#D8B872',
           'gold-dark': '#B08B43',

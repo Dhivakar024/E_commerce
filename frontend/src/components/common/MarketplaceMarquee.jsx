@@ -20,20 +20,20 @@ export const MarketplaceMarquee = () => {
     <div
       className={`relative w-full overflow-hidden border-y py-3 select-none transition-colors duration-250 ${
         isDark
-          ? 'bg-[#141E28] border-white/10 text-[#F7F3EA]'
-          : 'bg-[#F2EFE9] border-black/10 text-[#101820]'
+          ? 'bg-[#151F28] border-white/[0.08] text-[#F7F3EA]'
+          : 'bg-[#EDE9DF] border-black/[0.08] text-[#101820]'
       }`}
       aria-hidden="true"
     >
       {/* Left/Right Edge Fades for Seamless Look */}
       <div
         className={`absolute left-0 inset-y-0 w-16 sm:w-28 z-10 pointer-events-none bg-gradient-to-r ${
-          isDark ? 'from-[#141E28] to-transparent' : 'from-[#F2EFE9] to-transparent'
+          isDark ? 'from-[#151F28] to-transparent' : 'from-[#EDE9DF] to-transparent'
         }`}
       />
       <div
         className={`absolute right-0 inset-y-0 w-16 sm:w-28 z-10 pointer-events-none bg-gradient-to-l ${
-          isDark ? 'from-[#141E28] to-transparent' : 'from-[#F2EFE9] to-transparent'
+          isDark ? 'from-[#151F28] to-transparent' : 'from-[#EDE9DF] to-transparent'
         }`}
       />
 

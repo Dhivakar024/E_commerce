@@ -51,8 +51,8 @@ export const HeroBackground = () => {
         }}
         className={`absolute inset-[-20px] transition-colors duration-300 ${
           isDark
-            ? 'bg-gradient-to-b from-[#0B1015] via-[#101820] to-[#101820]'
-            : 'bg-gradient-to-b from-[#FAF8F3] via-[#F8F6F0] to-[#EFECE6]'
+            ? 'bg-gradient-to-b from-[#0B1117] via-[#101820] to-[#101820]'
+            : 'bg-gradient-to-b from-[#F0ECE1] via-[#F8F6F0] to-[#F8F6F0]'
         }`}
       />
 
