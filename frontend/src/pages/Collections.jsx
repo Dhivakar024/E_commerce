@@ -358,12 +358,15 @@ export const Collections = () => {
             ))}
           </div>
         </section>
+      </div>
 
-        {/* Marquee Banner */}
-        <div className="w-full">
-          <MarketplaceMarquee />
-        </div>
+      {/* Full Viewport Width Marketplace Marquee Ticker (Matching Home Page) */}
+      <div className="w-full my-12 sm:my-16">
+        <MarketplaceMarquee />
+      </div>
 
+      {/* Container 2: Stats Strip & Final CTA */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 space-y-12 sm:space-y-16">
         {/* 3. COMPACT PREMIUM MARKETPLACE STATS STRIP */}
         <section
           ref={statsRef}
