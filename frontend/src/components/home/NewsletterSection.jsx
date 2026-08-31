@@ -51,8 +51,8 @@ export const NewsletterSection = () => {
         <div
           className={`w-full max-w-xl sm:max-w-2xl px-6 py-8 sm:px-10 sm:py-10 text-center rounded-none border shadow-xl transition-all duration-700 ease-out relative ${
             isDark
-              ? 'bg-[#1B2630] border-white/[0.08] text-white'
-              : 'bg-white border-black/[0.08] text-[#101820]'
+              ? 'bg-[#1B2630] border-[#C9A45C]/45 shadow-[0_12px_32px_rgba(0,0,0,0.4),0_0_16px_rgba(201,164,92,0.12)] text-white'
+              : 'bg-white border-[#C9A45C]/60 shadow-[0_12px_32px_rgba(16,24,32,0.08),0_0_0_1px_rgba(201,164,92,0.15)] text-[#101820]'
           }`}
           style={{
             opacity: isVisible ? 1 : 0,
