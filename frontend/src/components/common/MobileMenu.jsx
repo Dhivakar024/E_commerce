@@ -56,8 +56,8 @@ export const MobileMenu = ({ isOpen, onClose }) => {
         aria-label="Mobile navigation"
         className={`fixed top-0 right-0 w-[85%] max-w-sm h-full z-50 p-6 flex flex-col justify-between overflow-y-auto transition-all duration-400 ease-out md:hidden shadow-2xl ${
           isDark
-            ? 'bg-[#0B1117] text-[#F7F3EA] border-l border-[#C9A45C]/30'
-            : 'bg-gradient-to-b from-[#D4B06A] via-[#C9A45C] to-[#B8944D] text-[#101820] border-l border-[#B8944D]'
+            ? 'bg-[#101820] text-[#F7F3EA] border-l border-[#C9A45C]/30'
+            : 'bg-[#EDE9DF] text-[#101820] border-l border-[#B08B43]/30'
         } ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div>

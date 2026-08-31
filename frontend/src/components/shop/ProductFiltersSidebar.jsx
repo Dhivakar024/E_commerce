@@ -62,43 +62,7 @@ export const ProductFiltersSidebar = ({
         )}
       </div>
 
-      {/* 1. Category Switcher */}
-      <div>
-        <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
-          Category
-        </h4>
-        <div className="space-y-2">
-          <label className={`flex items-center gap-2.5 text-xs cursor-pointer font-medium ${textBodyClass}`}>
-            <input
-              type="radio"
-              name="sidebar_category"
-              checked={currentCategory === 'all'}
-              onChange={() => onFilterChange({ category: 'all', subcategories: [] })}
-              className="accent-[#C9A45C] cursor-pointer"
-            />
-            <span>All Categories</span>
-          </label>
-          {CATEGORIES.map((cat) => (
-            <label
-              key={cat.id}
-              className={`flex items-center gap-2.5 text-xs cursor-pointer ${textBodyClass}`}
-            >
-              <input
-                type="radio"
-                name="sidebar_category"
-                checked={currentCategory === cat.slug}
-                onChange={() => onFilterChange({ category: cat.slug, subcategories: [] })}
-                className="accent-[#C9A45C] cursor-pointer"
-              />
-              <span className={currentCategory === cat.slug ? `font-semibold ${textHeaderClass}` : ''}>
-                {cat.name}
-              </span>
-            </label>
-          ))}
-        </div>
-      </div>
-
-      {/* 2. DYNAMIC CATEGORY-SPECIFIC FILTERS */}
+      {/* DYNAMIC CATEGORY-SPECIFIC FILTERS */}
 
       {/* Fashion: Sizes, Colors, Materials */}
       {currentCategory === 'fashion' && (

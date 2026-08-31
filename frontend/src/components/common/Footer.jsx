@@ -88,14 +88,14 @@ export const Footer = () => {
       ref={footerRef}
       className={`relative z-20 pt-10 sm:pt-12 md:pt-14 pb-6 sm:pb-8 overflow-hidden border-t select-none transition-all duration-400 ease-in-out ${
         isDark
-          ? 'bg-[#080D12] text-[#F7F3EA] border-[#C9A45C]/35 shadow-[0_-4px_24px_rgba(201,164,92,0.06)]'
-          : 'bg-gradient-to-b from-[#D4B06A] via-[#C9A45C] to-[#B8944D] text-[#101820] border-[#B8944D] shadow-[0_-4px_20px_rgba(184,148,77,0.20)]'
+          ? 'bg-[#101820] text-[#F7F3EA] border-[#C9A45C]/28 shadow-[0_-4px_20px_rgba(0,0,0,0.35)]'
+          : 'bg-[#EDE9DF] text-[#101820] border-[#B08B43]/30 shadow-[0_-4px_16px_rgba(16,24,32,0.04)]'
       }`}
     >
       {/* 1. Animated Travelling Gold Light on Top Divider */}
       <div
         className={`absolute top-0 inset-x-0 h-[1.5px] overflow-hidden ${
-          isDark ? 'bg-white/10' : 'bg-black/15'
+          isDark ? 'bg-white/10' : 'bg-black/10'
         }`}
       >
         <div className="w-1/3 h-full bg-gradient-to-r from-transparent via-[#C9A45C] to-transparent animate-gold-travel" />
@@ -105,7 +105,7 @@ export const Footer = () => {
         {/* 2. Top Footer Row: Brand on Left, Description on Right */}
         <div
           className={`flex flex-col sm:flex-row sm:items-center justify-between pb-7 sm:pb-8 border-b gap-4 sm:gap-8 transition-all duration-500 ease-out ${
-            isDark ? 'border-white/10' : 'border-black/15'
+            isDark ? 'border-white/10' : 'border-black/10'
           }`}
           style={{
             opacity: isVisible ? 1 : 0,
@@ -123,7 +123,7 @@ export const Footer = () => {
                 className={`font-cinzel text-2xl sm:text-3xl tracking-[0.25em] font-semibold transition-colors duration-300 ${
                   isDark
                     ? 'text-white group-hover:text-[#C9A45C]'
-                    : 'text-[#101820] group-hover:text-black'
+                    : 'text-[#101820] group-hover:text-[#B08B43]'
                 }`}
               >
                 LAX360
@@ -132,7 +132,7 @@ export const Footer = () => {
                 className={`text-[8.5px] sm:text-[9px] uppercase tracking-ultra -mt-0.5 font-bold transition-colors duration-300 ${
                   isDark
                     ? 'text-[#C9A45C]'
-                    : 'text-[#101820] bg-black/10 px-1 py-0.2 rounded w-max'
+                    : 'text-[#B08B43]'
                 }`}
               >
                 PVT LTD
@@ -143,7 +143,7 @@ export const Footer = () => {
           {/* Short Marketplace Description */}
           <p
             className={`text-xs sm:text-sm font-light max-w-xl leading-relaxed ${
-              isDark ? 'text-[#A9B0B5]' : 'text-[#101820]/85 font-normal'
+              isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560] font-normal'
             }`}
           >
             A modern, multi-category digital marketplace bringing verified fashion,
@@ -161,7 +161,7 @@ export const Footer = () => {
               <div
                 key={section.id}
                 className={`space-y-3 sm:space-y-3.5 border-b sm:border-b-0 pb-3.5 sm:pb-0 transition-all duration-500 ease-out ${
-                  isDark ? 'border-white/10' : 'border-black/15'
+                  isDark ? 'border-white/10' : 'border-black/10'
                 }`}
                 style={{
                   opacity: isVisible ? 1 : 0,
@@ -182,14 +182,14 @@ export const Footer = () => {
                   >
                     <span
                       className={`w-1 h-3 hidden sm:inline-block ${
-                        isDark ? 'bg-[#C9A45C]' : 'bg-[#101820]'
+                        isDark ? 'bg-[#C9A45C]' : 'bg-[#B08B43]'
                       }`}
                     />
                     <span>{section.title}</span>
                   </h4>
                   <ChevronDown
                     className={`w-4 h-4 sm:hidden transition-transform duration-300 ${
-                      isDark ? 'text-[#C9A45C]' : 'text-[#101820]'
+                      isDark ? 'text-[#C9A45C]' : 'text-[#B08B43]'
                     } ${isOpen ? 'rotate-180' : ''}`}
                   />
                 </button>
@@ -202,7 +202,7 @@ export const Footer = () => {
                 >
                   <ul
                     className={`space-y-2 sm:space-y-2.5 text-xs ${
-                      isDark ? 'text-[#A9B0B5]' : 'text-[#101820]/90 font-medium'
+                      isDark ? 'text-[#A9B0B5]' : 'text-[#4A5560]'
                     }`}
                   >
                     {section.links.map((link) => (
@@ -212,20 +212,20 @@ export const Footer = () => {
                           className={`group inline-flex items-center gap-1.5 transition-all duration-300 hover:translate-x-1 cursor-pointer ${
                             isDark
                               ? 'hover:text-[#C9A45C]'
-                              : 'hover:text-black hover:font-semibold'
+                              : 'hover:text-[#B08B43]'
                           }`}
                         >
                           <span className="relative">
                             {link.label}
                             <span
                               className={`absolute -bottom-0.5 left-0 w-0 h-[1px] transition-all duration-300 group-hover:w-full ${
-                                isDark ? 'bg-[#C9A45C]' : 'bg-[#101820]'
+                                isDark ? 'bg-[#C9A45C]' : 'bg-[#B08B43]'
                               }`}
                             />
                           </span>
                           <ArrowUpRight
                             className={`w-3 h-3 opacity-0 -translate-x-1 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 ${
-                              isDark ? 'text-[#C9A45C]' : 'text-[#101820]'
+                              isDark ? 'text-[#C9A45C]' : 'text-[#B08B43]'
                             }`}
                           />
                         </Link>
@@ -243,7 +243,7 @@ export const Footer = () => {
           className={`pt-6 sm:pt-7 border-t flex flex-col sm:flex-row items-center justify-between gap-3.5 text-xs transition-all duration-500 ease-out ${
             isDark
               ? 'border-white/10 text-[#A9B0B5]'
-              : 'border-black/15 text-[#101820]/80'
+              : 'border-black/10 text-[#717D86]'
           }`}
           style={{
             opacity: isVisible ? 1 : 0,
@@ -258,18 +258,18 @@ export const Footer = () => {
             <div className="flex items-center gap-1.5">
               <Truck
                 className={`w-3.5 h-3.5 ${
-                  isDark ? 'text-[#C9A45C]' : 'text-[#101820]'
+                  isDark ? 'text-[#C9A45C]' : 'text-[#B08B43]'
                 }`}
               />
               <span>Fast Nationwide Delivery</span>
             </div>
-            <span className={isDark ? 'text-[#C9A45C]' : 'text-[#101820]'}>
+            <span className={isDark ? 'text-[#C9A45C]' : 'text-[#B08B43]'}>
               •
             </span>
             <div className="flex items-center gap-1.5">
               <ShieldCheck
                 className={`w-3.5 h-3.5 ${
-                  isDark ? 'text-[#C9A45C]' : 'text-[#101820]'
+                  isDark ? 'text-[#C9A45C]' : 'text-[#B08B43]'
                 }`}
               />
               <span>Verified Authentic Products</span>
@@ -285,14 +285,14 @@ export const Footer = () => {
           onClick={scrollToTop}
           className={`fixed bottom-6 right-6 z-40 w-10 h-10 sm:w-11 sm:h-11 border shadow-2xl flex items-center justify-center transition-all duration-300 hover:-translate-y-1 active:translate-y-0 cursor-pointer animate-fade-in group ${
             isDark
-              ? 'bg-[#1B2630] border-[#C9A45C]/40 text-[#F7F3EA] hover:border-[#C9A45C] hover:shadow-[#C9A45C]/25'
-              : 'bg-[#101820] border-[#B8944D] text-[#D4B06A] hover:bg-black hover:text-white hover:shadow-lg'
+              ? 'bg-[#1B2630] border-[#C9A45C]/40 text-[#F7F3EA] hover:border-[#C9A45C] hover:text-[#C9A45C] hover:shadow-[#C9A45C]/25'
+              : 'bg-white border-[#B08B43]/40 text-[#101820] hover:border-[#B08B43] hover:text-[#B08B43] hover:shadow-lg'
           }`}
           aria-label="Back to top"
         >
           <ArrowUp
             className={`w-4 h-4 transition-transform duration-300 group-hover:-translate-y-0.5 ${
-              isDark ? 'text-[#C9A45C]' : 'text-[#D4B06A]'
+              isDark ? 'text-[#C9A45C]' : 'text-[#B08B43]'
             }`}
           />
         </button>

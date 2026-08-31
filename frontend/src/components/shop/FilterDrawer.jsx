@@ -80,40 +80,6 @@ export const FilterDrawer = ({
 
         {/* Scrollable Filters Body */}
         <div className="p-6 overflow-y-auto space-y-7 flex-grow text-[#F7F3EA]">
-          {/* 1. Category */}
-          <div>
-            <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
-              Category
-            </h4>
-            <div className="grid grid-cols-2 gap-2">
-              <button
-                type="button"
-                onClick={() => onFilterChange({ category: 'all' })}
-                className={`py-2 px-3 text-xs uppercase tracking-wider text-left border cursor-pointer ${
-                  currentCategory === 'all'
-                    ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
-                    : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
-                }`}
-              >
-                All Categories
-              </button>
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.id}
-                  type="button"
-                  onClick={() => onFilterChange({ category: cat.slug })}
-                  className={`py-2 px-3 text-xs uppercase tracking-wider text-left border cursor-pointer ${
-                    currentCategory === cat.slug
-                      ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
-                      : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
-                  }`}
-                >
-                  {cat.name}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* DYNAMIC FILTERS */}
           {(currentCategory === 'fashion' || currentCategory === 'all') && (
             <>
