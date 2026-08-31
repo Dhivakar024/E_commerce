@@ -11,13 +11,13 @@
     --deep-navy: #0B1117;
     --ivory: #F7F3EA;
 
-    /* Dark Mode Header & Footer: Visible Muted Bronze Gold Header & Warm Dark Gold Footer */
-    --bg-navbar: rgba(111, 90, 46, 0.95);
-    --bg-footer: #5A4724;
-    --nav-border: rgba(201, 164, 92, 0.25);
-    --footer-border: rgba(201, 164, 92, 0.25);
-    --nav-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(111, 90, 46, 0.18);
-    --footer-shadow: 0 -4px 24px rgba(0, 0, 0, 0.35);
+    /* Dark Mode Header & Footer: Warm Gold matching the Subscribe Button (#C9A45C family) */
+    --bg-navbar: rgba(201, 164, 92, 0.96);
+    --bg-footer: #C9A45C;
+    --nav-border: rgba(16, 24, 32, 0.18);
+    --footer-border: rgba(16, 24, 32, 0.18);
+    --nav-shadow: 0 4px 20px rgba(0, 0, 0, 0.25), 0 0 16px rgba(201, 164, 92, 0.2);
+    --footer-shadow: 0 -4px 20px rgba(0, 0, 0, 0.2);
 
     /* Page Content remains deep luxury midnight navy */
     --bg-page: #101820;
@@ -109,7 +109,7 @@
   }
 }
 
-/* Custom Glassmorphism - Adaptive for Dark (#6F5A2E Bronze Gold) and Light (#E6D09A Soft Champagne Gold) */
+/* Custom Glassmorphism - Adaptive for Header */
 .glass-nav {
   background: var(--bg-navbar);
   backdrop-filter: blur(20px);

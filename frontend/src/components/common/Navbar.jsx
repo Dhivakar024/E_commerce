@@ -178,7 +178,7 @@ export const Navbar = () => {
     <>
       {/* 1. Scroll Progress Indicator Bar */}
       <div
-        className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-[#C9A45C] via-[#E6D09A] to-[#C9A45C] z-50 origin-left transition-all duration-100 ease-out pointer-events-none"
+        className="fixed top-0 left-0 right-0 h-[2.5px] bg-gradient-to-r from-[#101820] via-[#C9A45C] to-[#101820] z-50 origin-left transition-all duration-100 ease-out pointer-events-none"
         style={{ transform: `scaleX(${scrollProgress / 100})` }}
         aria-hidden="true"
       />
@@ -199,22 +199,10 @@ export const Navbar = () => {
             aria-label="LAX360 PVT LTD Home"
           >
             <div className="flex flex-col">
-              <span
-                className={`font-cinzel text-xl sm:text-2xl tracking-[0.28em] font-semibold transition-colors duration-300 ${
-                  isDark
-                    ? 'text-[#F7F3EA] group-hover:text-white'
-                    : 'text-[#101820] group-hover:text-black'
-                }`}
-              >
+              <span className="font-cinzel text-xl sm:text-2xl tracking-[0.28em] font-bold text-[#101820] group-hover:text-black transition-colors duration-300">
                 LAX360
               </span>
-              <span
-                className={`text-[8px] sm:text-[9px] uppercase tracking-ultra -mt-1 font-bold transition-colors duration-300 ${
-                  isDark
-                    ? 'text-[#E6D09A]'
-                    : 'text-[#785A1E]'
-                }`}
-              >
+              <span className="text-[8px] sm:text-[9px] uppercase tracking-ultra -mt-1 font-bold text-[#101820]/80 group-hover:text-black transition-colors duration-300">
                 PVT LTD
               </span>
             </div>
@@ -232,12 +220,8 @@ export const Navbar = () => {
                 className={({ isActive }) =>
                   `relative py-1 px-2 text-xs uppercase tracking-widest transition-all duration-300 font-medium hover:-translate-y-0.5 rounded ${
                     isActive
-                      ? isDark
-                        ? 'text-white font-bold'
-                        : 'text-[#101820] font-bold'
-                      : isDark
-                        ? 'text-[#F7F3EA]/90 hover:text-white hover:bg-black/15'
-                        : 'text-[#101820]/80 hover:text-black hover:bg-black/10'
+                      ? 'text-[#101820] font-bold'
+                      : 'text-[#101820]/80 hover:text-black hover:bg-black/10'
                   }`
                 }
               >
@@ -246,11 +230,7 @@ export const Navbar = () => {
                     <span>{link.label}</span>
                     {isActive && (
                       <span
-                        className={`absolute -bottom-1 left-1 right-1 h-[2px] transform origin-left transition-transform duration-300 ${
-                          isDark
-                            ? 'bg-[#F7F3EA]'
-                            : 'bg-[#101820]'
-                        }`}
+                        className="absolute -bottom-1 left-1 right-1 h-[2px] transform origin-left transition-transform duration-300 bg-[#101820]"
                       />
                     )}
                   </>
@@ -260,27 +240,21 @@ export const Navbar = () => {
           </nav>
 
           {/* RIGHT: Action Icons + Inline Expandable Search + Dark/Light Theme Toggle */}
-          <div className="flex items-center space-x-1 sm:space-x-2">
+          <div className="flex items-center space-x-1 sm:space-x-2 text-[#101820]">
             {/* Inline Expandable Search Input & Autocomplete Dropdown */}
             <div ref={searchContainerRef} className="relative flex items-center">
               <form
                 onSubmit={handleSearchSubmit}
                 className={`flex items-center overflow-hidden transition-all duration-300 ease-in-out border rounded-full ${
                   searchOpen
-                    ? isDark
-                      ? 'w-48 sm:w-64 md:w-72 bg-[#5A4724] border-[#E6D09A]/40 shadow-md shadow-black/40'
-                      : 'w-48 sm:w-64 md:w-72 bg-white/90 border-[#785A1E]/30 shadow-md shadow-black/10'
+                    ? 'w-48 sm:w-64 md:w-72 bg-white/90 border-[#101820]/25 shadow-md shadow-black/15'
                     : 'w-9 h-9 sm:w-10 sm:h-10 bg-transparent border-transparent'
                 }`}
               >
                 <button
                   type={searchOpen && searchQuery.trim() ? 'submit' : 'button'}
                   onClick={handleSearchIconClick}
-                  className={`p-2 transition-all duration-300 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer ${
-                    isDark
-                      ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
-                      : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
-                  }`}
+                  className="p-2 transition-all duration-300 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30"
                   aria-label="Search catalog"
                   title={searchOpen ? 'Search' : 'Open search'}
                 >
@@ -299,12 +273,8 @@ export const Navbar = () => {
                     if (searchQuery.trim()) setShowSuggestions(true);
                   }}
                   placeholder="Search products..."
-                  className={`bg-transparent text-xs py-1.5 pr-2 focus:outline-none flex-grow transition-opacity duration-200 ${
+                  className={`bg-transparent text-xs py-1.5 pr-2 focus:outline-none flex-grow transition-opacity duration-200 text-[#101820] placeholder:text-[#101820]/60 ${
                     searchOpen ? 'opacity-100' : 'opacity-0 w-0 pointer-events-none'
-                  } ${
-                    isDark
-                      ? 'text-white placeholder:text-[#F7F3EA]/60'
-                      : 'text-[#101820] placeholder:text-[#717D86]/80'
                   }`}
                   tabIndex={searchOpen ? 0 : -1}
                 />
@@ -322,11 +292,7 @@ export const Navbar = () => {
                         setShowSuggestions(false);
                       }
                     }}
-                    className={`p-1.5 mr-1 rounded-full transition-colors flex-shrink-0 cursor-pointer ${
-                      isDark
-                        ? 'text-[#F7F3EA]/70 hover:text-white'
-                        : 'text-[#717D86] hover:text-[#101820]'
-                    }`}
+                    className="p-1.5 mr-1 rounded-full transition-colors flex-shrink-0 cursor-pointer text-[#101820]/70 hover:text-[#101820]"
                     aria-label="Close or clear search"
                   >
                     <X className="w-3.5 h-3.5" />
@@ -336,58 +302,42 @@ export const Navbar = () => {
 
               {/* Live Search Suggestions Dropdown */}
               {searchOpen && showSuggestions && searchQuery.trim().length >= 1 && (
-                <div
-                  className={`absolute top-full right-0 mt-2.5 w-72 sm:w-80 md:w-96 max-h-[75vh] overflow-y-auto border shadow-2xl z-50 transition-all duration-200 animate-fade-in ${
-                    isDark
-                      ? 'bg-[#5A4724] border-[#E6D09A]/30 text-[#F7F3EA] shadow-black/80'
-                      : 'bg-white border-[#785A1E]/20 text-[#101820] shadow-black/15'
-                  }`}
-                >
+                <div className="absolute top-full right-0 mt-2.5 w-72 sm:w-80 md:w-96 max-h-[75vh] overflow-y-auto border border-[#101820]/20 shadow-2xl z-50 transition-all duration-200 animate-fade-in bg-white text-[#101820] shadow-black/20">
                   {/* Products Matches */}
                   {matchingProducts.length > 0 && (
                     <div>
-                      <div
-                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b flex items-center justify-between ${
-                          isDark
-                            ? 'bg-black/20 border-white/10 text-[#E6D09A]'
-                            : 'bg-black/5 border-black/10 text-[#785A1E]'
-                        }`}
-                      >
+                      <div className="px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-black/10 flex items-center justify-between bg-black/5 text-[#101820]">
                         <span>PRODUCTS</span>
-                        <span className="text-[9px] text-[#A9B0B5] font-normal">
+                        <span className="text-[9px] text-[#717D86] font-normal">
                           {matchingProducts.length} suggestions
                         </span>
                       </div>
-                      <div className="divide-y divide-black/5 dark:divide-white/5">
+                      <div className="divide-y divide-black/5">
                         {matchingProducts.map((prod) => (
                           <div
                             key={prod.id}
                             onClick={() => handleSelectProduct(prod)}
-                            className={`p-2.5 flex items-center gap-3 cursor-pointer group transition-colors ${
-                              isDark
-                                ? 'hover:bg-white/10'
-                                : 'hover:bg-black/5'
-                            }`}
+                            className="p-2.5 flex items-center gap-3 cursor-pointer group transition-colors hover:bg-black/5"
                           >
                             <img
                               src={prod.image}
                               alt={prod.name}
-                              className="w-10 h-10 object-cover border border-black/10 dark:border-white/10 flex-shrink-0"
+                              className="w-10 h-10 object-cover border border-black/10 flex-shrink-0"
                             />
                             <div className="flex-grow min-w-0">
-                              <p className="text-xs font-medium truncate group-hover:text-[#E6D09A] transition-colors">
+                              <p className="text-xs font-medium truncate group-hover:text-[#C9A45C] transition-colors">
                                 {prod.name}
                               </p>
                               <div className="flex items-center gap-2 mt-0.5 text-[11px]">
-                                <span className="font-semibold text-[#E6D09A]">
+                                <span className="font-semibold text-[#101820]">
                                   ₹{prod.price.toLocaleString()}
                                 </span>
-                                <span className="text-[#A9B0B5] text-[10px] uppercase tracking-wider">
+                                <span className="text-[#717D86] text-[10px] uppercase tracking-wider">
                                   {prod.category}
                                 </span>
                               </div>
                             </div>
-                            <ArrowRight className="w-3.5 h-3.5 text-[#A9B0B5] opacity-0 group-hover:opacity-100 group-hover:text-[#E6D09A] transition-all -translate-x-1 group-hover:translate-x-0" />
+                            <ArrowRight className="w-3.5 h-3.5 text-[#717D86] opacity-0 group-hover:opacity-100 group-hover:text-[#101820] transition-all -translate-x-1 group-hover:translate-x-0" />
                           </div>
                         ))}
                       </div>
@@ -397,30 +347,20 @@ export const Navbar = () => {
                   {/* Categories Matches */}
                   {matchingCategories.length > 0 && (
                     <div>
-                      <div
-                        className={`px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-t ${
-                          isDark
-                            ? 'bg-black/20 border-white/10 text-[#E6D09A]'
-                            : 'bg-black/5 border-black/10 text-[#785A1E]'
-                        }`}
-                      >
+                      <div className="px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-t border-black/10 bg-black/5 text-[#101820]">
                         <span>CATEGORIES</span>
                       </div>
-                      <div className="divide-y divide-black/5 dark:divide-white/5">
+                      <div className="divide-y divide-black/5">
                         {matchingCategories.map((cat) => (
                           <div
                             key={cat.id}
                             onClick={() => handleSelectCategory(cat)}
-                            className={`px-3.5 py-2.5 flex items-center justify-between cursor-pointer group transition-colors text-xs ${
-                              isDark
-                                ? 'hover:bg-white/10'
-                                : 'hover:bg-black/5'
-                            }`}
+                            className="px-3.5 py-2.5 flex items-center justify-between cursor-pointer group transition-colors text-xs hover:bg-black/5"
                           >
-                            <span className="font-medium group-hover:text-[#E6D09A] transition-colors">
+                            <span className="font-medium group-hover:text-[#C9A45C] transition-colors">
                               {cat.name}
                             </span>
-                            <span className="text-[10px] uppercase tracking-widest text-[#E6D09A] flex items-center gap-1 font-semibold">
+                            <span className="text-[10px] uppercase tracking-widest text-[#101820] flex items-center gap-1 font-semibold">
                               <span>Department</span>
                               <ArrowRight className="w-3 h-3" />
                             </span>
@@ -432,15 +372,9 @@ export const Navbar = () => {
 
                   {/* No live suggestions */}
                   {matchingProducts.length === 0 && matchingCategories.length === 0 && (
-                    <div className="p-4 text-center text-xs">
-                      <p
-                        className={
-                          isDark ? 'text-[#F7F3EA]/70' : 'text-[#717D86]'
-                        }
-                      >
-                        No instant matches for "{searchQuery}"
-                      </p>
-                      <p className="text-[10px] text-[#E6D09A] mt-1">
+                    <div className="p-4 text-center text-xs text-[#717D86]">
+                      <p>No instant matches for "{searchQuery}"</p>
+                      <p className="text-[10px] text-[#101820] font-semibold mt-1">
                         Press Enter to search catalog
                       </p>
                     </div>
@@ -450,11 +384,7 @@ export const Navbar = () => {
                   <button
                     type="button"
                     onClick={handleSearchSubmit}
-                    className={`w-full text-center py-2.5 px-3 text-xs font-semibold hover:underline border-t flex items-center justify-center gap-1.5 cursor-pointer transition-colors ${
-                      isDark
-                        ? 'bg-black/30 border-white/10 text-[#E6D09A] hover:bg-black/40'
-                        : 'bg-black/5 border-black/10 text-[#101820] hover:bg-black/10'
-                    }`}
+                    className="w-full text-center py-2.5 px-3 text-xs font-semibold hover:underline border-t border-black/10 flex items-center justify-center gap-1.5 cursor-pointer transition-colors bg-black/5 text-[#101820] hover:bg-black/10"
                   >
                     <span>View all matching results for "{searchQuery}"</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -466,30 +396,20 @@ export const Navbar = () => {
             {/* Wishlist Icon */}
             <Link
               to="/wishlist"
-              className={`relative hidden sm:inline-flex p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 group ${
-                isDark
-                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
-                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
-              }`}
+              className="relative hidden sm:inline-flex p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 group text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30"
               aria-label={`Wishlist (${wishlistCount} items)`}
             >
               <Heart
                 className={`w-4 h-4 sm:w-[18px] sm:h-[18px] group-hover:scale-110 transition-transform ${
                   wishlistBouncing
-                    ? 'animate-heart-pop text-[#C9A45C]'
-                    : isDark
-                      ? 'group-hover:text-white'
-                      : 'group-hover:text-black'
+                    ? 'animate-heart-pop text-[#101820]'
+                    : 'group-hover:text-black'
                 }`}
               />
               {wishlistCount > 0 && (
                 <span
-                  className={`absolute top-1 right-1 w-3.5 h-3.5 font-bold text-[9px] flex items-center justify-center rounded-full leading-none shadow-xs ${
+                  className={`absolute top-1 right-1 w-3.5 h-3.5 font-bold text-[9px] flex items-center justify-center rounded-full leading-none shadow-xs bg-[#101820] text-white ${
                     wishlistBouncing ? 'animate-badge-bump' : ''
-                  } ${
-                    isDark
-                      ? 'bg-[#F7F3EA] text-[#5A4724]'
-                      : 'bg-[#101820] text-white'
                   }`}
                 >
                   {wishlistCount}
@@ -500,30 +420,20 @@ export const Navbar = () => {
             {/* Cart Icon with Bounce */}
             <Link
               to="/cart"
-              className={`relative p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 group ${
-                isDark
-                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
-                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
-              }`}
+              className="relative p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 group text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30"
               aria-label={`Shopping Cart (${cartCount} items)`}
             >
               <ShoppingBag
                 className={`w-4 h-4 sm:w-[18px] sm:h-[18px] group-hover:scale-110 transition-transform ${
                   cartBouncing
-                    ? 'animate-cart-bounce text-[#C9A45C]'
-                    : isDark
-                      ? 'group-hover:text-white'
-                      : 'group-hover:text-black'
+                    ? 'animate-cart-bounce text-[#101820]'
+                    : 'group-hover:text-black'
                 }`}
               />
               {cartCount > 0 && (
                 <span
-                  className={`absolute top-1 right-1 w-3.5 h-3.5 font-bold text-[9px] flex items-center justify-center rounded-full leading-none shadow-xs ${
+                  className={`absolute top-1 right-1 w-3.5 h-3.5 font-bold text-[9px] flex items-center justify-center rounded-full leading-none shadow-xs bg-[#101820] text-white ${
                     cartBouncing ? 'animate-badge-bump' : ''
-                  } ${
-                    isDark
-                      ? 'bg-[#F7F3EA] text-[#5A4724]'
-                      : 'bg-[#101820] text-white'
                   }`}
                 >
                   {cartCount}
@@ -535,11 +445,7 @@ export const Navbar = () => {
             {isAdmin && (
               <Link
                 to="/admin"
-                className={`hidden lg:inline-flex items-center gap-1 px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold transition-colors ${
-                  isDark
-                    ? 'text-[#F7F3EA] bg-black/20 border border-white/20 hover:bg-black/30'
-                    : 'text-[#101820] bg-black/10 border border-black/15 hover:bg-black/20'
-                }`}
+                className="hidden lg:inline-flex items-center gap-1 px-2.5 py-1 text-[10px] uppercase tracking-wider font-semibold transition-colors text-[#101820] bg-black/10 border border-black/15 hover:bg-black/20"
               >
                 <Shield className="w-3 h-3" />
                 <span>Admin</span>
@@ -549,11 +455,7 @@ export const Navbar = () => {
             {/* Account Icon */}
             <Link
               to={isAuthenticated ? '/account' : '/login'}
-              className={`hidden sm:inline-flex p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 ${
-                isDark
-                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
-                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
-              }`}
+              className="hidden sm:inline-flex p-2 transition-all duration-300 rounded-full focus:outline-none hover:scale-105 active:scale-95 text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30"
               aria-label={
                 isAuthenticated
                   ? `Account (${user?.firstName || 'Customer'})`
@@ -570,11 +472,7 @@ export const Navbar = () => {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className={`md:hidden p-2 transition-all duration-300 rounded-full focus:outline-none ${
-                isDark
-                  ? 'text-[#F7F3EA] hover:text-white hover:bg-black/15 focus:ring-1 focus:ring-white/40'
-                  : 'text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30'
-              }`}
+              className="md:hidden p-2 transition-all duration-300 rounded-full focus:outline-none text-[#101820] hover:text-black hover:bg-black/10 focus:ring-1 focus:ring-[#101820]/30 cursor-pointer"
               aria-label="Open navigation menu"
               aria-expanded={mobileMenuOpen}
               aria-controls="mobile-navigation"

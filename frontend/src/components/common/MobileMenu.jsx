@@ -53,11 +53,10 @@ export const MobileMenu = ({ isOpen, onClose }) => {
         id="mobile-navigation"
         role="dialog"
         aria-modal="true"
-        aria-label="Mobile navigation"
-        className={`fixed top-0 right-0 w-[85%] max-w-sm h-full z-50 p-6 flex flex-col justify-between overflow-y-auto transition-all duration-300 ease-out md:hidden shadow-2xl ${
+        className={`fixed top-0 right-0 w-[85%] max-w-sm h-full z-50 p-6 flex flex-col justify-between overflow-y-auto transition-all duration-300 ease-out md:hidden shadow-2xl text-[#101820] ${
           isDark
-            ? 'bg-[#6F5A2E] text-[#F7F3EA] border-l border-[#E6D09A]/30'
-            : 'bg-[#E6D09A] text-[#101820] border-l border-[#785A1E]/20'
+            ? 'bg-[#C9A45C] border-l border-black/15'
+            : 'bg-[#E6D09A] border-l border-black/15'
         } ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
       >
         <div>
