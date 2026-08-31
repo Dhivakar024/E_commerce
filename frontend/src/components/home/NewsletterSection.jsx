@@ -38,7 +38,7 @@ export const NewsletterSection = () => {
   return (
     <section
       ref={sectionRef}
-      className={`py-16 sm:py-20 relative z-10 overflow-hidden transition-colors duration-250 border-y ${
+      className={`py-10 sm:py-14 relative z-10 overflow-hidden transition-colors duration-250 border-t ${
         isDark ? 'bg-[#151F28] border-white/[0.08]' : 'bg-[#EDE9DF] border-black/[0.08]'
       }`}
     >
@@ -49,7 +49,7 @@ export const NewsletterSection = () => {
       {/* Compact Editorial-Style Centered Card Container */}
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-12 flex justify-center">
         <div
-          className={`w-full max-w-xl sm:max-w-2xl px-6 py-10 sm:px-10 sm:py-12 text-center rounded-none border shadow-2xl transition-all duration-700 ease-out relative ${
+          className={`w-full max-w-xl sm:max-w-2xl px-6 py-8 sm:px-10 sm:py-10 text-center rounded-none border shadow-xl transition-all duration-700 ease-out relative ${
             isDark
               ? 'bg-[#1B2630] border-white/[0.08] text-white'
               : 'bg-white border-black/[0.08] text-[#101820]'
