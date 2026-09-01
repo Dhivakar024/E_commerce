@@ -18,6 +18,7 @@ import {
   Edit2,
   ExternalLink,
 } from 'lucide-react';
+import { PrivacyConsent } from '../components/common/PrivacyConsent';
 
 export const Account = () => {
   const navigate = useNavigate();
@@ -43,6 +44,9 @@ export const Account = () => {
   // Addresses State
   const [addresses, setAddresses] = useState([]);
   const [isAddingAddress, setIsAddingAddress] = useState(false);
+  const [hasReadAddressPrivacy, setHasReadAddressPrivacy] = useState(false);
+  const [acknowledgedAddressPrivacy, setAcknowledgedAddressPrivacy] = useState(false);
+  const [addressPrivacyError, setAddressPrivacyError] = useState('');
   const [addressForm, setAddressForm] = useState({
     firstName: '',
     lastName: '',
@@ -136,6 +140,13 @@ export const Account = () => {
 
   const handleAddAddress = async (e) => {
     e.preventDefault();
+    setAddressPrivacyError('');
+
+    if (!hasReadAddressPrivacy || !acknowledgedAddressPrivacy) {
+      setAddressPrivacyError('Please read and acknowledge the Privacy Notice before saving your address.');
+      return;
+    }
+
     try {
       const res = await addressService.addAddress(addressForm);
       if (res.success && res.data) {
@@ -146,12 +157,16 @@ export const Account = () => {
         localStorage.setItem('elan_saved_address', JSON.stringify(addressForm));
       }
       setIsAddingAddress(false);
+      setHasReadAddressPrivacy(false);
+      setAcknowledgedAddressPrivacy(false);
       showToast('Address added to your address book.', 'success');
     } catch {
       const newAddr = { ...addressForm, _id: `addr-${Date.now()}` };
       setAddresses((prev) => [newAddr, ...prev]);
       localStorage.setItem('lax360_saved_address', JSON.stringify(addressForm));
       setIsAddingAddress(false);
+      setHasReadAddressPrivacy(false);
+      setAcknowledgedAddressPrivacy(false);
       showToast('Address added to your address book.', 'success');
     }
   };
@@ -496,14 +511,42 @@ export const Account = () => {
                         required
                       />
                     </div>
+
+                    {/* DPDP Privacy Notice Acknowledgement */}
+                    <PrivacyConsent
+                      id="account-address-privacy"
+                      acknowledged={acknowledgedAddressPrivacy}
+                      onChange={(checked) => {
+                        setAcknowledgedAddressPrivacy(checked);
+                        if (addressPrivacyError) setAddressPrivacyError('');
+                      }}
+                      hasRead={hasReadAddressPrivacy}
+                      onReadChange={setHasReadAddressPrivacy}
+                      error={addressPrivacyError}
+                      className="pt-1 pb-1"
+                    />
+
                     <div className="flex gap-3 pt-2">
-                      <button type="submit" className="btn-shine px-6 py-2 bg-white text-luxury-black font-medium">
+                      <button
+                        type="submit"
+                        disabled={!hasReadAddressPrivacy || !acknowledgedAddressPrivacy}
+                        className={`btn-shine px-6 py-2 font-medium transition-all ${
+                          !hasReadAddressPrivacy || !acknowledgedAddressPrivacy
+                            ? 'bg-neutral-800 text-neutral-500 cursor-not-allowed opacity-50'
+                            : 'bg-white text-luxury-black cursor-pointer'
+                        }`}
+                      >
                         Save Address
                       </button>
                       <button
                         type="button"
-                        onClick={() => setIsAddingAddress(false)}
-                        className="px-6 py-2 bg-white/5 border border-white/15 text-white"
+                        onClick={() => {
+                          setIsAddingAddress(false);
+                          setHasReadAddressPrivacy(false);
+                          setAcknowledgedAddressPrivacy(false);
+                          setAddressPrivacyError('');
+                        }}
+                        className="px-6 py-2 bg-white/5 border border-white/15 text-white cursor-pointer hover:bg-white/10 transition-colors"
                       >
                         Cancel
                       </button>

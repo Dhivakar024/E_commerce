@@ -23,6 +23,7 @@ import { Account } from './pages/Account';
 import { SearchPage } from './pages/Search';
 import { Collections } from './pages/Collections';
 import { About } from './pages/About';
+import { Careers } from './pages/Careers';
 import { Contact } from './pages/Contact';
 import { FAQ } from './pages/FAQ';
 import { LegalPage } from './pages/Legal';
@@ -104,6 +105,7 @@ const AppContent = () => {
           {/* Editorial & Information Routes */}
           <Route path="/collections" element={<Collections />} />
           <Route path="/about" element={<About />} />
+          <Route path="/careers" element={<Careers />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/faq" element={<FAQ />} />
           <Route path="/privacy" element={<LegalPage />} />

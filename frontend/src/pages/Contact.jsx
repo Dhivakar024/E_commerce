@@ -3,6 +3,7 @@ import { useShop } from '../context/ShopContext';
 import { useTheme } from '../context/ThemeContext';
 import { Phone, Mail, Clock, Send, Loader2, CheckCircle2, MessageSquare, Headphones } from 'lucide-react';
 import { NewsletterSection } from '../components/home/NewsletterSection';
+import { PrivacyConsent } from '../components/common/PrivacyConsent';
 
 const CONTACT_CATEGORIES = [
   'Order Support',
@@ -24,11 +25,22 @@ export const Contact = () => {
     message: '',
   });
 
+  const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
+  const [acknowledgedPrivacy, setAcknowledgedPrivacy] = useState(false);
+  const [privacyError, setPrivacyError] = useState('');
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setPrivacyError('');
+
+    if (!hasReadPrivacy || !acknowledgedPrivacy) {
+      setPrivacyError('Please read and acknowledge the Privacy Notice before submitting.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     setTimeout(() => {
@@ -147,6 +159,9 @@ export const Contact = () => {
                 type="button"
                 onClick={() => {
                   setIsSubmitted(false);
+                  setHasReadPrivacy(false);
+                  setAcknowledgedPrivacy(false);
+                  setPrivacyError('');
                   setFormData({
                     name: '',
                     email: '',
@@ -292,24 +307,38 @@ export const Contact = () => {
                 />
               </div>
 
+              {/* DPDP Privacy Notice Acknowledgement */}
+              <PrivacyConsent
+                id="contact-privacy-consent"
+                acknowledged={acknowledgedPrivacy}
+                onChange={(checked) => {
+                  setAcknowledgedPrivacy(checked);
+                  if (privacyError) setPrivacyError('');
+                }}
+                hasRead={hasReadPrivacy}
+                onReadChange={setHasReadPrivacy}
+                error={privacyError}
+                className="pt-2 pb-1"
+              />
+
               <button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || !hasReadPrivacy || !acknowledgedPrivacy}
                 className={`btn-shine w-full py-4 font-semibold text-xs uppercase tracking-widest transition-all shadow-xl flex items-center justify-center gap-2 cursor-pointer ${
-                  isSubmitting
-                    ? 'bg-neutral-800 text-neutral-400 cursor-wait'
+                  isSubmitting || !hasReadPrivacy || !acknowledgedPrivacy
+                    ? 'bg-neutral-300 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-500 cursor-not-allowed opacity-60'
                     : 'bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820]'
                 }`}
               >
                 {isSubmitting ? (
                   <>
                     <Loader2 className="w-4 h-4 animate-spin" />
-                    <span>Submitting Request...</span>
+                    <span>Transmitting Message...</span>
                   </>
                 ) : (
                   <>
                     <Send className="w-3.5 h-3.5" />
-                    <span>Submit Request</span>
+                    <span>Transmit Message</span>
                   </>
                 )}
               </button>

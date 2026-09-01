@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Star, CheckCircle, PenTool, X, Sparkles } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { PrivacyConsent } from '../common/PrivacyConsent';
 
 const DEMO_REVIEWS = [
   {
@@ -39,10 +40,20 @@ export const ProductReviewsSection = ({ product }) => {
   const [reviewName, setReviewName] = useState('');
   const [reviewTitle, setReviewTitle] = useState('');
   const [reviewText, setReviewText] = useState('');
+  const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
+  const [acknowledgedPrivacy, setAcknowledgedPrivacy] = useState(false);
+  const [privacyError, setPrivacyError] = useState('');
   const [submitted, setSubmitted] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setPrivacyError('');
+
+    if (!hasReadPrivacy || !acknowledgedPrivacy) {
+      setPrivacyError('Please read and acknowledge the Privacy Notice before submitting.');
+      return;
+    }
+
     if (reviewName && reviewText) {
       setSubmitted(true);
       setTimeout(() => {
@@ -51,6 +62,8 @@ export const ProductReviewsSection = ({ product }) => {
         setReviewName('');
         setReviewTitle('');
         setReviewText('');
+        setHasReadPrivacy(false);
+        setAcknowledgedPrivacy(false);
       }, 2000);
     }
   };
@@ -203,9 +216,28 @@ export const ProductReviewsSection = ({ product }) => {
                 />
               </div>
 
+              {/* DPDP Privacy Notice Acknowledgement */}
+              <PrivacyConsent
+                id="review-privacy-consent"
+                acknowledged={acknowledgedPrivacy}
+                onChange={(checked) => {
+                  setAcknowledgedPrivacy(checked);
+                  if (privacyError) setPrivacyError('');
+                }}
+                hasRead={hasReadPrivacy}
+                onReadChange={setHasReadPrivacy}
+                error={privacyError}
+                className="pt-1 pb-1"
+              />
+
               <button
                 type="submit"
-                className="btn-shine px-7 py-3 bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820] text-xs uppercase tracking-widest font-semibold cursor-pointer"
+                disabled={!hasReadPrivacy || !acknowledgedPrivacy}
+                className={`btn-shine px-7 py-3 font-semibold text-xs uppercase tracking-widest cursor-pointer shadow-md transition-all ${
+                  !hasReadPrivacy || !acknowledgedPrivacy
+                    ? 'bg-neutral-300 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-500 cursor-not-allowed opacity-60'
+                    : 'bg-[#C9A45C] hover:bg-[#D8B872] text-[#101820]'
+                }`}
               >
                 Submit Review
               </button>

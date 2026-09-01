@@ -39,6 +39,7 @@ const FOOTER_COLUMNS = [
     links: [
       { label: 'Our Story & Mission', path: '/about' },
       { label: 'Marketplace Collections', path: '/collections' },
+      { label: 'Careers & Talent', path: '/careers' },
       { label: 'Customer Assistance', path: '/contact' },
       { label: 'All Products Catalog', path: '/shop' },
     ],

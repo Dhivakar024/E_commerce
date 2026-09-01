@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useShop } from '../context/ShopContext';
 import { useTheme } from '../context/ThemeContext';
 import { Eye, EyeOff, Lock, Mail, User, Phone, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
+import { PrivacyConsent } from '../components/common/PrivacyConsent';
 
 export const Register = () => {
   const navigate = useNavigate();
@@ -22,6 +23,9 @@ export const Register = () => {
     password: '',
     confirmPassword: '',
   });
+
+  const [hasReadPrivacy, setHasReadPrivacy] = useState(false);
+  const [acknowledgedPrivacy, setAcknowledgedPrivacy] = useState(false);
 
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -53,6 +57,11 @@ export const Register = () => {
 
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match.');
+      return;
+    }
+
+    if (!hasReadPrivacy || !acknowledgedPrivacy) {
+      setError('Please read and acknowledge the Privacy Notice before creating an account.');
       return;
     }
 
@@ -250,10 +259,27 @@ export const Register = () => {
               </div>
             </div>
 
+            {/* DPDP Privacy Notice Acknowledgement */}
+            <PrivacyConsent
+              id="register-privacy-consent"
+              acknowledged={acknowledgedPrivacy}
+              onChange={(checked) => {
+                setAcknowledgedPrivacy(checked);
+                if (error) setError('');
+              }}
+              hasRead={hasReadPrivacy}
+              onReadChange={setHasReadPrivacy}
+              className="pt-2 pb-1"
+            />
+
             <button
               type="submit"
-              disabled={isSubmitting}
-              className="btn-shine w-full py-3.5 bg-[#C9A45C] text-[#101820] hover:bg-[#D8B872] uppercase tracking-widest font-semibold flex items-center justify-center gap-2 transition-all shadow-lg cursor-pointer mt-2"
+              disabled={isSubmitting || !hasReadPrivacy || !acknowledgedPrivacy}
+              className={`btn-shine w-full py-3.5 font-semibold uppercase tracking-widest flex items-center justify-center gap-2 transition-all shadow-lg cursor-pointer mt-2 ${
+                isSubmitting || !hasReadPrivacy || !acknowledgedPrivacy
+                  ? 'bg-neutral-300 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-500 cursor-not-allowed opacity-60'
+                  : 'bg-[#C9A45C] text-[#101820] hover:bg-[#D8B872]'
+              }`}
             >
               {isSubmitting ? (
                 <>
