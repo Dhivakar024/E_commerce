@@ -138,6 +138,7 @@ export const Cart = () => {
             {/* Right Column: Sticky Order Summary & Trust Badges (4-5 Cols) */}
             <div className="lg:col-span-5 xl:col-span-4">
               <OrderSummaryCard
+                items={cart}
                 subtotal={subtotal}
                 discount={discount}
                 shipping={shipping}
@@ -192,7 +193,7 @@ export const Cart = () => {
       />
 
       {/* Mobile Sticky Checkout Bar */}
-      {cart.length > 0 && <MobileCheckoutBar grandTotal={grandTotal} />}
+      {cart.length > 0 && <MobileCheckoutBar items={cart} grandTotal={grandTotal} />}
 
       {/* Reusable VIP Newsletter */}
       <div className="mt-16">

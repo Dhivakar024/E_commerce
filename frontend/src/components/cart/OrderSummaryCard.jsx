@@ -2,9 +2,10 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, ShieldCheck, Truck, RotateCcw, Lock, AlertCircle } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useShop } from '../../context/ShopContext';
 
 export const OrderSummaryCard = ({
-  items = [],
+  items,
   subtotal = 0,
   discount = 0,
   shipping = 0,
@@ -14,9 +15,16 @@ export const OrderSummaryCard = ({
 }) => {
   const navigate = useNavigate();
   const { isDark } = useTheme();
+  const shopContext = useShop();
 
-  const hasOutOfStockItem = items.some((item) => (item.product?.stock ?? item.stock ?? 99) <= 0);
-  const isCartEmpty = items.length === 0;
+  // Resolve items from prop or ShopContext fallback
+  const effectiveItems = items !== undefined ? items : (shopContext?.cart || []);
+  const validItems = Array.isArray(effectiveItems)
+    ? effectiveItems.filter((item) => item && (item.product || item.name || item.id) && item.quantity > 0)
+    : [];
+
+  const isCartEmpty = validItems.length === 0;
+  const hasOutOfStockItem = validItems.some((item) => (item.product?.stock ?? item.stock ?? 99) <= 0);
 
   const handleProceedToCheckout = () => {
     if (!isCartEmpty && !hasOutOfStockItem) {

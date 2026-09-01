@@ -2,17 +2,24 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Lock, ArrowRight } from 'lucide-react';
 import { useTheme } from '../../context/ThemeContext';
+import { useShop } from '../../context/ShopContext';
 
 export const MobileCheckoutBar = ({
   grandTotal = 0,
-  items = [],
+  items,
 }) => {
   const navigate = useNavigate();
   const { isDark } = useTheme();
+  const shopContext = useShop();
 
-  if (items.length === 0) return null;
+  const effectiveItems = items !== undefined ? items : (shopContext?.cart || []);
+  const validItems = Array.isArray(effectiveItems)
+    ? effectiveItems.filter((item) => item && (item.product || item.name || item.id) && item.quantity > 0)
+    : [];
 
-  const hasOutOfStock = items.some((i) => (i.product?.stock ?? i.stock ?? 99) <= 0);
+  if (validItems.length === 0) return null;
+
+  const hasOutOfStock = validItems.some((i) => (i.product?.stock ?? i.stock ?? 99) <= 0);
 
   return (
     <div
