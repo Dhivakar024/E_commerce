@@ -302,14 +302,14 @@ export const Navbar = () => {
 
               {/* Live Search Suggestions Dropdown */}
               {searchOpen && showSuggestions && searchQuery.trim().length >= 1 && (
-                <div className="absolute top-full right-0 mt-2.5 w-72 sm:w-80 md:w-96 max-h-[75vh] overflow-y-auto border border-[#101820]/20 shadow-2xl z-50 transition-all duration-200 animate-fade-in bg-white text-[#101820] shadow-black/20">
+                <div className="absolute top-full left-0 right-0 mt-2 w-full max-h-[320px] overflow-y-auto border border-[#101820]/20 shadow-2xl z-50 transition-all duration-200 animate-fade-in bg-white text-[#101820] shadow-black/20 rounded-xl overflow-hidden">
                   {/* Products Matches */}
                   {matchingProducts.length > 0 && (
                     <div>
-                      <div className="px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-black/10 flex items-center justify-between bg-black/5 text-[#101820]">
+                      <div className="px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-black/10 flex items-center justify-between bg-black/5 text-[#101820]">
                         <span>PRODUCTS</span>
-                        <span className="text-[9px] text-[#717D86] font-normal">
-                          {matchingProducts.length} suggestions
+                        <span className="text-[9px] text-[#717D86] font-medium">
+                          {matchingProducts.length} results
                         </span>
                       </div>
                       <div className="divide-y divide-black/5">
@@ -317,27 +317,27 @@ export const Navbar = () => {
                           <div
                             key={prod.id}
                             onClick={() => handleSelectProduct(prod)}
-                            className="p-2.5 flex items-center gap-3 cursor-pointer group transition-colors hover:bg-black/5"
+                            className="p-2 sm:p-2.5 flex items-center gap-2.5 cursor-pointer group transition-colors hover:bg-black/5"
                           >
                             <img
                               src={prod.image}
                               alt={prod.name}
-                              className="w-10 h-10 object-cover border border-black/10 flex-shrink-0"
+                              className="w-9 h-9 object-cover border border-black/10 rounded-sm flex-shrink-0"
                             />
                             <div className="flex-grow min-w-0">
-                              <p className="text-xs font-medium truncate group-hover:text-[#C9A45C] transition-colors">
+                              <p className="text-xs font-semibold truncate group-hover:text-[#B08B43] transition-colors text-[#101820]">
                                 {prod.name}
                               </p>
                               <div className="flex items-center gap-2 mt-0.5 text-[11px]">
                                 <span className="font-semibold text-[#101820]">
-                                  ₹{prod.price.toLocaleString()}
+                                  ₹{prod.price.toLocaleString('en-IN')}
                                 </span>
-                                <span className="text-[#717D86] text-[10px] uppercase tracking-wider">
+                                <span className="text-[#717D86] text-[9px] uppercase tracking-wider font-medium truncate">
                                   {prod.category}
                                 </span>
                               </div>
                             </div>
-                            <ArrowRight className="w-3.5 h-3.5 text-[#717D86] opacity-0 group-hover:opacity-100 group-hover:text-[#101820] transition-all -translate-x-1 group-hover:translate-x-0" />
+                            <ArrowRight className="w-3.5 h-3.5 text-[#717D86] opacity-0 group-hover:opacity-100 group-hover:text-[#101820] transition-all -translate-x-1 group-hover:translate-x-0 flex-shrink-0" />
                           </div>
                         ))}
                       </div>
@@ -347,7 +347,7 @@ export const Navbar = () => {
                   {/* Categories Matches */}
                   {matchingCategories.length > 0 && (
                     <div>
-                      <div className="px-3.5 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-t border-black/10 bg-black/5 text-[#101820]">
+                      <div className="px-3 py-1.5 text-[10px] uppercase font-bold tracking-widest border-b border-t border-black/10 bg-black/5 text-[#101820]">
                         <span>CATEGORIES</span>
                       </div>
                       <div className="divide-y divide-black/5">
@@ -355,13 +355,13 @@ export const Navbar = () => {
                           <div
                             key={cat.id}
                             onClick={() => handleSelectCategory(cat)}
-                            className="px-3.5 py-2.5 flex items-center justify-between cursor-pointer group transition-colors text-xs hover:bg-black/5"
+                            className="px-3 py-2 flex items-center justify-between cursor-pointer group transition-colors text-xs hover:bg-black/5"
                           >
-                            <span className="font-medium group-hover:text-[#C9A45C] transition-colors">
+                            <span className="font-semibold text-[#101820] group-hover:text-[#B08B43] transition-colors truncate">
                               {cat.name}
                             </span>
-                            <span className="text-[10px] uppercase tracking-widest text-[#101820] flex items-center gap-1 font-semibold">
-                              <span>Department</span>
+                            <span className="text-[9px] uppercase tracking-widest text-[#101820] flex items-center gap-1 font-semibold flex-shrink-0">
+                              <span>Dept</span>
                               <ArrowRight className="w-3 h-3" />
                             </span>
                           </div>
@@ -373,7 +373,7 @@ export const Navbar = () => {
                   {/* No live suggestions */}
                   {matchingProducts.length === 0 && matchingCategories.length === 0 && (
                     <div className="p-4 text-center text-xs text-[#717D86]">
-                      <p>No instant matches for "{searchQuery}"</p>
+                      <p>No matches for "{searchQuery}"</p>
                       <p className="text-[10px] text-[#101820] font-semibold mt-1">
                         Press Enter to search catalog
                       </p>
@@ -384,10 +384,10 @@ export const Navbar = () => {
                   <button
                     type="button"
                     onClick={handleSearchSubmit}
-                    className="w-full text-center py-2.5 px-3 text-xs font-semibold hover:underline border-t border-black/10 flex items-center justify-center gap-1.5 cursor-pointer transition-colors bg-black/5 text-[#101820] hover:bg-black/10"
+                    className="w-full text-center py-2 px-3 text-[11px] font-semibold hover:underline border-t border-black/10 flex items-center justify-center gap-1.5 cursor-pointer transition-colors bg-black/5 text-[#101820] hover:bg-black/10"
                   >
-                    <span>View all matching results for "{searchQuery}"</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
+                    <span>View all matching results</span>
+                    <ArrowRight className="w-3 h-3" />
                   </button>
                 </div>
               )}

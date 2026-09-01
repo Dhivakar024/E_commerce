@@ -64,9 +64,46 @@ export const ProductFiltersSidebar = ({
 
       {/* DYNAMIC CATEGORY-SPECIFIC FILTERS */}
 
-      {/* Fashion: Sizes, Colors, Materials */}
+      {/* Fashion: Subcategory / Fashion For, Sizes, Colors, Materials */}
       {currentCategory === 'fashion' && (
         <>
+          {/* Dedicated "FASHION FOR" Filter */}
+          <div>
+            <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
+              Fashion For
+            </h4>
+            <div className="space-y-1.5">
+              {[
+                { id: '', label: 'All Fashion' },
+                { id: 'Men', label: 'Men' },
+                { id: 'Women', label: 'Women' },
+                { id: 'Boys', label: 'Boys' },
+                { id: 'Girls', label: 'Girls' },
+              ].map((opt) => {
+                const isSelected = (filters.subcategory || '') === opt.id || (opt.id === '' && (!filters.subcategory || filters.subcategory === 'all'));
+                return (
+                  <label
+                    key={opt.id}
+                    className={`flex items-center gap-2.5 text-xs cursor-pointer py-1 px-2 rounded transition-colors ${
+                      isSelected
+                        ? isDark ? 'bg-[#C9A45C]/20 text-[#C9A45C] font-semibold' : 'bg-[#B08B43]/15 text-[#B08B43] font-semibold'
+                        : textBodyClass
+                    }`}
+                  >
+                    <input
+                      type="radio"
+                      name="fashion-for"
+                      checked={isSelected}
+                      onChange={() => onFilterChange({ subcategory: opt.id })}
+                      className="accent-[#C9A45C] cursor-pointer"
+                    />
+                    <span>{opt.label}</span>
+                  </label>
+                );
+              })}
+            </div>
+          </div>
+
           <div>
             <h4 className={`text-xs uppercase tracking-widest font-semibold mb-3 ${textHeaderClass}`}>
               Sizes

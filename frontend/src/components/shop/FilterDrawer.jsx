@@ -81,8 +81,41 @@ export const FilterDrawer = ({
         {/* Scrollable Filters Body */}
         <div className="p-6 overflow-y-auto space-y-7 flex-grow text-[#F7F3EA]">
           {/* DYNAMIC FILTERS */}
-          {(currentCategory === 'fashion' || currentCategory === 'all') && (
+          {currentCategory === 'fashion' && (
             <>
+              {/* Fashion For */}
+              <div>
+                <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">
+                  Fashion For
+                </h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {[
+                    { id: '', label: 'All Fashion' },
+                    { id: 'Men', label: 'Men' },
+                    { id: 'Women', label: 'Women' },
+                    { id: 'Boys', label: 'Boys' },
+                    { id: 'Girls', label: 'Girls' },
+                  ].map((opt) => {
+                    const isSelected = (filters.subcategory || '') === opt.id || (opt.id === '' && (!filters.subcategory || filters.subcategory === 'all'));
+                    return (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => onFilterChange({ subcategory: opt.id })}
+                        className={`py-2 px-3 text-xs uppercase tracking-wider flex items-center justify-between border cursor-pointer ${
+                          isSelected
+                            ? 'bg-[#C9A45C] text-[#101820] border-[#C9A45C] font-semibold'
+                            : 'bg-white/5 text-[#F7F3EA]/80 border-white/10'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        {isSelected && <Check className="w-3.5 h-3.5" />}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Sizes */}
               <div>
                 <h4 className="text-xs uppercase tracking-widest text-[#C9A45C] font-semibold mb-3">

@@ -139,9 +139,13 @@ export const Shop = ({ categoryName }) => {
       }
 
       // 2. Subcategory Filter
-      if (filters.subcategory) {
+      if (filters.subcategory && filters.subcategory !== 'all') {
+        const targetSub = filters.subcategory.toLowerCase();
         const pSub = (product.subcategory || '').toLowerCase();
-        if (!pSub.includes(filters.subcategory.toLowerCase())) return false;
+        const pTags = Array.isArray(product.tags) ? product.tags.map((t) => t.toLowerCase()) : [];
+        if (pSub !== targetSub && !pSub.includes(targetSub) && !pTags.includes(targetSub)) {
+          return false;
+        }
       }
 
       // 3. Search Query Filter

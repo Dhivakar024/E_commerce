@@ -17,11 +17,13 @@ import {
   calculateGrandTotal,
   FREE_SHIPPING_THRESHOLD,
 } from '../utils/cartCalculations';
+import { useTheme } from '../context/ThemeContext';
 import { AlertCircle } from 'lucide-react';
 
 export const Checkout = () => {
   const navigate = useNavigate();
   const { cart, clearCart, appliedCoupon, showToast } = useShop();
+  const { isDark } = useTheme();
 
   // 1. Guard against empty cart
   useEffect(() => {
@@ -318,7 +320,11 @@ export const Checkout = () => {
   if (cart.length === 0) return null;
 
   return (
-    <main className="w-full bg-luxury-black text-luxury-cream min-h-screen pb-12">
+    <main
+      className={`w-full min-h-screen pb-12 transition-colors duration-250 ${
+        isDark ? 'bg-[#101820] text-[#F7F3EA]' : 'bg-[#F8F6F0] text-[#101820]'
+      }`}
+    >
       {/* 1. Distraction-Free Minimal Checkout Header */}
       <CheckoutHeader />
 
@@ -332,14 +338,14 @@ export const Checkout = () => {
 
         {/* Global Error Banner */}
         {globalError && (
-          <div className="p-4 bg-rose-950/70 border border-rose-500/50 text-rose-200 text-xs flex items-center justify-between gap-3 mb-8 animate-fade-in">
+          <div className="p-4 bg-rose-50 dark:bg-rose-950/70 border border-rose-200 dark:border-rose-500/50 text-rose-700 dark:text-rose-200 text-xs flex items-center justify-between gap-3 mb-8 animate-fade-in">
             <div className="flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-rose-400 flex-shrink-0" />
+              <AlertCircle className="w-4 h-4 text-rose-500 flex-shrink-0" />
               <span>{globalError}</span>
             </div>
             <button
               onClick={() => setGlobalError('')}
-              className="text-luxury-muted hover:text-white uppercase tracking-wider text-[10px]"
+              className="text-[#717D86] dark:text-[#A9B0B5] hover:text-[#101820] dark:hover:text-white uppercase tracking-wider text-[10px]"
             >
               Dismiss
             </button>

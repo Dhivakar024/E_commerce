@@ -7,6 +7,7 @@ import { ErrorBoundary } from './components/common/ErrorBoundary';
 import { Navbar } from './components/common/Navbar';
 import { Footer } from './components/common/Footer';
 import { ToastNotification } from './components/shop/ToastNotification';
+import { WhatsAppButton } from './components/common/WhatsAppButton';
 
 // Customer Storefront Pages
 import { Home } from './pages/Home';
@@ -135,6 +136,9 @@ const AppContent = () => {
 
       {/* Footer */}
       {!isCheckoutPage && !isAdminRoute && <Footer />}
+
+      {/* Floating WhatsApp Support Button */}
+      {!isAdminRoute && <WhatsAppButton />}
     </div>
   );
 };
