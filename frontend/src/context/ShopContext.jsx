@@ -2,15 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const ShopContext = createContext(undefined);
 
-// Initial multi-category demo wishlist items for rich marketplace showcase
-const INITIAL_DEMO_WISHLIST = [
-  'prod_fash_01', // Classic Pure Linen Shirt (Fashion)
-  'prod_furn_01', // Solid Teak Dining Table (Furniture)
-  'prod_elec_01', // Aura Wireless ANC Headphones (Electronics)
-  'prod_med_01',  // Daily Multivitamin Complex (Medicines)
-  'prod_cosm_01', // Hyaluronic Deep Hydration Serum (Cosmetics)
-];
-
 export const ShopProvider = ({ children }) => {
   // 1. Initialize Cart with localStorage persistence & basic validation
   const [cart, setCart] = useState(() => {
@@ -28,19 +19,20 @@ export const ShopProvider = ({ children }) => {
     }
   });
 
-  // 2. Initialize Wishlist with multi-category demo defaults
+  // 2. Initialize Wishlist from localStorage (defaults to empty array)
   const [wishlist, setWishlist] = useState(() => {
     try {
       const saved = localStorage.getItem('lax360_wishlist');
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
-          return parsed;
+          // Filter out any legacy mock string IDs if present
+          return parsed.filter((id) => id && !String(id).startsWith('prod_'));
         }
       }
-      return INITIAL_DEMO_WISHLIST;
+      return [];
     } catch {
-      return INITIAL_DEMO_WISHLIST;
+      return [];
     }
   });
 
